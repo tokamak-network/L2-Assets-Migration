@@ -1,3 +1,0 @@
-[submodule "sub/tokamak-titan"]
-	path = sub/tokamak-titan
-	url = https://github.com/tokamak-network/tokamak-titan
