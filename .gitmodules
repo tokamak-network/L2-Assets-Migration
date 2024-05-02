@@ -1,0 +1,3 @@
+[submodule "titanLagacy/sub"]
+	path = titanLagacy/sub
+	url = https://github.com/tokamak-network/tokamak-titan.git
