@@ -260,7 +260,7 @@ const collectPool = async() => {
         continue; 
     }catch(err) { continue; }
 
-    let maxIndex = await nonFungibleContract.totalSupply();
+  
     const token0Address = await poolContract.token0();
     const token1Address = await poolContract.token1();
     const token0Contract = new ethers.Contract(token0Address, ERC20, L2PROVIDER); 

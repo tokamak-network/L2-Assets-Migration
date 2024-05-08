@@ -230,8 +230,6 @@ const collectPool = async() => {
     if(checker.get(p.claimer) === true)
       continue;
 
-    const data:User[] = []; 
-    const position:any = [];
     const poolContract = new ethers.Contract(p.claimer, Pool, L2PROVIDER); 
 
     // todo : Requires non-V3 full contract handling.
@@ -251,7 +249,6 @@ const collectPool = async() => {
     let tokenids:any = []; // token ids
     const outToken0:any = [];
     const outToken1:any = [];
-    const slot0 = await poolContract.slot0(); 
     const poolFee = await poolContract.fee()
     const totalMap = new Map<any, any>(); // total amount (token address => amount)
     
