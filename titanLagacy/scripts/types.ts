@@ -46,10 +46,10 @@ export type Closed = {
     L1endBlock : any; 
     L2startBlock : any;
     L2endBlock : any;
-    data : info[]
+    data : Info[]
   }
   
-  export type info = {
+  export type Info = {
     l1Token : string;
     l2Token : string;
     tokenName : string;
