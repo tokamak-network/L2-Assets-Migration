@@ -59,6 +59,6 @@ generate-assets1.json, generate-assets2.json, generate-assets3.json"
 
 
 ## Generated Assets Demo
-See the image in the repo
+!["test"](https://github.com/tokamak-network/L2-Assets-Migration/blob/dev/gernated_example.png)
 
 
