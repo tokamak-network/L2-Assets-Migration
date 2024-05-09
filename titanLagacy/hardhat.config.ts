@@ -11,10 +11,14 @@ const config: HardhatUserConfig = {
       forking: {
         url: "https://rpc.tokamak.network/",
       }
-    }
+    },
+    main :{
+      url: process.env.CONTRACT_RPC_URL_L1 || "",
+      accounts: [process.env.L1_PORXY_OWNER || "", process.env.L1_FORCE_OWNER || ""]
+    },
   },
   solidity: {
-    version :"0.8.20",
+    version :"0.8.9",
     settings: {
       viaIR: true,
       optimizer: {

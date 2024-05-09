@@ -58,11 +58,11 @@ export interface UpgradeL1BridgeInterface extends utils.Interface {
     "depositETH(uint32,bytes)": FunctionFragment;
     "depositETHTo(address,uint32,bytes)": FunctionFragment;
     "deposits(address,address)": FunctionFragment;
-    "doActive()": FunctionFragment;
     "donateETH()": FunctionFragment;
     "editMigration(bytes32,bytes32,address)": FunctionFragment;
     "finalizeERC20Withdrawal(address,address,address,address,uint256,bytes)": FunctionFragment;
     "finalizeETHWithdrawal(address,address,uint256,bytes)": FunctionFragment;
+    "forceActive()": FunctionFragment;
     "forceWithdraw(address,uint256)": FunctionFragment;
     "forceWithdrawAll((address,uint256)[])": FunctionFragment;
     "generateKey(address,address,uint256)": FunctionFragment;
@@ -81,11 +81,11 @@ export interface UpgradeL1BridgeInterface extends utils.Interface {
       | "depositETH"
       | "depositETHTo"
       | "deposits"
-      | "doActive"
       | "donateETH"
       | "editMigration"
       | "finalizeERC20Withdrawal"
       | "finalizeETHWithdrawal"
+      | "forceActive"
       | "forceWithdraw"
       | "forceWithdrawAll"
       | "generateKey"
@@ -134,7 +134,6 @@ export interface UpgradeL1BridgeInterface extends utils.Interface {
     functionFragment: "deposits",
     values: [PromiseOrValue<string>, PromiseOrValue<string>]
   ): string;
-  encodeFunctionData(functionFragment: "doActive", values?: undefined): string;
   encodeFunctionData(functionFragment: "donateETH", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "editMigration",
@@ -163,6 +162,10 @@ export interface UpgradeL1BridgeInterface extends utils.Interface {
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BytesLike>
     ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "forceActive",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "forceWithdraw",
@@ -213,7 +216,6 @@ export interface UpgradeL1BridgeInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "deposits", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "doActive", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "donateETH", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "editMigration",
@@ -225,6 +227,10 @@ export interface UpgradeL1BridgeInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "finalizeETHWithdrawal",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "forceActive",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -252,31 +258,21 @@ export interface UpgradeL1BridgeInterface extends utils.Interface {
   ): Result;
 
   events: {
-    "EDITED(bytes32,bytes32,address)": EventFragment;
     "ERC20DepositInitiated(address,address,address,address,uint256,bytes)": EventFragment;
     "ERC20WithdrawalFinalized(address,address,address,address,uint256,bytes)": EventFragment;
     "ETHDepositInitiated(address,address,uint256,bytes)": EventFragment;
     "ETHWithdrawalFinalized(address,address,uint256,bytes)": EventFragment;
+    "Edited(bytes32,bytes32,address)": EventFragment;
+    "ForceWithdraw(bytes32,address,uint256,address)": EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "EDITED"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ERC20DepositInitiated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ERC20WithdrawalFinalized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ETHDepositInitiated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ETHWithdrawalFinalized"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Edited"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ForceWithdraw"): EventFragment;
 }
-
-export interface EDITEDEventObject {
-  oldHashed: string;
-  newHashed: string;
-  claimer: string;
-}
-export type EDITEDEvent = TypedEvent<
-  [string, string, string],
-  EDITEDEventObject
->;
-
-export type EDITEDEventFilter = TypedEventFilter<EDITEDEvent>;
 
 export interface ERC20DepositInitiatedEventObject {
   _l1Token: string;
@@ -337,6 +333,31 @@ export type ETHWithdrawalFinalizedEvent = TypedEvent<
 
 export type ETHWithdrawalFinalizedEventFilter =
   TypedEventFilter<ETHWithdrawalFinalizedEvent>;
+
+export interface EditedEventObject {
+  oldHashed: string;
+  newHashed: string;
+  claimer: string;
+}
+export type EditedEvent = TypedEvent<
+  [string, string, string],
+  EditedEventObject
+>;
+
+export type EditedEventFilter = TypedEventFilter<EditedEvent>;
+
+export interface ForceWithdrawEventObject {
+  hash: string;
+  _token: string;
+  _amount: BigNumber;
+  _claimer: string;
+}
+export type ForceWithdrawEvent = TypedEvent<
+  [string, string, BigNumber, string],
+  ForceWithdrawEventObject
+>;
+
+export type ForceWithdrawEventFilter = TypedEventFilter<ForceWithdrawEvent>;
 
 export interface UpgradeL1Bridge extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -405,10 +426,6 @@ export interface UpgradeL1Bridge extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    doActive(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
     donateETH(
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -435,6 +452,10 @@ export interface UpgradeL1Bridge extends BaseContract {
       _to: PromiseOrValue<string>,
       _amount: PromiseOrValue<BigNumberish>,
       _data: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    forceActive(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -474,7 +495,7 @@ export interface UpgradeL1Bridge extends BaseContract {
     verifyRegistry(
       _params: UpgradeL1Bridge.AssetsParamStruct[],
       overrides?: CallOverrides
-    ): Promise<[UpgradeL1Bridge.AssetsParamStructOutput]>;
+    ): Promise<[UpgradeL1Bridge.AssetsParamStructOutput[]]>;
   };
 
   active(overrides?: CallOverrides): Promise<boolean>;
@@ -517,10 +538,6 @@ export interface UpgradeL1Bridge extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  doActive(
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   donateETH(
     overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -547,6 +564,10 @@ export interface UpgradeL1Bridge extends BaseContract {
     _to: PromiseOrValue<string>,
     _amount: PromiseOrValue<BigNumberish>,
     _data: PromiseOrValue<BytesLike>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  forceActive(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -586,7 +607,7 @@ export interface UpgradeL1Bridge extends BaseContract {
   verifyRegistry(
     _params: UpgradeL1Bridge.AssetsParamStruct[],
     overrides?: CallOverrides
-  ): Promise<UpgradeL1Bridge.AssetsParamStructOutput>;
+  ): Promise<UpgradeL1Bridge.AssetsParamStructOutput[]>;
 
   callStatic: {
     active(overrides?: CallOverrides): Promise<boolean>;
@@ -629,8 +650,6 @@ export interface UpgradeL1Bridge extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    doActive(overrides?: CallOverrides): Promise<void>;
-
     donateETH(overrides?: CallOverrides): Promise<void>;
 
     editMigration(
@@ -657,6 +676,8 @@ export interface UpgradeL1Bridge extends BaseContract {
       _data: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    forceActive(overrides?: CallOverrides): Promise<void>;
 
     forceWithdraw(
       _token: PromiseOrValue<string>,
@@ -694,21 +715,10 @@ export interface UpgradeL1Bridge extends BaseContract {
     verifyRegistry(
       _params: UpgradeL1Bridge.AssetsParamStruct[],
       overrides?: CallOverrides
-    ): Promise<UpgradeL1Bridge.AssetsParamStructOutput>;
+    ): Promise<UpgradeL1Bridge.AssetsParamStructOutput[]>;
   };
 
   filters: {
-    "EDITED(bytes32,bytes32,address)"(
-      oldHashed?: PromiseOrValue<BytesLike> | null,
-      newHashed?: PromiseOrValue<BytesLike> | null,
-      claimer?: PromiseOrValue<string> | null
-    ): EDITEDEventFilter;
-    EDITED(
-      oldHashed?: PromiseOrValue<BytesLike> | null,
-      newHashed?: PromiseOrValue<BytesLike> | null,
-      claimer?: PromiseOrValue<string> | null
-    ): EDITEDEventFilter;
-
     "ERC20DepositInitiated(address,address,address,address,uint256,bytes)"(
       _l1Token?: PromiseOrValue<string> | null,
       _l2Token?: PromiseOrValue<string> | null,
@@ -768,6 +778,30 @@ export interface UpgradeL1Bridge extends BaseContract {
       _amount?: null,
       _data?: null
     ): ETHWithdrawalFinalizedEventFilter;
+
+    "Edited(bytes32,bytes32,address)"(
+      oldHashed?: PromiseOrValue<BytesLike> | null,
+      newHashed?: PromiseOrValue<BytesLike> | null,
+      claimer?: PromiseOrValue<string> | null
+    ): EditedEventFilter;
+    Edited(
+      oldHashed?: PromiseOrValue<BytesLike> | null,
+      newHashed?: PromiseOrValue<BytesLike> | null,
+      claimer?: PromiseOrValue<string> | null
+    ): EditedEventFilter;
+
+    "ForceWithdraw(bytes32,address,uint256,address)"(
+      hash?: PromiseOrValue<BytesLike> | null,
+      _token?: null,
+      _amount?: null,
+      _claimer?: PromiseOrValue<string> | null
+    ): ForceWithdrawEventFilter;
+    ForceWithdraw(
+      hash?: PromiseOrValue<BytesLike> | null,
+      _token?: null,
+      _amount?: null,
+      _claimer?: PromiseOrValue<string> | null
+    ): ForceWithdrawEventFilter;
   };
 
   estimateGas: {
@@ -811,10 +845,6 @@ export interface UpgradeL1Bridge extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    doActive(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
     donateETH(
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -841,6 +871,10 @@ export interface UpgradeL1Bridge extends BaseContract {
       _to: PromiseOrValue<string>,
       _amount: PromiseOrValue<BigNumberish>,
       _data: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    forceActive(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -924,10 +958,6 @@ export interface UpgradeL1Bridge extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    doActive(
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
     donateETH(
       overrides?: PayableOverrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
@@ -954,6 +984,10 @@ export interface UpgradeL1Bridge extends BaseContract {
       _to: PromiseOrValue<string>,
       _amount: PromiseOrValue<BigNumberish>,
       _data: PromiseOrValue<BytesLike>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    forceActive(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
