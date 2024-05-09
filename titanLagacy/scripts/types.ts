@@ -61,3 +61,13 @@ export type Closed = {
     amount : string;
     type : number; // 0 : eoa, 1 : contract(pool)
   }
+
+  //Contract Type
+export type AssetsParam = {
+    claimer: string;
+    key: string;
+}
+export type ClaimParam = {
+    token: string;
+    amount: number;
+}
