@@ -26,12 +26,12 @@ const config: HardhatUserConfig = {
         runs: 10000
       }
     }
+  },
+  gasReporter: {
+    enabled: true,
+    currency: 'USD',
+    gasPrice: 6,
   }
-  // gasReporter: {
-  //   enabled: true,
-  //   currency: 'USD',
-  //   gasPrice: 100,
-  // }
 };
 
 export default config;
