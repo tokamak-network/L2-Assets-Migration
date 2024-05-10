@@ -29,6 +29,13 @@ SubModule Installation
     git submodule init
     git submodule update
 ```
+
+## Running Tests  
+Registry Assets Collection into a contract and run unit tests on the upgraded functionality
+
+```bash 
+   yarn hardhat test test/upgrade/u.forcewithdraw.ts --network hardhat
+```
     
 ## How to use L2 Assets collection
 
@@ -57,8 +64,7 @@ generate-assets1.json, generate-assets2.json, generate-assets3.json"
 - generate-assets3.json : Used to configure the service using the collected assets.  The main uses are Front, Contract. 
 
 
-
-## Generated Assets Demo
-!["test"](https://github.com/tokamak-network/L2-Assets-Migration/blob/dev/gernated_example.png)
+## Generated Assets Collection Report
+!["test"](https://github.com/tokamak-network/L2-Assets-Migration/blob/dev/gernated_example.png width="400" height="400")
 
 
