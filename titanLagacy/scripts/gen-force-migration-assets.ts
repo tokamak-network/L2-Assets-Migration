@@ -115,18 +115,18 @@ const main = async () => {
     let v:BigNumberish
     if(contract === ethers.ZeroAddress) { // ETH  
       v = await L1PROVIDER.getBalance(L1BRIDGE)      
-    }else  // other ERC20 
+    }else  // other ERC20        
       v = await l1BridgeContracts.deposits(contract, tokenMapper.get(contract))
   
     // L2 totalSupply()
     const l2Token = new ethers.Contract(tokenMapper.get(contract), ERC20, L2PROVIDER);
     const l2Balance = await l2Token.totalSupply();
     if(v == l2Balance) {
-      console.log("L1 : ", v.toString() ," L2 : ", l2Balance.toString(), ' : ', blue('MATCH ✅'))
+      console.log(await l2Token.name(), "L1 : ", v.toString() ," L2 : ", l2Balance.toString(), ' : ', blue('MATCH ✅'))
     }else if (v > l2Balance) {
-      console.log("L1 : ", v.toString() ," L2 : ", l2Balance.toString(), ' : ', red('L1 > L2 🟠'))
+      console.log(await l2Token.name()," L1 : ", v.toString() ," L2 : ", l2Balance.toString(), ' : ', red('L1 > L2 🟠'))
     }else{
-      console.log("L1 : ", v.toString() ," L2 : ", l2Balance.toString(), ' : ', red('ISSUE ❌'))
+      console.log(await l2Token.name()," L1 : ", v.toString() ," L2 : ", l2Balance.toString(), ' : ', red('ISSUE ❌'))
     }
     verifyL2Balance.set(tokenMapper.get(contract), l2Balance)
   }

@@ -24,7 +24,7 @@ contract UpgradeL1Bridge is L1StandardBridge {
 
     // WARNING: Be sure to edit with an admin address!
     address private constant closer = address(0); // msg.sender pauser same
-    mapping(bytes32 => address) private assets; // hased(token, amount) => Account
+    mapping(bytes32 => address) private assets; // hased(L1Token, Claimer, amount) => Account
     bool public active = false;
 
     // closer
@@ -51,7 +51,7 @@ contract UpgradeL1Bridge is L1StandardBridge {
     }
 
     
-    function verifyRegistry(
+    function isRegistry(
         AssetsParam[] calldata _params
     ) external view returns (AssetsParam[] memory) {
         AssetsParam[] memory result = new AssetsParam[](_params.length);
@@ -63,7 +63,7 @@ contract UpgradeL1Bridge is L1StandardBridge {
     }
 
     
-    function editMigration(bytes32 _old, bytes32 _new, address _claimer) external onlyCloser {
+    function editRegistry(bytes32 _old, bytes32 _new, address _claimer) external onlyCloser {
         assets[_old] = address(0);
         assets[_new] = _claimer;
         emit Edited(_old , _new, _claimer);
