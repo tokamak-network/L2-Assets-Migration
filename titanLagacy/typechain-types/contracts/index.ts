@@ -4,3 +4,4 @@
 export type { L1ForceWithdraw } from "./L1ForceWithdraw";
 export type { Proxy } from "./Proxy";
 export type { UpgradeL1Bridge } from "./UpgradeL1Bridge";
+export type { UpgradeL1BridgeD } from "./UpgradeL1BridgeD";

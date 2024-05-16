@@ -16,6 +16,8 @@ export type { Proxy } from "./contracts/Proxy";
 export { Proxy__factory } from "./factories/contracts/Proxy__factory";
 export type { UpgradeL1Bridge } from "./contracts/UpgradeL1Bridge";
 export { UpgradeL1Bridge__factory } from "./factories/contracts/UpgradeL1Bridge__factory";
+export type { UpgradeL1BridgeD } from "./contracts/UpgradeL1BridgeD";
+export { UpgradeL1BridgeD__factory } from "./factories/contracts/UpgradeL1BridgeD__factory";
 export type { IL1ChugSplashDeployer } from "./sub/packages/tokamak/contracts/contracts/chugsplash/interfaces/IL1ChugSplashDeployer";
 export { IL1ChugSplashDeployer__factory } from "./factories/sub/packages/tokamak/contracts/contracts/chugsplash/interfaces/IL1ChugSplashDeployer__factory";
 export type { L1ChugSplashProxy } from "./sub/packages/tokamak/contracts/contracts/chugsplash/L1ChugSplashProxy";

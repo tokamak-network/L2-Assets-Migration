@@ -17,6 +17,7 @@ contract UpgradeL1Bridge is L1StandardBridge {
         address claimer;
         bytes32 key;
     }
+    
     struct ClaimParam {
         address token;
         uint amount;
@@ -37,7 +38,6 @@ contract UpgradeL1Bridge is L1StandardBridge {
         _;
     }
 
-     
     // todo : Need to check if the deposit should be blocked -> User error
     function forceActive() external onlyCloser {
         active = !active;
@@ -63,13 +63,21 @@ contract UpgradeL1Bridge is L1StandardBridge {
     }
 
     
-    function editRegistry(bytes32 _old, bytes32 _new, address _claimer) external onlyCloser {
+    function editRegistry(bytes32 _old, bytes32 _new, address _claimer) external onlyCloser paused {
         assets[_old] = address(0);
         assets[_new] = _claimer;
         emit Edited(_old , _new, _claimer);
     }
 
-    
+     function generateKey(
+        address _token,
+        address _claimer,
+        uint _amount
+    ) external pure returns (bytes32) {
+        return keccak256(abi.encodePacked(_token, _claimer, _amount));
+    }
+
+
     function forceWithdraw(address _token, uint _amount) external {
         _forceWithdraw(_token, _amount);
     }
@@ -80,16 +88,6 @@ contract UpgradeL1Bridge is L1StandardBridge {
             _forceWithdraw(_params[i].token, _params[i].amount);
     }
 
-    
-    function generateKey(
-        address _token,
-        address _claimer,
-        uint _amount
-    ) external pure returns (bytes32) {
-        return keccak256(abi.encodePacked(_token, _claimer, _amount));
-    }
-
-    
     function _forceWithdraw(address _token, uint _amount) internal {
         bytes32 target = keccak256(abi.encodePacked(_token, msg.sender, _amount));
         address claimer = assets[target];

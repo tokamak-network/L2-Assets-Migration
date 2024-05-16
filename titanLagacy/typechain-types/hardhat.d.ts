@@ -29,6 +29,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.UpgradeL1Bridge__factory>;
     getContractFactory(
+      name: "UpgradeL1BridgeD",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.UpgradeL1BridgeD__factory>;
+    getContractFactory(
       name: "IL1ChugSplashDeployer",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IL1ChugSplashDeployer__factory>;
@@ -81,6 +85,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.UpgradeL1Bridge>;
+    getContractAt(
+      name: "UpgradeL1BridgeD",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.UpgradeL1BridgeD>;
     getContractAt(
       name: "IL1ChugSplashDeployer",
       address: string,

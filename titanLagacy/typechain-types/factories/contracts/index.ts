@@ -4,3 +4,4 @@
 export { L1ForceWithdraw__factory } from "./L1ForceWithdraw__factory";
 export { Proxy__factory } from "./Proxy__factory";
 export { UpgradeL1Bridge__factory } from "./UpgradeL1Bridge__factory";
+export { UpgradeL1BridgeD__factory } from "./UpgradeL1BridgeD__factory";

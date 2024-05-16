@@ -82,7 +82,7 @@ export default describe('# Unit Test : L1 StandardBridge', () => {
                 }
             ])).to.be.revertedWith('Only Closer')
           
-
+            
             for(const assetInfo of assets) {
                 for(const asset of assetInfo.data) {
                     if(asset.amount == 0)  // todo : amount 0 arguments require remove function
