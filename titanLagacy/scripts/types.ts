@@ -1,5 +1,7 @@
 export const L1Interface =[
-    "function deposits(address _firstKey, address _secondKey) public view returns (uint256)"
+    "function deposits(address _firstKey, address _secondKey) public view returns (uint256)",
+    "event ETHWithdrawalFinalized(address indexed _from, address indexed _to,uint256 _amount,bytes _data)",
+    "event ERC20WithdrawalFinalized(address indexed _l1Token, address indexed _l2Token, address indexed _from,address _to,uint256 _amount,bytes _data)"
 ]
 
 export const L2Interface = [
@@ -47,27 +49,29 @@ export type Closed = {
     L2startBlock : any;
     L2endBlock : any;
     data : Info[]
-  }
-  
-  export type Info = {
+}
+
+export type Info = {
     l1Token : string;
     l2Token : string;
     tokenName : string;
     data : User[];
-  }
-  
-  export type User = {
+}
+
+export type User = {
     claimer : string;
     amount : string;
     type : number; // 0 : eoa, 1 : contract(pool)
-  }
-
-  //Contract Type
-export type AssetsParam = {
-    claimer: string;
-    key: string;
 }
-export type ClaimParam = {
-    token: string;
-    amount: number;
+
+export type WithdrawClaimed = {
+    txHash : string;
+    event : {
+        l1Token : any;
+        l2Token : any;
+        from : any;
+        to : any;
+        amount : any;
+        data : any;
+    }
 }

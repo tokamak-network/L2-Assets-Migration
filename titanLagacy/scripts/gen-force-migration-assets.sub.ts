@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { BigNumberish } from 'ethers';
 import { ethers } from 'hardhat'
+import { ethers as ethers2 } from 'ethers2'
 import { Client, cacheExchange, fetchExchange } from '@urql/core';
 import { NonfungibleTokenPositionManager, L2Interface, ERC20, L1Interface, Pool, Closed, User,Info } from './types';
 import { red, green,white,blue } from 'console-log-colors';
@@ -22,8 +23,8 @@ const Qlclient = new Client({
   exchanges: [cacheExchange, fetchExchange],
 });
 
-const L1PROVIDER = new ethers.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L1 || ""); // L1 RPC URL
-const L2PROVIDER = new ethers.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L2 || ""); // L2 RPC URL
+const L1PROVIDER = new ethers2.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L1 || ""); // L1 RPC URL
+const L2PROVIDER = new ethers2.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L2 || ""); // L2 RPC URL
 const L1BRIDGE = process.env.CONTRACTS_L1BRIDGE_ADDRESS || ""; // L1 bridge address
 const L2BRIDGE = process.env.CONTRACTS_L2BRIDGE_ADDRESS || ""; // L2 bridge address
 const DEAD_MAX =  Math.floor(Date.now() / 1000) + 1200
@@ -82,8 +83,8 @@ const main = async () => {
   runChecker();
   const [STBLOCK, ENBLOCK, L2STBLOCK, L2ENDBLOCK] = await getBlock();
   const L2TokenContracts:any = []; 
-  const l2BridgeContracts = new ethers.Contract(L2BRIDGE, L2Interface, L2PROVIDER); 
-  const l1BridgeContracts = new ethers.Contract(L1BRIDGE, L1Interface, L1PROVIDER); 
+  const l2BridgeContracts = new ethers2.Contract(L2BRIDGE, L2Interface, L2PROVIDER); 
+  const l1BridgeContracts = new ethers2.Contract(L1BRIDGE, L1Interface, L1PROVIDER); 
   out = {
     L1startBlock : STBLOCK,
     L1endBlock : await L1PROVIDER.getBlockNumber(),
@@ -133,13 +134,13 @@ const main = async () => {
   for(const contract of L1TokenContracts) {
     // L1 deposit
     let v:BigNumberish
-    if(contract === ethers.ZeroAddress) { // ETH  
+    if(contract === ethers2.ZeroAddress) { // ETH  
       v = await L1PROVIDER.getBalance(L1BRIDGE)      
     }else  // other ERC20 
       v = await l1BridgeContracts.deposits(contract, tokenMapper.get(contract))
   
     // L2 totalSupply()
-    const l2Token = new ethers.Contract(tokenMapper.get(contract), ERC20, L2PROVIDER);
+    const l2Token = new ethers2.Contract(tokenMapper.get(contract), ERC20, L2PROVIDER);
     const l2Balance = await l2Token.totalSupply();
     if(v == l2Balance) {
       console.log(await l2Token.name(), " L1 : ", v.toString() ," L2 : ", l2Balance.toString(), ' : ', blue('MATCH ✅'))
@@ -154,9 +155,9 @@ const main = async () => {
   console.log(blue.bgGreen.bold.underline("\n Collect L2 wallets and Check Assets holdings"))
   for(let i = 0 ; i < L1TokenContracts.length ; i++) {
     let totalAddress:any = [];
-    let totalBalance = ethers.getBigInt(0);
+    let totalBalance = ethers2.getBigInt(0);
     const data:User[] = [];
-    const l2Token = new ethers.Contract(tokenMapper.get(L1TokenContracts[i]), ERC20 , L2PROVIDER);
+    const l2Token = new ethers2.Contract(tokenMapper.get(L1TokenContracts[i]), ERC20 , L2PROVIDER);
     const l2TokenName = await l2Token.name();
 
     eventName = l2Token.filters.Transfer();
@@ -242,7 +243,7 @@ const collectPool = async() => {
 
 
   const nonFungibleContractAddress = process.env.CONTRACTS_NONFUNGIBLE_ADDRESS!;
-  const nonFungibleContract = new ethers.Contract(nonFungibleContractAddress, NonfungibleTokenPositionManager, L2PROVIDER);
+  const nonFungibleContract = new ethers2.Contract(nonFungibleContractAddress, NonfungibleTokenPositionManager, L2PROVIDER);
   const _outPool = new Map<any, any[]>(); // token address : { claimer : address, amount : string }[]
   console.log(white.bgGreen.bold("Collecting Pool Data...."))  
   for(const p of outPool) 
@@ -252,7 +253,7 @@ const collectPool = async() => {
 
     const data:User[] = []; 
     const position:any = [];
-    const poolContract = new ethers.Contract(p.claimer, Pool, L2PROVIDER); 
+    const poolContract = new ethers2.Contract(p.claimer, Pool, L2PROVIDER); 
 
     // todo : Requires non-V3 full contract handling.
     try{ 
@@ -263,8 +264,8 @@ const collectPool = async() => {
   
     const token0Address = await poolContract.token0();
     const token1Address = await poolContract.token1();
-    const token0Contract = new ethers.Contract(token0Address, ERC20, L2PROVIDER); 
-    const token1Contract = new ethers.Contract(token1Address, ERC20, L2PROVIDER); 
+    const token0Contract = new ethers2.Contract(token0Address, ERC20, L2PROVIDER); 
+    const token1Contract = new ethers2.Contract(token1Address, ERC20, L2PROVIDER); 
     const token0Name = await token0Contract.symbol()
     const token1Name = await token1Contract.symbol()
     
@@ -274,8 +275,8 @@ const collectPool = async() => {
     const poolFee = await poolContract.fee()
     const totalMap = new Map<any, any>(); // total amount (token address => amount)
     
-    let total0 = ethers.getBigInt(0); 
-    let total1 = ethers.getBigInt(0);
+    let total0 = ethers2.getBigInt(0); 
+    let total1 = ethers2.getBigInt(0);
     // CheckPoint: Check if you can withdraw less than the amount the pool has.
     console.log("💧 Pool Info Address: ",p.claimer, " Pair: ",token0Name,'/',token1Name,'Pool Fee: ',poolFee,'\n')
     let positions:any = [];
@@ -353,10 +354,10 @@ const collectPool = async() => {
         }) : ""
       }
     }
-    console.log('Pool Amount token0: ', ethers.formatUnits(await (await token0Contract.balanceOf(p.claimer)), await token0Contract.decimals()),' Pool State: ',(await token0Contract.balanceOf(p.claimer)) >= total0 ? green('MATCH ✅') : red('MISMATCH ❌'))
-    console.log('Withdraw Available Total Token0: ', ethers.formatUnits(total0.toString(), await token0Contract.decimals()))
-    console.log('Pool Amount token1: ', ethers.formatUnits(await (await token1Contract.balanceOf(p.claimer)), await token1Contract.decimals()),' Pool State: ',(await token1Contract.balanceOf(p.claimer)) >= total1 ? green('MATCH ✅') : red('MISMATCH ❌'))
-    console.log('Withdraw Available Total Token1: ', ethers.formatUnits(total1.toString(), await token1Contract.decimals()))
+    console.log('Pool Amount token0: ', ethers2.formatUnits(await (await token0Contract.balanceOf(p.claimer)), await token0Contract.decimals()),' Pool State: ',(await token0Contract.balanceOf(p.claimer)) >= total0 ? green('MATCH ✅') : red('MISMATCH ❌'))
+    console.log('Withdraw Available Total Token0: ', ethers2.formatUnits(total0.toString(), await token0Contract.decimals()))
+    console.log('Pool Amount token1: ', ethers2.formatUnits(await (await token1Contract.balanceOf(p.claimer)), await token1Contract.decimals()),' Pool State: ',(await token1Contract.balanceOf(p.claimer)) >= total1 ? green('MATCH ✅') : red('MISMATCH ❌'))
+    console.log('Withdraw Available Total Token1: ', ethers2.formatUnits(total1.toString(), await token1Contract.decimals()))
     
 
     const _outToken0 = _outPool.get(token0Address);
@@ -460,7 +461,7 @@ const convertToContractData = async() => {
       inner.data.push({
         "claimer": userData.claimer,
         "amount": userData.amount,
-        "hash" : ethers.solidityPackedKeccak256(['address', 'address', 'uint256'], [data.l1Token, userData.claimer, userData.amount])
+        "hash" : ethers2.solidityPackedKeccak256(['address', 'address', 'uint256'], [data.l1Token, userData.claimer, userData.amount])
       })
     }
     outContract.push(inner)

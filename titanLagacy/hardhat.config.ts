@@ -9,7 +9,7 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       forking: {
-        url: "https://rpc.tokamak.network/",
+        url: process.env.L1_RPC_URL || "",
       }
     },
     main :{
