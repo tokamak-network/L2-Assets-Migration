@@ -3,8 +3,9 @@ import path from 'path'
 import { ethers as ethers2 } from 'ethers2';
 import { ethers } from "ethers";
 import { BatchCrossChainMessenger, MessageStatus} from "@tokamak-network/titan-sdk"
-import { L2Interface, WithdrawClaimed } from './types';
+import { L2Interface, WithdrawClaimed,Pool, User } from './types';
 import { blue } from 'console-log-colors';
+import ProgressBar from 'progress';
 import axios from 'axios';
 import * as dotenv from 'dotenv';
 
@@ -12,6 +13,7 @@ import * as dotenv from 'dotenv';
 // Provides a function to easily obtain Ethereum balance based on Titan or track withdrawal request volume.
 */
 
+const WETH = process.env.L2_WETH_ADDRESS || ""
 const L2PROVIDER = new ethers2.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L2 || ""); // L2 RPC URL
 const L2BRIDGE = process.env.CONTRACTS_L2BRIDGE_ADDRESS || ""; // L2 bridge address
 const baseUrl = "https://explorer.titan.tokamak.network/api?"
@@ -36,6 +38,11 @@ const replacer = (key:any, value:any) => {
   return value;
 }
 
+const sleep = (ms: number): Promise<void> => {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
 export interface Account {
   address: string;
   balance: bigint;
@@ -44,7 +51,7 @@ export interface Account {
 
 export interface Response {
   message: string;
-  result: Account[];
+  result: any[];
   status: string;
 }
 
@@ -59,11 +66,7 @@ export interface Response {
  * @param {boolean} [opts.bedrock=false] - Optional flag to indicate if Bedrock is enabled.
  * @param {boolean} [opts.save=false] - Optional flag to indicate if the result should be saved to a file.
  * @returns {Promise<any>} - Returns a promise that resolves to an array of objects containing transaction hash, state, and claim status.
- *
- * @example
- * const txHashes = ["0x123...", "0x456..."];
- * const opts = { l1ChainId: 1, l2ChainId: 550040, bedrock: true, save: true };
- * getWithdrawalClaimStatus(txHashes, opts).then(result => console.log(result));
+ * 
  */
 export const getWithdrawalClaimStatus = async (
   txHashes:string[]|WithdrawClaimed[],
@@ -88,6 +91,9 @@ export const getWithdrawalClaimStatus = async (
   })
   const result:any = [];
 
+  const total = txHashes.length;
+  const bar = new ProgressBar(':bar :current/:total', { width: 50, total: total});
+  console.log(blue.bgBlue.bold("🔍 Retrieving withdrawal claim status..."))
   for (const tx of txHashes) {
     if (typeof tx === 'string') {
       const state: MessageStatus = await crossDomainMessenger.getMessageStatus(tx);
@@ -108,7 +114,7 @@ export const getWithdrawalClaimStatus = async (
         });
       }
     }
-    
+    bar.tick();
   }
 
   if(opts.save? true : false) {
@@ -136,9 +142,6 @@ export const getWithdrawalClaimStatus = async (
  *
  * @returns {Map<any, any>} - A map where the key is the l1Token and the value is the aggregated amount.
  *
- * @example
- * const result = getWithdrawalIsClaimAll();
- * console.log(result);
  */
 export const getWithdrawalIsClaimAll = () => {
   const obj = JSON.parse(fs.readFileSync(path.join(dirPath, 'generate-WithdrawalClaim.json'), 'utf-8'));
@@ -151,8 +154,10 @@ export const getWithdrawalIsClaimAll = () => {
   }
 }
 
-
-
+/**
+ * @param {integer} page - A nonnegative integer that represents the page number to be used for pagination. 'offset' must be provided in conjunction.
+ * @param {integer} offset - A nonnegative integer that represents the maximum number of records to return when paginating. 'page' must be provided in conjunction.
+ */
 export const getTotalAddressAll = async(page:number, offest:number) => {
   const query = `module=account&action=listaccounts&page=${page}&offset=${offest}`;
   let accounts: Account[] = [];
@@ -168,29 +173,166 @@ export const getTotalAddressAll = async(page:number, offest:number) => {
   } catch (error) {
       console.error('Error fetching data:', error);
   }
+
+  const result0:User[] = []; // EOA
+  const result1:User[] = []; // CA - POOL
+  const result2:User[] = []; // CA - NOT POOL
   let totalBalance = ethers2.getBigInt(0);
   for(const account of accounts){
-      totalBalance +=  ethers2.getBigInt(account.balance) 
+      if(await L2PROVIDER.getCode(account.address) === '0x' && account.balance > 0){
+        result0.push({
+          claimer: account.address,
+          amount: account.balance.toString(),
+          type:  0
+        })
+      }else if (account.balance > 0) {
+        const poolContract = new ethers2.Contract(account.address, Pool, L2PROVIDER); 
+        try{
+          await poolContract.liquidity()
+          result1.push({
+            claimer: account.address,
+            amount: account.balance.toString(),
+            type:  1
+          })
+        }catch(err){
+          result2.push({
+            claimer: account.address,
+            amount: account.balance.toString(),
+            type: 2
+          })
+        }
+      }
   }
-  console.log(totalBalance)
+  
+  return [result0, result1, result2]
 }
 
-getTotalAddressAll(1,1000)
 
+/**
+ * Get all contract addresses deployed on the Titan network. v3 pool addresses are filtered out.
+ * 
+ * @param {integer} page - A nonnegative integer that represents the page number to be used for pagination. 'offset' must be provided in conjunction.
+ * @param {integer} offset - A nonnegative integer that represents the maximum number of records to return when paginating. 'page' must be provided in conjunction.
+ * @param {boolean} flag - 'true' contains the list of tokens held by the contract. Default false
+ */
+export const getContractAll = async(page:number, offest:number, flag?:boolean) => {
+  const result:any = [];
+  let data:any = [];
+  try {
+    for(let i = 1 ; i <= page; i++){
+      const query = `module=contract&action=listcontracts&page=${i}&offset=${offest}`;
+      const response = await axios.get<Response>(baseUrl + query);
+      if (response.data.status === '1') {
+        if(response.data.result === null || response.data.result === undefined || response.data.result.length === 0)
+          break;
+        data.push(...response.data.result);
+      } else {
+        console.error('Failed to fetch data:', response.data.message);
+      }  
+    }
+  } catch (error) {
+      console.error('Error fetching data:', error);
+  }
+  const convertData:any = [];
+  await Promise.all(data.map(async(item:any) =>{
+    const poolContract = new ethers2.Contract(item.Address, Pool, L2PROVIDER); 
+      // todo : Requires non-V3 full contract handling.
+        try{
+          await poolContract.liquidity()
+        }catch(err){
+          convertData.push(item.Address)
+        }
+  }));
 
+  if (flag){
+    for (const contract of convertData) {
+      await sleep(100)
+      const query = `module=account&action=tokenlist&address=${contract}&page=1&offset=9999`;
+      try {
+          const response = await axios.get<Response>(baseUrl + query);
+          if (response.data.status === '1') {
+            if(response.data.result === null || response.data.result === undefined || response.data.result.length === 0)
+              continue;
 
+            result.push({
+              caAddress: contract,
+              tokens: response.data.result
+            })  
+          } else {
+            // console.error('Failed to fetch data:', response.data.message);
+          }  
+        
+      } catch (error) {
+          // console.error('Error fetching data:', error);
+      }
+    }
+  } else return convertData;
 
-
-
-
-
-
-
-
-
-
-
-const main = async() => {
+  return result
 }
-main()
 
+/**
+ * .
+ * 
+ * @param {integer} page - A nonnegative integer that represents the page number to be used for pagination. 'offset' must be provided in conjunction.
+ * @param {integer} offset - A nonnegative integer that represents the maximum number of records to return when paginating. 'page' must be provided in conjunction.
+ * @param {any} weth - L2 WETH address, default value ENV L2_WETH_ADDRESS
+ */
+const getCollectWETH = async(page:number, offest:number, weth?:any) => {
+  const data:any =[]; 
+  weth = weth? weth : WETH;
+  for(let i = 1 ; i <= page; i++){
+    try {
+      const query = `module=token&action=getTokenHolders&contractaddress=${weth}&page=${i}&offset=${offest}`;
+      const response = await axios.get<Response>(baseUrl + query);
+      console.log(baseUrl+query)
+      if (response.data.status === '1') {
+        if(response.data.result === null || response.data.result === undefined || response.data.result.length === 0)
+          continue
+
+        data.push(...response.data.result);
+      } else {
+        // console.error('Failed to fetch data:', response.data.message);
+      }  
+    }catch (error) {
+        // console.error('Error fetching data:', error);
+    }
+  }
+
+  const result0:User[] = []; // EOA
+  const result1:User[] = []; // CA - POOL
+  const result2:User[] = []; // CA - NOT POOL
+  for(const item of data){
+  
+      if(await L2PROVIDER.getCode(item.address) === '0x'){
+        result0.push({
+          claimer: item.address,
+          amount: item.value,
+          type:  0
+        })
+      }else{
+        const poolContract = new ethers2.Contract(item.address, Pool, L2PROVIDER); 
+        try{
+          await poolContract.liquidity()
+          result1.push({
+            claimer: item.address,
+            amount: item.value,
+            type:  1
+          })
+        }catch(err){
+          result2.push({
+            claimer: item.address,
+            amount: item.value,
+            type: 2
+          })
+        }
+
+      }
+  }
+  return [result0, result1, result2]
+}
+
+
+// getTotalAddressAll(1,1000)
+// getContractAll(1,1000,true)
+// getCollectWETH(1,1000)
