@@ -336,5 +336,213 @@
   },
   "state": 4,
   "isClaimed": false
+ },
+ {
+  "txHash": "0x2a916e9ef95c8e9caeb166ae7c0c022850aad260cfb285a8d5e803191bc7cdc7",
+  "event": {
+   "l1Token": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+   "l2Token": "0x46BbbC5f20093cB53952127c84F1Fbc9503bD6D9",
+   "from": "0x1E0E51d6Db814086a06A40CC946a5310146a8202",
+   "to": "0x1E0E51d6Db814086a06A40CC946a5310146a8202",
+   "amount": "4736000000",
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x69151fa00d353ec86d6231db0750af55f4bd127e6e0e0f407ef60f61878c65e9",
+  "event": {
+   "l1Token": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+   "l2Token": "0x46BbbC5f20093cB53952127c84F1Fbc9503bD6D9",
+   "from": "0x942d6ac7A6702Bb1852676f3f22AeE38bD442E4C",
+   "to": "0x942d6ac7A6702Bb1852676f3f22AeE38bD442E4C",
+   "amount": "3676000000",
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xbdd27a214caec782116595a77112d659bf4edd4c8c4d76d25cfc5f795a1d57ef",
+  "event": {
+   "l1Token": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+   "l2Token": "0x46BbbC5f20093cB53952127c84F1Fbc9503bD6D9",
+   "from": "0x71a85558bf573f2cc8C25A8A27C917FB296ce9D5",
+   "to": "0x71a85558bf573f2cc8C25A8A27C917FB296ce9D5",
+   "amount": "7000000000",
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xb4e164ccff846c66ac4995a9c422b17ccc83f8e9f2d90b6493f0f47bd347fd0f",
+  "event": {
+   "l1Token": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+   "l2Token": "0x2aCC8EFEd68f07DEAaD37f57A189677fB5655B46",
+   "from": "0x8d58995C2EB561Ca21c9bD7935015d739a75c5C0",
+   "to": "0x8d58995C2EB561Ca21c9bD7935015d739a75c5C0",
+   "amount": "3200000000",
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xe6160bd2224ae61c174a26a430b1716e912e43c90a6638e0f6876ac1034dbd56",
+  "event": {
+   "l1Token": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+   "l2Token": "0x46BbbC5f20093cB53952127c84F1Fbc9503bD6D9",
+   "from": "0x5da0A50c04e4d8DC07740b5C66bc2250566883C2",
+   "to": "0x5da0A50c04e4d8DC07740b5C66bc2250566883C2",
+   "amount": "3888000000",
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x8311ca6c35a252efa6432d284b92a3a7d01515297270eb597ade0b7b857f5a05",
+  "event": {
+   "l1Token": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+   "l2Token": "0x2aCC8EFEd68f07DEAaD37f57A189677fB5655B46",
+   "from": "0x3380FCf51d9B1A1F472Ba361eD9645698C08fe6c",
+   "to": "0x3380FCf51d9B1A1F472Ba361eD9645698C08fe6c",
+   "amount": "3984000000",
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xb8c253fe48ab82b92bc031b300c117de9d7e4c68b160be347dd11edb70c66263",
+  "event": {
+   "l1Token": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+   "l2Token": "0x2aCC8EFEd68f07DEAaD37f57A189677fB5655B46",
+   "from": "0x6BeCE336c19217d1EB3bdD8Df37999dc7F5BF968",
+   "to": "0x6BeCE336c19217d1EB3bdD8Df37999dc7F5BF968",
+   "amount": "3200000000",
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xcc1ef5538146ff2f8064c7cb60f884b3636f93574ddefb68cc730a69e02b5a4d",
+  "event": {
+   "l1Token": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+   "l2Token": "0x46BbbC5f20093cB53952127c84F1Fbc9503bD6D9",
+   "from": "0xa6a89A0405032b854cEd02f95599d91eD7935610",
+   "to": "0xa6a89A0405032b854cEd02f95599d91eD7935610",
+   "amount": "3300000000",
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xbcc4ff1ef284732ddc2ddf5f9913873bfddea5a4d799dfcc563a9dcf31985b26",
+  "event": {
+   "l1Token": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+   "l2Token": "0x2aCC8EFEd68f07DEAaD37f57A189677fB5655B46",
+   "from": "0x97480065cd63143B9913CA67872DfC3A191e4c9e",
+   "to": "0x97480065cd63143B9913CA67872DfC3A191e4c9e",
+   "amount": "2965000000",
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xd77f79aa326510cd43ef7383c2052703c1be5a8e5d9a41b0d256c6a1c9b3c0fc",
+  "event": {
+   "l1Token": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+   "l2Token": "0x46BbbC5f20093cB53952127c84F1Fbc9503bD6D9",
+   "from": "0xcb002fC8Cb3a5638F19156B16F98e9eC9232c1ae",
+   "to": "0xcb002fC8Cb3a5638F19156B16F98e9eC9232c1ae",
+   "amount": "6501000000",
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xfaf102ff9f050876fe83c058d5c2a6b421ffd5be9f30f41f0b115d97b6fb267f",
+  "event": {
+   "l1Token": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+   "l2Token": "0x2aCC8EFEd68f07DEAaD37f57A189677fB5655B46",
+   "from": "0xDa9B006a2D6c39F69E447924994018C08e268f7a",
+   "to": "0xDa9B006a2D6c39F69E447924994018C08e268f7a",
+   "amount": "2687000000",
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x89f6a21e66ad565ced9cc86512d03c7ed8cd483bbd99313be817132a3c2b0ef0",
+  "event": {
+   "l1Token": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+   "l2Token": "0x46BbbC5f20093cB53952127c84F1Fbc9503bD6D9",
+   "from": "0x3188489d1c650A43f81724C0E205D14FdeFAB329",
+   "to": "0x3188489d1c650A43f81724C0E205D14FdeFAB329",
+   "amount": "58741000000",
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x1396ce566bb7040372d5f9991619b337380f10dbc99752fbc869410bb4014e51",
+  "event": {
+   "l1Token": "0x0000000000000000000000000000000000000000",
+   "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
+   "from": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "to": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "amount": "10000000000000",
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xbcc94d1ac47b245020a8a223e36fac1d4d51d8ad78e6caf1f9cdcb0eac87c405",
+  "event": {
+   "l1Token": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+   "l2Token": "0x2aCC8EFEd68f07DEAaD37f57A189677fB5655B46",
+   "from": "0xF24E378E0964E6f491Fc88Ae42eAB2276f93FB01",
+   "to": "0xF24E378E0964E6f491Fc88Ae42eAB2276f93FB01",
+   "amount": "10000000000",
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x13658b161325ab3d1bd80b225b07848fe3f9e91dbd3bfc1f737593599b72f687",
+  "event": {
+   "l1Token": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+   "l2Token": "0x46BbbC5f20093cB53952127c84F1Fbc9503bD6D9",
+   "from": "0x3aD4Df56E6B8F7Dc02ED8D5CCf9c13F5E3452De3",
+   "to": "0x3aD4Df56E6B8F7Dc02ED8D5CCf9c13F5E3452De3",
+   "amount": "7275000000",
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xd234ef608ec02166fb8b0832a4107edb36d8226d76d2935df7d0d43a417a078e",
+  "event": {
+   "l1Token": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+   "l2Token": "0x46BbbC5f20093cB53952127c84F1Fbc9503bD6D9",
+   "from": "0x59E8d5DfaE4DD0Eb794cbFe08dE6eC0672CCeB32",
+   "to": "0x59E8d5DfaE4DD0Eb794cbFe08dE6eC0672CCeB32",
+   "amount": "2582000000",
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
  }
 ]

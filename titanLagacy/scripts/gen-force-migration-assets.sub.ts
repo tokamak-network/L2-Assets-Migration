@@ -176,14 +176,14 @@ const main = async () => {
           continue;
 
         totalBalance = totalBalance + amount// total balance  update
-        if(await L2PROVIDER.getCode(address) === '0x') { // outPool
+        if(await L2PROVIDER.getCode(address) === '0x') {
           data.push({
             claimer : address,
             amount : amount.toString(),
             type : 0 // 0 : eoa
           })
         }else{
-          outPool.push({
+          outPool.push({ // ca 
             claimer : address,
             amount : amount.toString(),
             type : i,  // outPool array index 

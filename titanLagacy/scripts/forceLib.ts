@@ -158,7 +158,7 @@ export const getWithdrawalIsClaimAll = () => {
  * @param {integer} page - A nonnegative integer that represents the page number to be used for pagination. 'offset' must be provided in conjunction.
  * @param {integer} offset - A nonnegative integer that represents the maximum number of records to return when paginating. 'page' must be provided in conjunction.
  */
-export const getTotalAddressAll = async(page:number, offest:number) => {
+export const getTotalAddressAll = async(page:number, offest:number, flag?:boolean) => {
   const query = `module=account&action=listaccounts&page=${page}&offset=${offest}`;
   let accounts: Account[] = [];
   try {
@@ -173,18 +173,27 @@ export const getTotalAddressAll = async(page:number, offest:number) => {
   } catch (error) {
       console.error('Error fetching data:', error);
   }
-
+  
+  
   const result0:User[] = []; // EOA
   const result1:User[] = []; // CA - POOL
   const result2:User[] = []; // CA - NOT POOL
+  const result0Str:any = []; // EOA
+
   let totalBalance = ethers2.getBigInt(0);
+  const total = accounts.length;
+  const bar = new ProgressBar(':bar :current/:total', { width: 50, total: total});
+  console.log(blue.bgBlue.bold("🔍 Retrieving total ETH balance..."))
   for(const account of accounts){
       if(await L2PROVIDER.getCode(account.address) === '0x' && account.balance > 0){
-        result0.push({
-          claimer: account.address,
-          amount: account.balance.toString(),
-          type:  0
-        })
+          result0.push({
+            claimer: account.address,
+            amount: account.balance.toString(),
+            type:  0
+          })
+          if(flag){
+            result0Str.push(account.address)
+          }
       }else if (account.balance > 0) {
         const poolContract = new ethers2.Contract(account.address, Pool, L2PROVIDER); 
         try{
@@ -202,9 +211,13 @@ export const getTotalAddressAll = async(page:number, offest:number) => {
           })
         }
       }
+      bar.tick();
+      totalBalance = totalBalance + ethers2.getBigInt(account.balance)
   }
-  
-  return [result0, result1, result2]
+  // console.log(result0.length)
+  // console.log( result2)
+  // console.log(totalBalance)
+  return [result0, result1, result2, flag? result0Str : undefined]
 }
 
 
@@ -245,6 +258,9 @@ export const getContractAll = async(page:number, offest:number, flag?:boolean) =
   }));
 
   if (flag){
+    const total = convertData.length;
+    const bar = new ProgressBar(':bar :current/:total', { width: 50, total: total});
+    console.log(blue.bgBlue.bold("🔍 Retrieving All Contract list (token included)..."))
     for (const contract of convertData) {
       await sleep(100)
       const query = `module=account&action=tokenlist&address=${contract}&page=1&offset=9999`;
@@ -265,9 +281,10 @@ export const getContractAll = async(page:number, offest:number, flag?:boolean) =
       } catch (error) {
           // console.error('Error fetching data:', error);
       }
+      bar.tick();
     }
   } else return convertData;
-
+  
   return result
 }
 
