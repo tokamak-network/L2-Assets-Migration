@@ -17,9 +17,9 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC20__factory>;
     getContractFactory(
-      name: "L1ForceWithdraw",
+      name: "L1StandardBridge",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.L1ForceWithdraw__factory>;
+    ): Promise<Contracts.L1StandardBridge__factory>;
     getContractFactory(
       name: "Proxy",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -71,10 +71,10 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IERC20>;
     getContractAt(
-      name: "L1ForceWithdraw",
+      name: "L1StandardBridge",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.L1ForceWithdraw>;
+    ): Promise<Contracts.L1StandardBridge>;
     getContractAt(
       name: "Proxy",
       address: string,

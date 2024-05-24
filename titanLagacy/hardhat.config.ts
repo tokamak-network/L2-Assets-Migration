@@ -9,7 +9,7 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       forking: {
-        url: process.env.L1_RPC_URL || "",
+        url: process.env.CONTRACT_RPC_URL_L1 || "",
       }
     },
     main :{

@@ -1,8 +1,8 @@
 {
  "L1startBlock": 0,
- "L1endBlock": 19931252,
+ "L1endBlock": 19936643,
  "L2startBlock": 0,
- "L2endBlock": 19931252,
+ "L2endBlock": 19936643,
  "data": [
   {
    "l1Token": "0x0000000000000000000000000000000000000000",
@@ -1440,6 +1440,11 @@
      "type": 0
     },
     {
+     "claimer": "0x0adc4cc308e3c93f828e588e3d2761176c0c3831",
+     "amount": "3701392957275136",
+     "type": 0
+    },
+    {
      "claimer": "0x3380fcf51d9b1a1f472ba361ed9645698c08fe6c",
      "amount": "6760695915568861",
      "type": 0
@@ -2838,7 +2843,7 @@
     },
     {
      "claimer": "0x0aDC4cc308E3c93f828e588E3d2761176C0C3831",
-     "amount": "196030400000000000000",
+     "amount": "0",
      "type": 0
     }
    ]

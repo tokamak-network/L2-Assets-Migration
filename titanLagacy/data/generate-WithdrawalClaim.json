@@ -544,5 +544,18 @@
   },
   "state": 3,
   "isClaimed": false
+ },
+ {
+  "txHash": "0x07abd306f644daa94120a2f8f35a493a1fa9cb12ac9618091b7c2e2ef25ea175",
+  "event": {
+   "l1Token": "0x2be5e8c109e2197D077D13A82dAead6a9b3433C5",
+   "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
+   "from": "0x0aDC4cc308E3c93f828e588E3d2761176C0C3831",
+   "to": "0x0aDC4cc308E3c93f828e588E3d2761176C0C3831",
+   "amount": "196030400000000000000",
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
  }
 ]

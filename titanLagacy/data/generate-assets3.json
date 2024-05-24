@@ -1435,6 +1435,11 @@
     "hash": "0xa600af1ac92c908ce87863891efa8f22cedb2fee1cbdf7714c4415c453a648d3"
    },
    {
+    "claimer": "0x0adc4cc308e3c93f828e588e3d2761176c0c3831",
+    "amount": "3701392957275136",
+    "hash": "0xe5c2260fc93dd4594b2d7bb84cf50bffc2e759088701158a07c81d316644bfa9"
+   },
+   {
     "claimer": "0x3380fcf51d9b1a1f472ba361ed9645698c08fe6c",
     "amount": "6760695915568861",
     "hash": "0xf104e60110395fe2f4378e932884b22cbe4cdb63c8c32ecfa09d2c0ac5e7c0d3"
@@ -2833,8 +2838,8 @@
    },
    {
     "claimer": "0x0aDC4cc308E3c93f828e588E3d2761176C0C3831",
-    "amount": "196030400000000000000",
-    "hash": "0xee9432964740abd769f1d61527709ac7b676e0a75f3765fb9b1f806815fca438"
+    "amount": "0",
+    "hash": "0x23fd6e44e496366049256ff5dcf92df5e3db813f83e4817802aec419fa4fa6fd"
    }
   ]
  },

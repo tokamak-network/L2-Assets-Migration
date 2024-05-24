@@ -19,7 +19,15 @@ const L2BRIDGE = process.env.CONTRACTS_L2BRIDGE_ADDRESS || ""; // L2 bridge addr
 const baseUrl = "https://explorer.titan.tokamak.network/api?"
 const dirPath = "data"
 
-// true : claimed, false : unclaimed
+
+/**
+ * Returns whether a claim is made and the status of the withdrawal tx.
+ *
+ * UNCONFIRMED_L1_TO_L2_MESSAGE = 0, FAILED_L1_TO_L2_MESSAGE = 1,STATE_ROOT_NOT_PUBLISHED = 2, IN_CHALLENGE_PERIOD = 3,
+ * READY_FOR_RELAY = 4, RELAYED = 5, RELAYED_FAILED = 6
+ * @returns {boolean} - true : claimed, false : unclaimed
+ * 
+ */
 const isClaimed = (state:MessageStatus|any)=>{
   return  state == MessageStatus.RELAYED ? true : false
 }

@@ -1,12 +1,13 @@
+// import { ethers as ethers2} from "ethers2";
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import {AssetsParam, ClaimParam} from "../../scripts/types"
 import path from 'path'
 import fs from 'fs'
-import { EventLog } from "ethers";
+import { ERC20 } from "../../scripts/types"
 
 export default describe('# Unit Test : L1 StandardBridge', () => {
     const proxyABI = require("../../artifacts/contracts/Proxy.sol/Proxy.json");
+    const l1BridgeABI = require("../../artifacts/contracts/UpgradeL1BridgeD.sol/UpgradeL1BridgeD.json");
     const helpers = require("@nomicfoundation/hardhat-toolbox/network-helpers");
     const L1BRIDGE = process.env.CONTRACTS_L1BRIDGE_ADDRESS || "";  
     const L2BRIDGE = process.env.CONTRACTS_L2BRIDGE_ADDRESS || "";
@@ -41,35 +42,77 @@ export default describe('# Unit Test : L1 StandardBridge', () => {
         expect(messenger).to.be.equal(_messenger)
     });
 
+
+    it('Titan Paused Test', async () => {
+        const upgradedContract = await ethers.getContractAt("UpgradeL1BridgeD", L1BRIDGE)        
+        const zeroSigner = await ethers.getSigner(zeroAddress) // tmp signer
+
+        await (upgradedContract.connect(zeroSigner) as any).forceActive(true);
+        //ETH 
+        await expect(upgradedContract.depositETH(100000, ethers.encodeBytes32String("0x0"))).to.be.revertedWith("Paused L1StandardBridge")
+        await expect(upgradedContract.depositETHTo(owner, 100000, ethers.encodeBytes32String("0x0"))).to.be.revertedWith("Paused L1StandardBridge")
+        
+        //ERC20 
+        await expect(upgradedContract.depositERC20(zeroAddress, zeroAddress, 100000, 100000, ethers.encodeBytes32String("0x0"))).to.be.revertedWith("Paused L1StandardBridge")
+        await expect(upgradedContract.depositERC20To(zeroAddress, zeroAddress, owner, 100000, 100000, ethers.encodeBytes32String("0x0"))).to.be.revertedWith("Paused L1StandardBridge")
+    })
+
+
     it('Registry Check', async () => {
         const l1Bridge:any = await ethers.getContractAt("UpgradeL1BridgeD", L1BRIDGE) 
         const accounts = await ethers.getSigners()
         const zeroSigner = await ethers.getSigner(zeroAddress) // tmp signer
-
-        await l1Bridge.connect(zeroSigner).forceActive()
-        // @param 
-        // address token;
-        // address to; 
-        // uint amount;
-        // bytes32 hash;
+        
+        let params:any = []
+        let count = 0;
+        let max = 999;
         for(const assetInfo of assets) {
-            if(assetInfo.l1Token === "0x0000000000000000000000000000000000000000")
-                continue
-            
+            // if(assetInfo.l1Token !== "0x0000000000000000000000000000000000000000")
+            //     continue
             for(const asset of assetInfo.data) {
                 if(asset.amount == 0) // todo : amount 0 arguments require remove function
                     continue    
                 
-                
-                const param:any = {
-                    token: assetInfo.l1Token,
-                    to: asset.claimer,
-                    amount: asset.amount
+                if(count != max) {
+                    params.push({
+                        token: assetInfo.l1Token,
+                        to: asset.claimer,
+                        amount: asset.amount,
+                        index: asset.hash
+                    })
+                    ++count;
                 }
-                
-                await l1Bridge.connect(zeroSigner).forceWithdrawAll([param])
+
+                if(count == max) {
+                    await l1Bridge.connect(zeroSigner).forceWithdrawAll(params)
+                    params.length = 0;
+                    count = 0;
+                }
+                // const param:any = {
+                //     token: assetInfo.l1Token,
+                //     to: asset.claimer,
+                //     amount: asset.amount,
+                //     index: asset.hash
+                // }           
             }
         }
+        params.length > 0 ? await l1Bridge.connect(zeroSigner).forceWithdrawAll(params) : ""
+    
+        // check balance 
+        // for(const assetInfo of assets) {
+        //     if(assetInfo.l1Token === "0x0000000000000000000000000000000000000000"){
+        //         console.log(assetInfo.tokenName,": ", await ethers.provider.getBalance(L1BRIDGE));
+        //     }else{
+        //         const l1token = await ethers.getContractAt(ERC20, assetInfo.l1Token)   
+        //         console.log(assetInfo.tokenName,": ", await l1token.balanceOf(L1BRIDGE));
+        //     }
+        // }
+
+        // check event 
+        // event ForceWithdraw(bytes32 indexed _index, address indexed _token, address indexed _claimer, uint _amount);
+        // const b:any = new ethers.Contract(L1BRIDGE, l1BridgeABI.abi, ethers.provider);
+        // const events:any = await b.queryFilter(b.filters.ForceWithdraw(null,null,null,null), 2000, 'latest');
+        // console.log(events.length)
     });
 
 
