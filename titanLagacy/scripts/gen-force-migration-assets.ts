@@ -88,7 +88,7 @@ const main = async () => {
   console.log('\n')
   contractAllInToken = await getContractAll(1,10000,true)
   console.log('\n')
-
+  
 
   const withdrawClaimed:WithdrawClaimed[] =[];
   // get L2 initWithdrawalclaim data 
@@ -463,27 +463,32 @@ const collectPool = async() => {
 
   //contractAllInToken setup 
   const caAllInToken = new Map<any, any>();
-  for(const ca of contractAllInToken) {
-    if(caAllInToken.has(ca.l2Token)) {
-      if(ca.type === 'ERC-20') 
-        caAllInToken.set(ca.l2Token, caAllInToken.get(ca.l2Token) + ethers2.getBigInt(ca.balance))
-    }else if (ca.type === 'ERC-20') {
-      caAllInToken.set(ca.l2Token, ethers2.getBigInt(ca.balance))
-    }
-  }
-
+  contractAllInToken.forEach((Info:any) => {
+    Info.tokens.forEach((token:any) => {
+      if(token.type === 'ERC-20') {
+        if(caAllInToken.has(token.contractAddress)){
+          caAllInToken.set(token.contractAddress.toLowerCase(), ethers2.getBigInt(caAllInToken.get(token.contractAddress.toLowerCase())) + ethers2.getBigInt(token.balance))
+        }else{
+          caAllInToken.set(token.contractAddress.toLowerCase(), ethers2.getBigInt(token.balance))
+        }
+      }
+    })
+  })
 
   // CheckPoint: Finally, compare the totals 
   console.log(white.bgGreen.bold("\n Finally, Compare the Total Amounts")) 
   for(const info of out.data) {
     const l2total:any = info.data.reduce((acc:any, cur:any) => {
-      return BigInt(acc) + BigInt(cur.amount)
+      return ethers2.getBigInt(acc) + ethers2.getBigInt(cur.amount)
     },0)
-    if(verifyL2Balance.get(info.l2Token) >= (ethers2.getBigInt(l2total) + ethers2.getBigInt(caAllInToken.get(info.l2Token)))) {
-      console.log(info.tokenName,' L2 Total Balance: ', verifyL2Balance.get(info.l2Token), ' Collected L2 Total Balance: ', l2total,"(+",caAllInToken.get(info.l2Token),")",green('MATCH ✅'))
+
+    const caAmount = ethers2.getBigInt(caAllInToken.has(info.l2Token.toLowerCase()) ? caAllInToken.get(info.l2Token.toLowerCase()) : 0)
+
+    if(verifyL2Balance.get(info.l2Token) >= (ethers2.getBigInt(l2total) + caAmount)) {
+      console.log(info.tokenName,' L2 Total Balance: ', verifyL2Balance.get(info.l2Token), ' Collected L2 Total Balance: ', ethers2.getBigInt(l2total) + caAmount,"(-",caAmount,")",green('MATCH ✅'))
     }
     else {
-      console.log(info.tokenName, ' L2 Total Balance: ', verifyL2Balance.get(info.l2Token), ' Collected L2 Total Balance: ', l2total,"(+",caAllInToken.get(info.l2Token),")",red('MISMATCH ❌'))
+      console.log(info.tokenName, ' L2 Total Balance: ', verifyL2Balance.get(info.l2Token), ' Collected L2 Total Balance: ', ethers2.getBigInt(l2total) + caAmount,"(-",caAmount,")",red('MISMATCH ❌'))
     }
   }
   
