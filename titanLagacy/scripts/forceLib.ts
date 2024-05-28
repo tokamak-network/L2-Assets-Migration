@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import { ethers as ethers2 } from 'ethers2';
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import { BatchCrossChainMessenger, MessageStatus} from "@tokamak-network/titan-sdk"
 import { L2Interface, WithdrawClaimed,Pool, User } from './types';
 import { blue } from 'console-log-colors';
@@ -14,7 +13,7 @@ import * as dotenv from 'dotenv';
 */
 
 const WETH = process.env.L2_WETH_ADDRESS || ""
-const L2PROVIDER = new ethers2.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L2 || ""); // L2 RPC URL
+const L2PROVIDER = new ethers.providers.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L2 || ""); // L2 RPC URL
 const L2BRIDGE = process.env.CONTRACTS_L2BRIDGE_ADDRESS || ""; // L2 bridge address
 const baseUrl = "https://explorer.titan.tokamak.network/api?"
 const dirPath = "data"
@@ -157,7 +156,7 @@ export const getWithdrawalIsClaimAll = () => {
 
   for(const data of obj) {
       maps.has(data.event.l1Token) ? 
-        maps.set(data.event.l1Token, ethers2.toBigInt(maps.get(data.event.l1Token)) + ethers2.toBigInt(data.event.amount)) :
+        maps.set(data.event.l1Token, BigNumber.from(maps.get(data.event.l1Token)).add(BigNumber.from(data.event.amount))) :
          maps.set(data.event.l1Token, data.event.amount)
   }
 }
@@ -188,7 +187,7 @@ export const getTotalAddressAll = async(page:number, offest:number, flag?:boolea
   const result2:User[] = []; // CA - NOT POOL
   const result0Str:any = []; // EOA
 
-  let totalBalance = ethers2.getBigInt(0);
+  let totalBalance:BigNumber =BigNumber.from(0);
   const total = accounts.length;
   const bar = new ProgressBar(':bar :current/:total', { width: 50, total: total});
   console.log(blue.bgBlue.bold("🔍 Retrieving total ETH balance..."))
@@ -203,7 +202,7 @@ export const getTotalAddressAll = async(page:number, offest:number, flag?:boolea
             result0Str.push(account.address)
           }
       }else if (account.balance > 0) {
-        const poolContract = new ethers2.Contract(account.address, Pool, L2PROVIDER); 
+        const poolContract = new ethers.Contract(account.address, Pool, L2PROVIDER); 
         try{
           await poolContract.liquidity()
           result1.push({
@@ -220,7 +219,7 @@ export const getTotalAddressAll = async(page:number, offest:number, flag?:boolea
         }
       }
       bar.tick();
-      totalBalance = totalBalance + ethers2.getBigInt(account.balance)
+      totalBalance = totalBalance.add(BigNumber.from(account.balance))
   }
   // console.log(result0.length)
   // console.log( result2)
@@ -256,7 +255,7 @@ export const getContractAll = async(page:number, offest:number, flag?:boolean) =
   }
   const convertData:any = [];
   await Promise.all(data.map(async(item:any) =>{
-    const poolContract = new ethers2.Contract(item.Address, Pool, L2PROVIDER); 
+    const poolContract = new ethers.Contract(item.Address, Pool, L2PROVIDER); 
       // todo : Requires non-V3 full contract handling.
         try{
           await poolContract.liquidity()
@@ -303,14 +302,13 @@ export const getContractAll = async(page:number, offest:number, flag?:boolean) =
  * @param {integer} offset - A nonnegative integer that represents the maximum number of records to return when paginating. 'page' must be provided in conjunction.
  * @param {any} weth - L2 WETH address, default value ENV L2_WETH_ADDRESS
  */
-const getCollectWETH = async(page:number, offest:number, weth?:any) => {
+export const getCollectWETH = async(page:number, offest:number, weth?:any) => {
   const data:any =[]; 
   weth = weth? weth : WETH;
   for(let i = 1 ; i <= page; i++){
     try {
       const query = `module=token&action=getTokenHolders&contractaddress=${weth}&page=${i}&offset=${offest}`;
       const response = await axios.get<Response>(baseUrl + query);
-      console.log(baseUrl+query)
       if (response.data.status === '1') {
         if(response.data.result === null || response.data.result === undefined || response.data.result.length === 0)
           continue
@@ -336,7 +334,7 @@ const getCollectWETH = async(page:number, offest:number, weth?:any) => {
           type:  0
         })
       }else{
-        const poolContract = new ethers2.Contract(item.address, Pool, L2PROVIDER); 
+        const poolContract = new ethers.Contract(item.address, Pool, L2PROVIDER); 
         try{
           await poolContract.liquidity()
           result1.push({
@@ -355,6 +353,12 @@ const getCollectWETH = async(page:number, offest:number, weth?:any) => {
       }
   }
   return [result0, result1, result2]
+}
+
+export const bigNumberAbs = (bn:BigNumber) => {
+  const bnStr = bn.toString();
+  const absStr = bnStr.startsWith('-') ? bnStr.slice(1) : bnStr;
+  return ethers.BigNumber.from(absStr);
 }
 
 
