@@ -8,6 +8,8 @@ export type { contracts };
 import type * as sub from "./sub";
 export type { sub };
 export * as factories from "./factories";
+export type { IERC20Permit } from "./@openzeppelin/contracts/token/ERC20/extensions/IERC20Permit";
+export { IERC20Permit__factory } from "./factories/@openzeppelin/contracts/token/ERC20/extensions/IERC20Permit__factory";
 export type { IERC20 } from "./@openzeppelin/contracts/token/ERC20/IERC20";
 export { IERC20__factory } from "./factories/@openzeppelin/contracts/token/ERC20/IERC20__factory";
 export type { L1StandardBridge } from "./contracts/L1Bridge.sol/L1StandardBridge";

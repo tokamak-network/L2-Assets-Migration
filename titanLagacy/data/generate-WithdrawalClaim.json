@@ -6,7 +6,10 @@
    "l2Token": "0x46BbbC5f20093cB53952127c84F1Fbc9503bD6D9",
    "from": "0xcb002fC8Cb3a5638F19156B16F98e9eC9232c1ae",
    "to": "0xcb002fC8Cb3a5638F19156B16F98e9eC9232c1ae",
-   "amount": "5000000",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x4c4b40"
+   },
    "data": "0x"
   },
   "state": 4,
@@ -19,7 +22,10 @@
    "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
    "from": "0x22D1B7A30121aEee04122f0E367D3864892ee0D8",
    "to": "0x22D1B7A30121aEee04122f0E367D3864892ee0D8",
-   "amount": "8750000000000000",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x1f161421c8e000"
+   },
    "data": "0x"
   },
   "state": 4,
@@ -32,7 +38,10 @@
    "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
    "from": "0x1B0B0ee6609a5eb67C4DB4EE19329aC2cEAf9441",
    "to": "0x1B0B0ee6609a5eb67C4DB4EE19329aC2cEAf9441",
-   "amount": "5000000000000000",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x11c37937e08000"
+   },
    "data": "0x"
   },
   "state": 4,
@@ -45,7 +54,10 @@
    "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
    "from": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
    "to": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
-   "amount": "27073390258802166",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x602f1ae13dcdf6"
+   },
    "data": "0x"
   },
   "state": 4,
@@ -58,7 +70,10 @@
    "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
    "from": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
    "to": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
-   "amount": "1",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x01"
+   },
    "data": "0x"
   },
   "state": 4,
@@ -71,7 +86,10 @@
    "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
    "from": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
    "to": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
-   "amount": "1",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x01"
+   },
    "data": "0x"
   },
   "state": 4,
@@ -84,7 +102,10 @@
    "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
    "from": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
    "to": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
-   "amount": "1",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x01"
+   },
    "data": "0x"
   },
   "state": 4,
@@ -97,7 +118,10 @@
    "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
    "from": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
    "to": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
-   "amount": "1",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x01"
+   },
    "data": "0x"
   },
   "state": 4,
@@ -110,7 +134,10 @@
    "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
    "from": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
    "to": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
-   "amount": "1",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x01"
+   },
    "data": "0x"
   },
   "state": 4,
@@ -123,7 +150,10 @@
    "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
    "from": "0x3188489d1c650A43f81724C0E205D14FdeFAB329",
    "to": "0x3188489d1c650A43f81724C0E205D14FdeFAB329",
-   "amount": "2500000000000000000000",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x878678326eac900000"
+   },
    "data": "0x"
   },
   "state": 4,
@@ -136,7 +166,10 @@
    "l2Token": "0x46BbbC5f20093cB53952127c84F1Fbc9503bD6D9",
    "from": "0x3188489d1c650A43f81724C0E205D14FdeFAB329",
    "to": "0x3188489d1c650A43f81724C0E205D14FdeFAB329",
-   "amount": "8391660000",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x01f42e91e0"
+   },
    "data": "0x"
   },
   "state": 4,
@@ -149,7 +182,10 @@
    "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
    "from": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
    "to": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
-   "amount": "1",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x01"
+   },
    "data": "0x"
   },
   "state": 4,
@@ -162,7 +198,10 @@
    "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
    "from": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
    "to": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
-   "amount": "1",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x01"
+   },
    "data": "0x"
   },
   "state": 4,
@@ -175,7 +214,10 @@
    "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
    "from": "0x74a9636E5f6C9639a0eDDf0CeA2cDeA24e67b999",
    "to": "0x74a9636E5f6C9639a0eDDf0CeA2cDeA24e67b999",
-   "amount": "198023381960616580",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x02bf85377afbea84"
+   },
    "data": "0x"
   },
   "state": 4,
@@ -188,7 +230,10 @@
    "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
    "from": "0xd51e5E72DbA89FdD03B19E576AC96af87299e7f7",
    "to": "0xd51e5E72DbA89FdD03B19E576AC96af87299e7f7",
-   "amount": "70000000000000000000",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x03cb71f51fc5580000"
+   },
    "data": "0x"
   },
   "state": 4,
@@ -201,7 +246,10 @@
    "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
    "from": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
    "to": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
-   "amount": "100000000000",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x174876e800"
+   },
    "data": "0x"
   },
   "state": 4,
@@ -214,7 +262,10 @@
    "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
    "from": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
    "to": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
-   "amount": "100000000000000",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x5af3107a4000"
+   },
    "data": "0x"
   },
   "state": 4,
@@ -227,7 +278,10 @@
    "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
    "from": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
    "to": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
-   "amount": "100000000000",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x174876e800"
+   },
    "data": "0x"
   },
   "state": 4,
@@ -240,7 +294,10 @@
    "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
    "from": "0xFF1F43422A0240CCbD29C16197853b372a61255d",
    "to": "0xFF1F43422A0240CCbD29C16197853b372a61255d",
-   "amount": "14900000000000000000000",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x0327bb09d06aa8500000"
+   },
    "data": "0x"
   },
   "state": 4,
@@ -253,7 +310,10 @@
    "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
    "from": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
    "to": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
-   "amount": "1",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x01"
+   },
    "data": "0x"
   },
   "state": 4,
@@ -266,7 +326,10 @@
    "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
    "from": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
    "to": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
-   "amount": "1",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x01"
+   },
    "data": "0x"
   },
   "state": 4,
@@ -279,7 +342,10 @@
    "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
    "from": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
    "to": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
-   "amount": "1",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x01"
+   },
    "data": "0x"
   },
   "state": 4,
@@ -292,7 +358,10 @@
    "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
    "from": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
    "to": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
-   "amount": "0",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x00"
+   },
    "data": "0x"
   },
   "state": 4,
@@ -305,7 +374,10 @@
    "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
    "from": "0x24884B9A47049B7663aEdaC7c7C91afd406EA09e",
    "to": "0x24884B9A47049B7663aEdaC7c7C91afd406EA09e",
-   "amount": "10000000000000000",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x2386f26fc10000"
+   },
    "data": "0x"
   },
   "state": 4,
@@ -318,7 +390,10 @@
    "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
    "from": "0xA4Cb7fb1aBb9D6F7750BddeaD7B11F7a3eC4eD10",
    "to": "0xA4Cb7fb1aBb9D6F7750BddeaD7B11F7a3eC4eD10",
-   "amount": "2300000000000000000000",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x7caee97613e6700000"
+   },
    "data": "0x"
   },
   "state": 4,
@@ -331,127 +406,13 @@
    "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
    "from": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
    "to": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
-   "amount": "1",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x01"
+   },
    "data": "0x"
   },
   "state": 4,
-  "isClaimed": false
- },
- {
-  "txHash": "0x2a916e9ef95c8e9caeb166ae7c0c022850aad260cfb285a8d5e803191bc7cdc7",
-  "event": {
-   "l1Token": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-   "l2Token": "0x46BbbC5f20093cB53952127c84F1Fbc9503bD6D9",
-   "from": "0x1E0E51d6Db814086a06A40CC946a5310146a8202",
-   "to": "0x1E0E51d6Db814086a06A40CC946a5310146a8202",
-   "amount": "4736000000",
-   "data": "0x"
-  },
-  "state": 3,
-  "isClaimed": false
- },
- {
-  "txHash": "0x69151fa00d353ec86d6231db0750af55f4bd127e6e0e0f407ef60f61878c65e9",
-  "event": {
-   "l1Token": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-   "l2Token": "0x46BbbC5f20093cB53952127c84F1Fbc9503bD6D9",
-   "from": "0x942d6ac7A6702Bb1852676f3f22AeE38bD442E4C",
-   "to": "0x942d6ac7A6702Bb1852676f3f22AeE38bD442E4C",
-   "amount": "3676000000",
-   "data": "0x"
-  },
-  "state": 3,
-  "isClaimed": false
- },
- {
-  "txHash": "0xbdd27a214caec782116595a77112d659bf4edd4c8c4d76d25cfc5f795a1d57ef",
-  "event": {
-   "l1Token": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-   "l2Token": "0x46BbbC5f20093cB53952127c84F1Fbc9503bD6D9",
-   "from": "0x71a85558bf573f2cc8C25A8A27C917FB296ce9D5",
-   "to": "0x71a85558bf573f2cc8C25A8A27C917FB296ce9D5",
-   "amount": "7000000000",
-   "data": "0x"
-  },
-  "state": 3,
-  "isClaimed": false
- },
- {
-  "txHash": "0xb4e164ccff846c66ac4995a9c422b17ccc83f8e9f2d90b6493f0f47bd347fd0f",
-  "event": {
-   "l1Token": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
-   "l2Token": "0x2aCC8EFEd68f07DEAaD37f57A189677fB5655B46",
-   "from": "0x8d58995C2EB561Ca21c9bD7935015d739a75c5C0",
-   "to": "0x8d58995C2EB561Ca21c9bD7935015d739a75c5C0",
-   "amount": "3200000000",
-   "data": "0x"
-  },
-  "state": 3,
-  "isClaimed": false
- },
- {
-  "txHash": "0xe6160bd2224ae61c174a26a430b1716e912e43c90a6638e0f6876ac1034dbd56",
-  "event": {
-   "l1Token": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-   "l2Token": "0x46BbbC5f20093cB53952127c84F1Fbc9503bD6D9",
-   "from": "0x5da0A50c04e4d8DC07740b5C66bc2250566883C2",
-   "to": "0x5da0A50c04e4d8DC07740b5C66bc2250566883C2",
-   "amount": "3888000000",
-   "data": "0x"
-  },
-  "state": 3,
-  "isClaimed": false
- },
- {
-  "txHash": "0x8311ca6c35a252efa6432d284b92a3a7d01515297270eb597ade0b7b857f5a05",
-  "event": {
-   "l1Token": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
-   "l2Token": "0x2aCC8EFEd68f07DEAaD37f57A189677fB5655B46",
-   "from": "0x3380FCf51d9B1A1F472Ba361eD9645698C08fe6c",
-   "to": "0x3380FCf51d9B1A1F472Ba361eD9645698C08fe6c",
-   "amount": "3984000000",
-   "data": "0x"
-  },
-  "state": 3,
-  "isClaimed": false
- },
- {
-  "txHash": "0xb8c253fe48ab82b92bc031b300c117de9d7e4c68b160be347dd11edb70c66263",
-  "event": {
-   "l1Token": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
-   "l2Token": "0x2aCC8EFEd68f07DEAaD37f57A189677fB5655B46",
-   "from": "0x6BeCE336c19217d1EB3bdD8Df37999dc7F5BF968",
-   "to": "0x6BeCE336c19217d1EB3bdD8Df37999dc7F5BF968",
-   "amount": "3200000000",
-   "data": "0x"
-  },
-  "state": 3,
-  "isClaimed": false
- },
- {
-  "txHash": "0xcc1ef5538146ff2f8064c7cb60f884b3636f93574ddefb68cc730a69e02b5a4d",
-  "event": {
-   "l1Token": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-   "l2Token": "0x46BbbC5f20093cB53952127c84F1Fbc9503bD6D9",
-   "from": "0xa6a89A0405032b854cEd02f95599d91eD7935610",
-   "to": "0xa6a89A0405032b854cEd02f95599d91eD7935610",
-   "amount": "3300000000",
-   "data": "0x"
-  },
-  "state": 3,
-  "isClaimed": false
- },
- {
-  "txHash": "0xbcc4ff1ef284732ddc2ddf5f9913873bfddea5a4d799dfcc563a9dcf31985b26",
-  "event": {
-   "l1Token": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
-   "l2Token": "0x2aCC8EFEd68f07DEAaD37f57A189677fB5655B46",
-   "from": "0x97480065cd63143B9913CA67872DfC3A191e4c9e",
-   "to": "0x97480065cd63143B9913CA67872DfC3A191e4c9e",
-   "amount": "2965000000",
-   "data": "0x"
-  },
-  "state": 3,
   "isClaimed": false
  },
  {
@@ -461,23 +422,13 @@
    "l2Token": "0x46BbbC5f20093cB53952127c84F1Fbc9503bD6D9",
    "from": "0xcb002fC8Cb3a5638F19156B16F98e9eC9232c1ae",
    "to": "0xcb002fC8Cb3a5638F19156B16F98e9eC9232c1ae",
-   "amount": "6501000000",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x01837d6340"
+   },
    "data": "0x"
   },
-  "state": 3,
-  "isClaimed": false
- },
- {
-  "txHash": "0xfaf102ff9f050876fe83c058d5c2a6b421ffd5be9f30f41f0b115d97b6fb267f",
-  "event": {
-   "l1Token": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
-   "l2Token": "0x2aCC8EFEd68f07DEAaD37f57A189677fB5655B46",
-   "from": "0xDa9B006a2D6c39F69E447924994018C08e268f7a",
-   "to": "0xDa9B006a2D6c39F69E447924994018C08e268f7a",
-   "amount": "2687000000",
-   "data": "0x"
-  },
-  "state": 3,
+  "state": 4,
   "isClaimed": false
  },
  {
@@ -487,10 +438,13 @@
    "l2Token": "0x46BbbC5f20093cB53952127c84F1Fbc9503bD6D9",
    "from": "0x3188489d1c650A43f81724C0E205D14FdeFAB329",
    "to": "0x3188489d1c650A43f81724C0E205D14FdeFAB329",
-   "amount": "58741000000",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x0dad3c8740"
+   },
    "data": "0x"
   },
-  "state": 3,
+  "state": 4,
   "isClaimed": false
  },
  {
@@ -500,7 +454,10 @@
    "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
    "from": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
    "to": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
-   "amount": "10000000000000",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x09184e72a000"
+   },
    "data": "0x"
   },
   "state": 3,
@@ -513,7 +470,10 @@
    "l2Token": "0x2aCC8EFEd68f07DEAaD37f57A189677fB5655B46",
    "from": "0xF24E378E0964E6f491Fc88Ae42eAB2276f93FB01",
    "to": "0xF24E378E0964E6f491Fc88Ae42eAB2276f93FB01",
-   "amount": "10000000000",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x02540be400"
+   },
    "data": "0x"
   },
   "state": 3,
@@ -526,7 +486,10 @@
    "l2Token": "0x46BbbC5f20093cB53952127c84F1Fbc9503bD6D9",
    "from": "0x3aD4Df56E6B8F7Dc02ED8D5CCf9c13F5E3452De3",
    "to": "0x3aD4Df56E6B8F7Dc02ED8D5CCf9c13F5E3452De3",
-   "amount": "7275000000",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x01b19fb0c0"
+   },
    "data": "0x"
   },
   "state": 3,
@@ -539,7 +502,10 @@
    "l2Token": "0x46BbbC5f20093cB53952127c84F1Fbc9503bD6D9",
    "from": "0x59E8d5DfaE4DD0Eb794cbFe08dE6eC0672CCeB32",
    "to": "0x59E8d5DfaE4DD0Eb794cbFe08dE6eC0672CCeB32",
-   "amount": "2582000000",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x99e63180"
+   },
    "data": "0x"
   },
   "state": 3,
@@ -552,7 +518,138 @@
    "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
    "from": "0x0aDC4cc308E3c93f828e588E3d2761176C0C3831",
    "to": "0x0aDC4cc308E3c93f828e588E3d2761176C0C3831",
-   "amount": "196030400000000000000",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x0aa077e22fb9bc0000"
+   },
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xdc2e109a287e1d6ab0dc91ad8031f798b0ea4a35a0ac57c6ece23d5db2434918",
+  "event": {
+   "l1Token": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+   "l2Token": "0x2aCC8EFEd68f07DEAaD37f57A189677fB5655B46",
+   "from": "0x4f359B3B5BE7549a9CaCaB70510335F9ACA5023A",
+   "to": "0x4f359B3B5BE7549a9CaCaB70510335F9ACA5023A",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x3019d7c0"
+   },
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x868fc550b4b6a90de508c468bf661d58b84a952decd42092d7bfdd451a0ecf94",
+  "event": {
+   "l1Token": "0x2be5e8c109e2197D077D13A82dAead6a9b3433C5",
+   "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
+   "from": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "to": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x174876e800"
+   },
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x2f240d6c46b9ebe6cb228a1d0fb9908b3629e8c1d264e5ee2d02a3c4c3759cbd",
+  "event": {
+   "l1Token": "0x0000000000000000000000000000000000000000",
+   "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
+   "from": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "to": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x09184e72a000"
+   },
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x8578aa94e2f91260e3ee435c9e68aa6ed23360737833c3f8f41e92369dbd97b3",
+  "event": {
+   "l1Token": "0x2be5e8c109e2197D077D13A82dAead6a9b3433C5",
+   "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
+   "from": "0x1E0E51d6Db814086a06A40CC946a5310146a8202",
+   "to": "0x1E0E51d6Db814086a06A40CC946a5310146a8202",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x6c6b935b8bbd400000"
+   },
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xf9f58b44262caa69a9693966cc28223bb3e1c73de7903ba2be7833f45323ce67",
+  "event": {
+   "l1Token": "0x2be5e8c109e2197D077D13A82dAead6a9b3433C5",
+   "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
+   "from": "0x7B06DEF7e1eBE693f921864406890F12765790ea",
+   "to": "0x7B06DEF7e1eBE693f921864406890F12765790ea",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x6c6b935b8bbd400000"
+   },
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x070e1c28b4cb59880405032a1d7ec95e8ee2c08966010983bc865c977511456a",
+  "event": {
+   "l1Token": "0x2be5e8c109e2197D077D13A82dAead6a9b3433C5",
+   "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
+   "from": "0x6BeCE336c19217d1EB3bdD8Df37999dc7F5BF968",
+   "to": "0x6BeCE336c19217d1EB3bdD8Df37999dc7F5BF968",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x6c6b935b8bbd400000"
+   },
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x1364c1115d98a98af4c93f1f5c9e06f3911f1bede35db9f5ce9dd3ef2dea872d",
+  "event": {
+   "l1Token": "0x2be5e8c109e2197D077D13A82dAead6a9b3433C5",
+   "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
+   "from": "0xcb002fC8Cb3a5638F19156B16F98e9eC9232c1ae",
+   "to": "0xcb002fC8Cb3a5638F19156B16F98e9eC9232c1ae",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x4be4e7267b6ae00000"
+   },
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x9379d82829bbef033f94b109e264d27008a11690f9d0b2e89e538c080ba5f1d3",
+  "event": {
+   "l1Token": "0x2be5e8c109e2197D077D13A82dAead6a9b3433C5",
+   "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
+   "from": "0x5da0A50c04e4d8DC07740b5C66bc2250566883C2",
+   "to": "0x5da0A50c04e4d8DC07740b5C66bc2250566883C2",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x6c6b935b8bbd400000"
+   },
    "data": "0x"
   },
   "state": 3,

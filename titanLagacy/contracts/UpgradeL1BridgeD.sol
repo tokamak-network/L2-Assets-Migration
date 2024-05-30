@@ -22,7 +22,6 @@ contract UpgradeL1BridgeD is L1StandardBridge {
 
     // WARNING: Be sure to edit with an admin address!
     address private constant closer = address(0); // msg.sender pauser same
-    mapping(bytes32 => address) private assets; // hased(L1Token, Claimer, amount) => Account
     
     // closer
     modifier onlyCloser() {
@@ -39,37 +38,17 @@ contract UpgradeL1BridgeD is L1StandardBridge {
             _forceWithdrawAll(_target[i]);
         }
     }
-
-    function _forceWithdrawAll(ClaimParam calldata _target) internal  {
-        if (_target.token == address(0)) {
-            try this.callETH(_target) {
+    
+    function _forceWithdrawAll(ClaimParam calldata _target) internal {
+        if(_target.token == address(0)) {
+            (bool success, ) = _target.to.call{ value: _target.amount }(new bytes(0));
+            if(success) 
                 emit ForceWithdraw(_target.index, _target.token, _target.to, _target.amount);
-                
-            } catch {
-                console.log("ETH transfer failed");
-            }
-        } else {
-            try this.callERC20(_target) {
-                emit ForceWithdraw(_target.index, _target.token, _target.to, _target.amount);          
-            } catch Error(string memory _err) {
-                console.log("ERC20 transfer failed", _err);
-            }
-        } 
+        }else{
+            (bool success,) = _target.token.call(abi.encodeWithSelector(IERC20.transfer.selector, _target.to, _target.amount));
+            if(success) 
+                emit ForceWithdraw(_target.index, _target.token, _target.to, _target.amount);
+        }
     }
-
-    function callERC20(ClaimParam calldata _target) public  {
-        if(address(this) != msg.sender)
-            revert("Only this contract can call this function");
-
-        IERC20(_target.token).safeTransfer(msg.sender, _target.amount);
-    }
-
-    function callETH(ClaimParam calldata _target) public  {
-        if(address(this) != msg.sender)
-            revert("Only this contract can call this function");
-
-        (bool success, ) = _target.to.call{ value: _target.amount }(new bytes(0));
-        require(success, "TransferHelper::safeTransferETH: ETH transfer failed");
-    }
-      
 }
+ 

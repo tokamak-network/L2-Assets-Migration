@@ -21,34 +21,28 @@ export default describe('# Unit Test : L1 StandardBridge', () => {
 
     const data = fs.readFileSync(path.join('data', 'generate-assets3.json'), "utf-8")
     const assets = JSON.parse(data) 
-    const provider = new ethers.providers.JsonRpcProvider("http://127.0.0.1:8545/")
+    // const provider = ethers.provider
+    const network = process.env.L1_PRC_URL_SDK || ""
     
-
     it('Titan L1 Bridge Upgrade Test', async () => {
         // await helpers.impersonateAccount(owner);
-        await helpers.reset("https://rpc.tokamak.network");
-        await provider.send('hardhat_impersonateAccount', [zeroAddress])
-        await provider.send('hardhat_setBalance', [zeroAddress, '0x152D02C7E14AF6800000']);
-        await provider.send("hardhat_setNextBlockBaseFeePerGas", [
-            "0x2540be400", // 10 gwei
-          ]);
-
-        const deployer = provider.getSigner(zeroAddress)
-        
-        
-        const proxy:any = new ethers.Contract(L1BRIDGE, proxyABI.abi, provider);
-
+        await helpers.reset(network);
+        await ethers.provider.send('hardhat_impersonateAccount', [zeroAddress])
+        await ethers.provider.send('hardhat_setBalance', [zeroAddress, '0x152D02C7E14AF6800000']);
     
-        const upgradeContract = await (await ethers.getContractFactory("UpgradeL1BridgeD", deployer)).deploy()
+        const deployer = ethers.provider.getSigner(zeroAddress)
+        const proxy:any = new ethers.Contract(L1BRIDGE, proxyABI.abi);
+
+        const upgradeContract = await (await ethers.getContractFactory("UpgradeL1BridgeD")).deploy()
         await upgradeContract.deployed()
-        const byteCode = await provider.getCode(upgradeContract.address)
+        const byteCode = await ethers.provider.getCode(upgradeContract.address)
         
         await proxy.connect(deployer).setCode(byteCode)
     
         const _owner = await proxy.connect(deployer).callStatic.getOwner()
         expect(owner).to.be.equal(_owner)
   
-        const upgradedContract = await ethers.getContractAt("UpgradeL1BridgeD", L1BRIDGE, deployer)
+        const upgradedContract = await ethers.getContractAt("UpgradeL1BridgeD", L1BRIDGE)
 
         const _l2Bridge = await upgradedContract.l2TokenBridge()
         expect(L2BRIDGE).to.be.equal(_l2Bridge)
@@ -59,8 +53,8 @@ export default describe('# Unit Test : L1 StandardBridge', () => {
 
 
     it('Titan Paused Test', async () => {
-        const deployer = provider.getSigner(zeroAddress)
-        const upgradedContract = await ethers.getContractAt("UpgradeL1BridgeD", L1BRIDGE, deployer)        
+        const deployer = ethers.provider.getSigner(zeroAddress)
+        const upgradedContract = await ethers.getContractAt("UpgradeL1BridgeD", L1BRIDGE)        
         
         await (upgradedContract.connect(deployer as any) as any).forceActive(true);
         //ETH 
@@ -74,23 +68,23 @@ export default describe('# Unit Test : L1 StandardBridge', () => {
 
 
     it('Registry Check', async () => {
-        const deployer = provider.getSigner(zeroAddress)
-        const l1Bridge:any = await ethers.getContractAt("UpgradeL1BridgeD", L1BRIDGE, deployer) 
-        const account = provider.getSigner(0)
+        const deployer = ethers.provider.getSigner(zeroAddress)
+        const l1Bridge:any = await ethers.getContractAt("UpgradeL1BridgeD", L1BRIDGE) 
+        const account = await ethers.provider.getSigner(owner)
         const accountAddress = await account.getAddress()
-
+            
         let params:any = []
         let count = 0;
-        let max = 1;
+        const max = 50;
 
-        // for(const assetInfo of assets) {
-        //     if(assetInfo.l1Token === "0x0000000000000000000000000000000000000000"){
-        //         console.log(assetInfo.tokenName,": ", await provider.getBalance(L1BRIDGE));
-        //     }else{
-        //         const l1token = await ethers.getContractAt(ERC20, assetInfo.l1Token,deployer)   
-        //         console.log(assetInfo.tokenName,": ", await l1token.balanceOf(L1BRIDGE));
-        //     }
-        // }
+        for(const assetInfo of assets) {
+            if(assetInfo.l1Token === "0x0000000000000000000000000000000000000000"){
+                console.log(assetInfo.tokenName,": ", await ethers.provider.getBalance(L1BRIDGE));
+            }else{
+                const l1token = await ethers.getContractAt(ERC20, assetInfo.l1Token)   
+                console.log(assetInfo.tokenName,": ", await l1token.balanceOf(L1BRIDGE));
+            }
+        }
         console.log("\n")
         for(const assetInfo of assets) {
             // if(assetInfo.l1Token !== "0x0000000000000000000000000000000000000000")
@@ -130,14 +124,14 @@ export default describe('# Unit Test : L1 StandardBridge', () => {
         
         console.log("\n")
         // check balance 
-        // for(const assetInfo of assets) {
-        //     if(assetInfo.l1Token === "0x0000000000000000000000000000000000000000"){
-        //         console.log(assetInfo.tokenName,": ", await provider.getBalance(L1BRIDGE));
-        //     }else{
-        //         const l1token = await ethers.getContractAt(ERC20, assetInfo.l1Token, deployer)   
-        //         console.log(assetInfo.tokenName,": ", await l1token.balanceOf(L1BRIDGE));
-        //     }
-        // }
+        for(const assetInfo of assets) {
+            if(assetInfo.l1Token === "0x0000000000000000000000000000000000000000"){
+                console.log(assetInfo.tokenName,": ", await ethers.provider.getBalance(L1BRIDGE));
+            }else{
+                const l1token = await ethers.getContractAt(ERC20, assetInfo.l1Token)   
+                console.log(assetInfo.tokenName,": ", await l1token.balanceOf(L1BRIDGE));
+            }
+        }
         // check event 
         // event ForceWithdraw(bytes32 indexed _index, address indexed _token, address indexed _claimer, uint _amount);
         // const b:any = new ethers.Contract(L1BRIDGE, l1BridgeABI.abi, ethers.provider);
