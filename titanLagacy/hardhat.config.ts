@@ -9,19 +9,20 @@ dotenv.config()
 
 const config: HardhatUserConfig = {
   networks: {
-    hardhat: {
-      forking: {
-        url: process.env.L1_PRC_URL_SDK || "",
-        blockNumber: 19973387
-      }
-    },
+    // hardhat: {
+    //   forking: {
+    //     url: process.env.L1_RPC_URL_SDK || "", // process.env.CONTRACT_RPC_URL_L1 || "",
+    // //     // blockNumber: 19973387,
+    //   }
+    // },
+    
     main :{
       url: process.env.CONTRACT_RPC_URL_L1 || "",
       accounts: [process.env.L1_PORXY_OWNER || "", process.env.L1_FORCE_OWNER || ""]
     },
     test :{
-      url: "https://eth-sepolia.g.alchemy.com/v2/0bwKZXOmm5eG2Ff5-zx-_okYXky0Ijnq",
-      accounts: [process.env.L1_PORXY_OWNER || "", process.env.L1_FORCE_OWNER || ""]
+      url: "http://127.0.0.1:8545/",
+      // accounts: [process.env.L1_PORXY_OWNER || "", process.env.L1_FORCE_OWNER || ""]
     },
   },
   solidity: {

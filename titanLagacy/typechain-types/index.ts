@@ -12,14 +12,12 @@ export type { IERC20Permit } from "./@openzeppelin/contracts/token/ERC20/extensi
 export { IERC20Permit__factory } from "./factories/@openzeppelin/contracts/token/ERC20/extensions/IERC20Permit__factory";
 export type { IERC20 } from "./@openzeppelin/contracts/token/ERC20/IERC20";
 export { IERC20__factory } from "./factories/@openzeppelin/contracts/token/ERC20/IERC20__factory";
-export type { L1StandardBridge } from "./contracts/L1Bridge.sol/L1StandardBridge";
-export { L1StandardBridge__factory } from "./factories/contracts/L1Bridge.sol/L1StandardBridge__factory";
+export type { L1StandardBridge } from "./contracts/L1StandardBridge";
+export { L1StandardBridge__factory } from "./factories/contracts/L1StandardBridge__factory";
 export type { Proxy } from "./contracts/Proxy";
 export { Proxy__factory } from "./factories/contracts/Proxy__factory";
 export type { UpgradeL1Bridge } from "./contracts/UpgradeL1Bridge";
 export { UpgradeL1Bridge__factory } from "./factories/contracts/UpgradeL1Bridge__factory";
-export type { UpgradeL1BridgeD } from "./contracts/UpgradeL1BridgeD";
-export { UpgradeL1BridgeD__factory } from "./factories/contracts/UpgradeL1BridgeD__factory";
 export type { IL1ChugSplashDeployer } from "./sub/packages/tokamak/contracts/contracts/chugsplash/interfaces/IL1ChugSplashDeployer";
 export { IL1ChugSplashDeployer__factory } from "./factories/sub/packages/tokamak/contracts/contracts/chugsplash/interfaces/IL1ChugSplashDeployer__factory";
 export type { L1ChugSplashProxy } from "./sub/packages/tokamak/contracts/contracts/chugsplash/L1ChugSplashProxy";
