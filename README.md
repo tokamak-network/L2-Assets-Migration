@@ -4,7 +4,7 @@ When Legacy Titan Closes, L2 assets can be withdrawn from L1.
 
 ## Environment Variables
 
-The following environment variables are required to be set. See the .env file for more information on specifying block numbers and using the Subgraph API.
+The following environment variables are required to be set. See the .env file for more information on specifying block numbers and using the Subgraph API!
 
 `CONTRACT_RPC_URL_L1` 
 
