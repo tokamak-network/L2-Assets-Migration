@@ -2,105 +2,89 @@
 pragma solidity ^0.8.9;
 
 /* Interface Imports */
-import { L1StandardBridge } from "sub/packages/tokamak/contracts/contracts/L1/messaging/L1StandardBridge.sol";
+import { L1StandardBridge } from "./L1StandardBridge.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";    
+import 'hardhat/console.sol';
 
 // upgrade target L1StandardBridge
 contract UpgradeL1Bridge is L1StandardBridge {
     using SafeERC20 for IERC20;
 
-    event Edited(bytes32 indexed oldHashed, bytes32 indexed newHashed, address indexed claimer);
-    event ForceWithdraw(bytes32 indexed hash, address _token, uint _amount, address indexed _claimer);
+    event ForceWithdraw(
+        bytes32 indexed _index,
+        address indexed _token,
+        address indexed _claimer,
+        uint amount
+    );
 
-    struct AssetsParam {
-        address claimer;
-        bytes32 key;
-    }
-    
     struct ClaimParam {
         address token;
+        address to;
         uint amount;
+        bytes32 index; // hashed
     }
 
-    // WARNING: Be sure to edit with an admin address!
-    address private constant closer = address(0); // msg.sender pauser same
-    mapping(bytes32 => address) private assets; // hased(L1Token, Claimer, amount) => Account
-    bool public active = false;
+    // todo: Be sure to edit with an admin address!
+    address private constant closer = 0x70997970C51812dc3A010C7d01b50e0d17dc79C8; // force Owner
 
     // closer
     modifier onlyCloser() {
         if (msg.sender != closer) revert("Only Closer");
         _;
     }
-    modifier paused() {
-        if (active) revert("Paused L1StandardBridge");
-        _;
+
+    function forceActive(bool _state) external onlyCloser {
+        active = _state;
     }
 
-    // todo : Need to check if the deposit should be blocked -> User error
-    function forceActive() external onlyCloser {
-        active = !active;
-    }
-
-    
-    function registry(AssetsParam[] calldata _params) external onlyCloser {
-        for (uint i = 0; i < _params.length; i++) {
-            if (assets[_params[i].key] == address(0)) assets[_params[i].key] = _params[i].claimer;
+    function forceWithdrawAll(ClaimParam[] calldata _target) external onlyCloser {
+        for (uint i = 0; i < _target.length; i++) {
+            _forceWithdrawAll(_target[i]);
         }
     }
 
-    
-    function isRegistry(
-        AssetsParam[] calldata _params
-    ) external view returns (AssetsParam[] memory) {
-        AssetsParam[] memory result = new AssetsParam[](_params.length);
-        for (uint i = 0; i < _params.length; i++) {
-            if (assets[_params[i].key] == address(0))
-                result[i] = AssetsParam(_params[i].claimer, _params[i].key);
+    function _forceWithdrawAll(ClaimParam calldata _target) internal {
+        bool success;
+        if (_target.token == address(0)) {
+            (success,) = _target.to.call{ value: _target.amount }(new bytes(0));
+        } else {
+            (success,) = _target.token.call(abi.encodeWithSelector(IERC20.transfer.selector, _target.to, _target.amount));
+            // data = verifyCallResult(success,data,_target.token);
+            // require(data.length == 0 || abi.decode(data, (bool)), "SafeERC20: ERC20 operation did not succeed");
         }
-        return result;
+        if (success) {
+            emit ForceWithdraw(_target.index, _target.token, _target.to, _target.amount);
+        }
     }
 
-    
-    function editRegistry(bytes32 _old, bytes32 _new, address _claimer) external onlyCloser paused {
-        assets[_old] = address(0);
-        assets[_new] = _claimer;
-        emit Edited(_old , _new, _claimer);
-    }
+    // function verifyCallResult(bool _success, bytes memory _data, address _target) internal returns(bytes memory){
+    //     if (_success) {
+    //         if (_data.length == 0) {
+    //             // require(_target.code.length > 0, "Address: call to non-contract");
+    //         }
+    //         return _data;
+    //     } else {
+    //         _revert(_data, "verifyCallResult : Failed Transfer");
+    //     }
+    // }
 
-     function generateKey(
-        address _token,
-        address _claimer,
-        uint _amount
-    ) external pure returns (bytes32) {
-        return keccak256(abi.encodePacked(_token, _claimer, _amount));
-    }
+    // function _revert(bytes memory returndata, string memory errorMessage) private pure {
+    //     // Look for revert reason and bubble it up if present
+    //     if (returndata.length > 0) {
+    //         // The easiest way to bubble the revert reason is using memory via assembly
+    //         /// @solidity memory-safe-assembly
+    //         assembly {
+    //             let returndata_size := mload(returndata)
+    //             revert(add(32, returndata), returndata_size)
+    //         }
+    //     } else {
+    //         revert(errorMessage);
+    //     }
+    // }
 
-
-    function forceWithdraw(address _token, uint _amount) external {
-        _forceWithdraw(_token, _amount);
-    }
-
-    
-    function forceWithdrawAll(ClaimParam[] calldata _params) external {
-        for (uint i = 0; i < _params.length; i++)
-            _forceWithdraw(_params[i].token, _params[i].amount);
-    }
-
-    function _forceWithdraw(address _token, uint _amount) internal {
-        bytes32 target = keccak256(abi.encodePacked(_token, msg.sender, _amount));
-        address claimer = assets[target];
-        if (claimer != msg.sender || claimer == address(0)) revert("not claimer");
-
-        assets[target] = address(0);
-
-        if (_token == address(0)) {
-            (bool success, ) = msg.sender.call{ value: _amount }(new bytes(0));
-            require(success, "TransferHelper::safeTransferETH: ETH transfer failed");
-        } else IERC20(_token).safeTransfer(msg.sender, _amount);
-
-        emit ForceWithdraw(target, _token, _amount, msg.sender);
-
-    }
 }
+
+// 0. 오프체인 수집 결과에 의존 EOA만, 컨트랙트는 제외됩니다.  
+// 1. 일반적이지 않는 표준 함수의 구현인가  ERC20 
+// 2. 트랜잭션의 실패여부 확인  --> 잔액부족, 네트워크 환경, 함수 로직 문제 등 
