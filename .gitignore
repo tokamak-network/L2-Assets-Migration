@@ -2,3 +2,5 @@ titanLagacy/.env
 titanLagacy/node_modules
 titanLagacy/artifacts
 titanLagacy/cache
+titanLagacy/typechain-types
+thanos/node_modules/
