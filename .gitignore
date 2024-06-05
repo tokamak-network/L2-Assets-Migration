@@ -4,3 +4,8 @@ titanLagacy/artifacts
 titanLagacy/cache
 titanLagacy/typechain-types/
 thanos/node_modules/
+thanos/.env
+thanos/node_modules
+thanos/artifacts
+thanos/cache
+thanos/typechain-types/

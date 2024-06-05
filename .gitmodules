@@ -1,3 +1,6 @@
 [submodule "titanLagacy/sub"]
 	path = titanLagacy/sub
 	url = https://github.com/tokamak-network/tokamak-titan.git
+[submodule "thanos/sub"]
+	path = thanos/sub
+	url = https://github.com/tokamak-network/tokamak-thanos.git
