@@ -761,6 +761,11 @@
     table "^6.8.0"
     undici "^5.14.0"
 
+"@nomiclabs/hardhat-waffle@^2.0.6":
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/@nomiclabs/hardhat-waffle/-/hardhat-waffle-2.0.6.tgz#d11cb063a5f61a77806053e54009c40ddee49a54"
+  integrity sha512-+Wz0hwmJGSI17B+BhU/qFRZ1l6/xMW82QGXE/Gi+WTmwgJrQefuBs1lIf7hzQ1hLk6hpkvb/zwcNkpVKRYTQYg==
+
 "@openzeppelin/contracts-upgradeable@4.7.3":
   version "4.7.3"
   resolved "https://registry.yarnpkg.com/@openzeppelin/contracts-upgradeable/-/contracts-upgradeable-4.7.3.tgz#f1d606e2827d409053f3e908ba4eb8adb1dd6995"
@@ -1126,14 +1131,14 @@ aggregate-error@^3.0.0:
     indent-string "^4.0.0"
 
 ajv@^8.0.1:
-  version "8.15.0"
-  resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.15.0.tgz#d918c661e3e820bbbc65a320e182ee56a1aa978a"
-  integrity sha512-15BTtQUOsSrmHCy+B4VnAiJAJxJ8IFgu6fcjFQF3jQYZ78nLSQthlFg4ehp+NLIyfvFgOlxNsjKIEhydtFPVHQ==
+  version "8.16.0"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.16.0.tgz#22e2a92b94f005f7e0f9c9d39652ef0b8f6f0cb4"
+  integrity sha512-F0twR8U1ZU67JIEtekUcLkXkoO5mMMmgGD8sK/xUFzJ805jxHQl92hImFAqqXMyMYjSPOyUPAwHYhB72g5sTXw==
   dependencies:
     fast-deep-equal "^3.1.3"
-    fast-uri "^2.3.0"
     json-schema-traverse "^1.0.0"
     require-from-string "^2.0.2"
+    uri-js "^4.4.1"
 
 amdefine@>=0.0.4:
   version "1.0.1"
@@ -2097,11 +2102,6 @@ fast-levenshtein@~2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
   integrity sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==
-
-fast-uri@^2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/fast-uri/-/fast-uri-2.3.0.tgz#bdae493942483d299e7285dcb4627767d42e2793"
-  integrity sha512-eel5UKGn369gGEWOqBShmFJWfq/xSJvsgDzgLYC845GneayWvXBf0lJCBn5qTABfewy1ZDPoaR5OZCP+kssfuw==
 
 fastq@^1.6.0:
   version "1.17.1"
@@ -3236,6 +3236,11 @@ proxy-from-env@^1.1.0:
   resolved "https://registry.yarnpkg.com/proxy-from-env/-/proxy-from-env-1.1.0.tgz#e102f16ca355424865755d2c9e8ea4f24d58c3e2"
   integrity sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==
 
+punycode@^2.1.0:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.3.1.tgz#027422e2faec0b25e1549c3e1bd8309b9133b6e5"
+  integrity sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==
+
 qs@^6.4.0:
   version "6.12.1"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.12.1.tgz#39422111ca7cbdb70425541cba20c7d7b216599a"
@@ -3961,6 +3966,13 @@ unpipe@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/unpipe/-/unpipe-1.0.0.tgz#b2bf4ee8514aae6165b4817829d21b2ef49904ec"
   integrity sha512-pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ==
+
+uri-js@^4.4.1:
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/uri-js/-/uri-js-4.4.1.tgz#9b1a52595225859e55f669d928f88c6c57f2a77e"
+  integrity sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==
+  dependencies:
+    punycode "^2.1.0"
 
 utf8@3.0.0:
   version "3.0.0"
