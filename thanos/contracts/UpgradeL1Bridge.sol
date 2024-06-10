@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.15;
 
 /* Interface Imports */
-import { L1StandardBridge } from "./L1StandardBridge.sol";
+import { L1StandardBridge } from "./base/L1StandardBridge.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";    
 
@@ -34,7 +34,7 @@ contract UpgradeL1Bridge is L1StandardBridge {
     }
 
     function forceActive(bool _state) external onlyCloser {
-        active = _state;
+        // active = _state;
     }
 
     function forceWithdrawAll(ClaimParam[] calldata _target) external onlyCloser {
@@ -49,41 +49,10 @@ contract UpgradeL1Bridge is L1StandardBridge {
             (success,) = _target.to.call{ value: _target.amount }(new bytes(0));
         } else {
             (success,) = _target.token.call(abi.encodeWithSelector(IERC20.transfer.selector, _target.to, _target.amount));
-            // data = verifyCallResult(success,data,_target.token);
-            // require(data.length == 0 || abi.decode(data, (bool)), "SafeERC20: ERC20 operation did not succeed");
         }
         if (success) {
             emit ForceWithdraw(_target.index, _target.token, _target.to, _target.amount);
         }
     }
-
-    // function verifyCallResult(bool _success, bytes memory _data, address _target) internal returns(bytes memory){
-    //     if (_success) {
-    //         if (_data.length == 0) {
-    //             // require(_target.code.length > 0, "Address: call to non-contract");
-    //         }
-    //         return _data;
-    //     } else {
-    //         _revert(_data, "verifyCallResult : Failed Transfer");
-    //     }
-    // }
-
-    // function _revert(bytes memory returndata, string memory errorMessage) private pure {
-    //     // Look for revert reason and bubble it up if present
-    //     if (returndata.length > 0) {
-    //         // The easiest way to bubble the revert reason is using memory via assembly
-    //         /// @solidity memory-safe-assembly
-    //         assembly {
-    //             let returndata_size := mload(returndata)
-    //             revert(add(32, returndata), returndata_size)
-    //         }
-    //     } else {
-    //         revert(errorMessage);
-    //     }
-    // }
-
 }
 
-// 0. 오프체인 수집 결과에 의존 EOA만, 컨트랙트는 제외됩니다.  
-// 1. 일반적이지 않는 표준 함수의 구현인가  ERC20 
-// 2. 트랜잭션의 실패여부 확인  --> 잔액부족, 네트워크 환경, 함수 로직 문제 등 

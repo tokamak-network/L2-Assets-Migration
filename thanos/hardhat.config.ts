@@ -9,12 +9,12 @@ dotenv.config()
 
 const config: HardhatUserConfig = {
   networks: {
-    // hardhat: {
-    //   forking: {
-    //     url: process.env.L1_RPC_URL_SDK || "", // process.env.CONTRACT_RPC_URL_L1 || "",
-    // //     // blockNumber: 19973387,
-    //   }
-    // },
+    hardhat: {
+      forking: {
+        url: process.env.L1_RPC_URL_SDK || "", // process.env.CONTRACT_RPC_URL_L1 || "",
+    //     // blockNumber: 19973387,
+      }
+    },
     
     main :{
       url: process.env.CONTRACT_RPC_URL_L1 || "",
@@ -26,20 +26,26 @@ const config: HardhatUserConfig = {
     },
   },
   solidity: {
-    version :"0.8.15",
-    settings: {
-      viaIR: true,
-      optimizer: {
-        enabled: true,
-        runs: 10000
-      }
-    }
+    compilers: [
+      {
+        version: "0.8.15",
+        settings: {
+        viaIR: true,
+          optimizer: {
+            enabled: true,
+            runs: 10000
+          }
+        }
+      },
+    ]
+
   },
   gasReporter: {
     enabled: true,
     currency: 'USD',
     gasPrice: 10,
   }
+  
 };
 
 export default config;

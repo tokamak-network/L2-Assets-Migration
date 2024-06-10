@@ -1,24 +1,21 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.15;
+pragma solidity ^0.8.15;
 
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { IERC165 } from "@openzeppelin/contracts/utils/introspection/IERC165.sol";
-
 import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import { IOptimismMintableERC20 } from "sub/packages/tokamak/contracts-bedrock/src/universal/IOptimismMintableERC20.sol"; 
-import { Predeploys } from "sub/packages/tokamak/contracts-bedrock/src/libraries/Predeploys.sol";
-import { StandardBridge } from "sub/packages/tokamak/contracts-bedrock/src/universal/StandardBridge.sol";
-import { ISemver } from "sub/packages/tokamak/contracts-bedrock/src/universal/ISemver.sol";
-import { CrossDomainMessenger } from "sub/packages/tokamak/contracts-bedrock/src/universal/CrossDomainMessenger.sol";
+import { IOptimismMintableERC20 } from "./IOptimismMintableERC20.sol";
+import { Predeploys } from "./Predeploys.sol";
+import { StandardBridge } from "./StandardBridge.sol";
 
-// import { L1CrossDomainMessenger } from "sub/packages/tokamak/contracts-bedrock/src/L1/L1CrossDomainMessenger.sol";
-
-
-import { SuperchainConfig } from "sub/packages/tokamak/contracts-bedrock/src/L1/SuperchainConfig.sol";
-import { Constants } from "sub/packages/tokamak/contracts-bedrock/src/libraries/Constants.sol";
-import { SafeCall } from "sub/packages/tokamak/contracts-bedrock/src/libraries/SafeCall.sol";
-import { OptimismMintableERC20 } from "sub/packages/tokamak/contracts-bedrock/src/universal/OptimismMintableERC20.sol";
-import { OnApprove } from "sub/packages/tokamak/contracts-bedrock/src/L1/OnApprove.sol";
+import { ISemver } from "./ISemver.sol";
+import { CrossDomainMessenger } from "./CrossDomainMessenger.sol";
+import { L1CrossDomainMessenger } from "./L1CrossDomainMessenger.sol";
+import { SuperchainConfig } from "./SuperchainConfig.sol";
+import { Constants } from "./Constants.sol";
+import { SafeCall } from "./SafeCall.sol";
+import { OptimismMintableERC20 } from "./OptimismMintableERC20.sol";
+import { OnApprove } from "./OnApprove.sol";
 
 /// @custom:proxied
 /// @title L1StandardBridge
@@ -184,7 +181,7 @@ contract L1StandardBridge is StandardBridge, OnApprove, ISemver {
     /// @param _extraData   Optional data to forward to L2.
     ///                     Data supplied here will not be used to execute any code on L2 and is
     ///                     only emitted as extra data for the convenience of off-chain tooling.
-    function depositNativeToken(uint256 _amount, uint32 _minGasLimit, bytes calldata _extraData) external onlyEOA paused {
+    function depositNativeToken(uint256 _amount, uint32 _minGasLimit, bytes calldata _extraData) external onlyEOA {
         _initiateBridgeNativeToken(msg.sender, msg.sender, _amount, _minGasLimit, _extraData);
     }
 
@@ -201,7 +198,7 @@ contract L1StandardBridge is StandardBridge, OnApprove, ISemver {
         uint32 _minGasLimit,
         bytes calldata _extraData
     )
-        external paused
+        external
     {
         _initiateBridgeNativeToken(msg.sender, _to, _amount, _minGasLimit, _extraData);
     }
@@ -229,7 +226,7 @@ contract L1StandardBridge is StandardBridge, OnApprove, ISemver {
         uint32 _minGasLimit,
         bytes calldata _extraData
     )
-        external paused
+        external
     {
         _initiateBridgeNativeToken(msg.sender, _to, _amount, _minGasLimit, _extraData);
     }
@@ -239,7 +236,7 @@ contract L1StandardBridge is StandardBridge, OnApprove, ISemver {
     /// @param _extraData   Optional data to forward to L2.
     ///                     Data supplied here will not be used to execute any code on L2 and is
     ///                     only emitted as extra data for the convenience of off-chain tooling.
-    function depositETH(uint32 _minGasLimit, bytes calldata _extraData) external payable onlyEOA paused {
+    function depositETH(uint32 _minGasLimit, bytes calldata _extraData) external payable onlyEOA {
         _initiateETHDeposit(msg.sender, msg.sender, _minGasLimit, _extraData);
     }
 
@@ -315,7 +312,7 @@ contract L1StandardBridge is StandardBridge, OnApprove, ISemver {
     )
         external
         virtual
-        onlyEOA paused
+        onlyEOA
     {
         _initiateERC20Deposit(_l1Token, _l2Token, msg.sender, msg.sender, _amount, _minGasLimit, _extraData);
     }
@@ -339,7 +336,7 @@ contract L1StandardBridge is StandardBridge, OnApprove, ISemver {
         bytes calldata _extraData
     )
         external
-        virtual paused
+        virtual
     {
         _initiateERC20Deposit(_l1Token, _l2Token, msg.sender, _to, _amount, _minGasLimit, _extraData);
     }
@@ -357,7 +354,7 @@ contract L1StandardBridge is StandardBridge, OnApprove, ISemver {
         bytes calldata _extraData
     )
         external
-        payable  paused
+        payable
     {
         finalizeBridgeETH(_from, _to, _amount, _extraData);
     }
@@ -378,7 +375,7 @@ contract L1StandardBridge is StandardBridge, OnApprove, ISemver {
         uint256 _amount,
         bytes calldata _extraData
     )
-        external paused
+        external
     {
         // TODO
         finalizeBridgeERC20(_l1Token, _l2Token, _from, _to, _amount, _extraData);
@@ -616,11 +613,11 @@ contract L1StandardBridge is StandardBridge, OnApprove, ISemver {
             }
         }
     }
-        
 
     bool public active = true;
-    modifier paused() {
+    modifier _Paused() {
         if (active) revert("Paused L1StandardBridge");
         _;
     }
+
 }

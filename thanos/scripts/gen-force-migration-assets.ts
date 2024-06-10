@@ -29,9 +29,9 @@ const outPool:any[] = [];
 const verifyL2Balance = new Map<any, any>(); // L2 token address : totalSupply
 let L1TokenContracts:any = []; // L1 tokens contracts address 
 let tokenMapper:any // L1 -> L2 token address mapping 
-let etheoa_str:any[];
-let ethpool:any[];
-let ethca:any[];
+let tonEoa_str:any[]; // etheoa_str
+let toknPool:any[]; // ethpool, native ton token == ETH
+let tonCa:any[]; // ethca
 let contractAllInToken:any = [];
 
 const getBlock = async() => {
@@ -83,47 +83,50 @@ const main = async () => {
   }  
   // API total ethereumscan info
   const results = await getTotalAddressAll(1,10000,true)
-  ethpool = results[1]
-  ethca = results[2]
-  etheoa_str = results[3]
+  
+  toknPool = results[1]
+  tonCa = results[2]
+  tonEoa_str = results[3]
   console.log('\n')
-  contractAllInToken = await getContractAll(1,10000,true)
+  // contractAllInToken = await getContractAll(1,10000,true)
   console.log('\n')
   
 
   const withdrawClaimed:WithdrawClaimed[] =[];
   // get L2 initWithdrawalclaim data 
   let l2WithdrawClaimed:any = [];
-    try{
-      l2WithdrawClaimed = JSON.parse(fs.readFileSync(path.join(dirPath, 'generate-WithdrawalClaim.json'), "utf-8"))
-    }catch(err) {
-      let eventName = l2BridgeContracts.filters.WithdrawalInitiated();
-      const events:any = await l2BridgeContracts.queryFilter(eventName, L2STBLOCK, L2ENDBLOCK); // todo : When L2 transaction volumes get high, you need to split events to collect them
-      for (const event of events) {
-        if(event.args !== undefined) {
-          withdrawClaimed.push(
-            {
-              txHash: event.transactionHash,
-              event : {
-                l1Token : event.args[0],
-                l2Token : event.args[1],
-                from : event.args[2],
-                to : event.args[3],
-                amount : event.args[4],
-                data : event.args[5]
-              }
-            }
-          )
-        }
-      }
-      l2WithdrawClaimed = await getWithdrawalClaimStatus(withdrawClaimed, {
-        l1ChainId:1,
-        l2ChainId:55004,
-        save:true
-      })
-      // console.log(red('generate-WithdrawalClaim.json is not exist. \n'));
-      // process.exit(1);
-    }
+    // try{
+    //   l2WithdrawClaimed = JSON.parse(fs.readFileSync(path.join(dirPath, 'generate-WithdrawalClaim.json'), "utf-8"))
+    // }catch(err) {
+    //   let eventName = l2BridgeContracts.filters.WithdrawalInitiated();
+    //   const events:any = await l2BridgeContracts.queryFilter(eventName, L2STBLOCK, L2ENDBLOCK); // todo : When L2 transaction volumes get high, you need to split events to collect them
+    //   for (const event of events) {
+    //     if(event.args !== undefined) {
+    //       withdrawClaimed.push(
+    //         {
+    //           txHash: event.transactionHash,
+    //           event : {
+    //             l1Token : event.args[0],
+    //             l2Token : event.args[1],
+    //             from : event.args[2],
+    //             to : event.args[3],
+    //             amount : event.args[4],
+    //             data : event.args[5]
+    //           }
+    //         }
+    //       )
+    //     }
+    //   }
+  
+    //   l2WithdrawClaimed = await getWithdrawalClaimStatus(withdrawClaimed, {
+    //     l1ChainId:11155111,
+    //     l2ChainId:111551118080,
+    //     bedrock:true,
+    //     save:true,
+    //   })
+    //   // console.log(red('generate-WithdrawalClaim.json is not exist. \n'));
+    //   // process.exit(1);
+    // }
 
     // total l2 isNotClaimeAll amount
     const isNotClaimeAll:any = new Map<any, any>();
@@ -156,7 +159,7 @@ const main = async () => {
   }
   
   // ##1 여기에 WETH 주소 추가해주셈
-  L1TokenContracts = Array.from(new Set(L1TokenContracts))
+  // L1TokenContracts = Array.from(new Set(L1TokenContracts))
   
   tokenMapper = L2TokenContracts.reduce((map:any, pair:any) => {
       const key = pair.l1;

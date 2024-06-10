@@ -1,5 +1,5 @@
 {
-  "name": "titanLagacy",
+  "name": "thanos-FW",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -10,6 +10,7 @@
     "generate3": "yarn run build && yarn concurrently `yarn hardhat node` `sleep 5 && node dist/generate-migration-assets.fin.js`"
   },
   "dependencies": {
+    "@eth-optimism/sdk": "^3.3.1",
     "@ethersproject/providers": "^5.4.7",
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.0",
     "@nomicfoundation/hardhat-ethers": "^3.0.6",
@@ -23,7 +24,8 @@
     "@nomiclabs/hardhat-etherscan": "^3.0.0",
     "@nomiclabs/hardhat-waffle": "^2.0.6",
     "@openzeppelin/contracts": "^4.3.2",
-    "@tokamak-network/titan-sdk": "^0.0.8",
+    "@openzeppelin/contracts-upgradeable": "^4.9.6",
+    "@rari-capital/solmate": "^6.4.0",
     "@typechain/ethers-v5": "^10.1.0",
     "@typechain/hardhat": "^6.1.2",
     "@types/chai": "^4.2.0",
