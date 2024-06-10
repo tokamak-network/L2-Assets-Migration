@@ -4,10 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "upgrade": "yarn hardhat upgrade --network main",
     "gen": "yarn hardhat run scripts/gen-force-migration-assets.ts",
-    "gensub": "yarn hardhat run scripts/gen-force-migration-assets.sub.ts",
-    "generate2": "yarn run build && yarn hardhat node && node dist/generate-migration-assets.fin.js",
-    "generate3": "yarn run build && yarn concurrently `yarn hardhat node` `sleep 5 && node dist/generate-migration-assets.fin.js`"
+    "gensub": "yarn hardhat run scripts/gen-force-migration-assets.sub.ts"
   },
   "dependencies": {
     "@ethersproject/providers": "^5.4.7",
