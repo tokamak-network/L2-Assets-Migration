@@ -13,13 +13,17 @@ import * as Contracts from ".";
 declare module "hardhat/types/runtime" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
     getContractFactory(
+      name: "IERC20Permit",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC20Permit__factory>;
+    getContractFactory(
       name: "IERC20",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC20__factory>;
     getContractFactory(
-      name: "L1ForceWithdraw",
+      name: "L1StandardBridge",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.L1ForceWithdraw__factory>;
+    ): Promise<Contracts.L1StandardBridge__factory>;
     getContractFactory(
       name: "Proxy",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -45,10 +49,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IL1StandardBridge__factory>;
     getContractFactory(
-      name: "L1StandardBridge",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.L1StandardBridge__factory>;
-    getContractFactory(
       name: "IL2ERC20Bridge",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IL2ERC20Bridge__factory>;
@@ -62,15 +62,20 @@ declare module "hardhat/types/runtime" {
     ): Promise<Contracts.ICrossDomainMessenger__factory>;
 
     getContractAt(
+      name: "IERC20Permit",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IERC20Permit>;
+    getContractAt(
       name: "IERC20",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.IERC20>;
     getContractAt(
-      name: "L1ForceWithdraw",
+      name: "L1StandardBridge",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.L1ForceWithdraw>;
+    ): Promise<Contracts.L1StandardBridge>;
     getContractAt(
       name: "Proxy",
       address: string,
@@ -101,11 +106,6 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.IL1StandardBridge>;
-    getContractAt(
-      name: "L1StandardBridge",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.L1StandardBridge>;
     getContractAt(
       name: "IL2ERC20Bridge",
       address: string,

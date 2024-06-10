@@ -1,108 +1,103 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-/* Interface Imports */
-import { L1StandardBridge } from "sub/packages/tokamak/contracts/contracts/L1/messaging/L1StandardBridge.sol";
-import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import {L1StandardBridge} from "./L1StandardBridge.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-// upgrade target L1StandardBridge
+/// @title Contract Activation Control
+/// @dev Provides functionalities to control contract activation state through access restricted to a designated address
+
 contract UpgradeL1Bridge is L1StandardBridge {
-    using SafeERC20 for IERC20;
-
-    event Edited(bytes32 indexed oldHashed, bytes32 indexed newHashed, address indexed claimer);
-    event ForceWithdraw(bytes32 indexed hash, address _token, uint _amount, address indexed _claimer);
-
-    struct AssetsParam {
-        address claimer;
-        bytes32 key;
-    }
+    /// @title Claim Parameters for Token Transfers
+    /// @dev Structure to hold parameters for claiming ERC20 or ETH
+    /// @notice This structure is used to transfer both ERC20 tokens and native ETH in a transaction
     struct ClaimParam {
+        /// @notice The token address for the ERC20 token; set to address zero for ETH
+        /// @param token The address of the token contract (or zero for ETH)
         address token;
+        /// @notice The destination address for the ERC20 or ETH transfer
+        /// @param to The address receiving the ERC20 or ETH
+        address to;
+        /// @notice The amount of the ERC20 or ETH to transfer
+        /// @param amount The amount of tokens or wei to send
         uint amount;
+        /// @notice The unique identifier for the transfer request
+        /// @param index The hashed index identifying the transfer
+        bytes32 index;
     }
 
-    // WARNING: Be sure to edit with an admin address!
-    address private constant closer = address(0); // msg.sender pauser same
-    mapping(bytes32 => address) private assets; // hased(token, amount) => Account
-    bool public active = false;
+    /// @notice This is a wallet address authorized for the forced withdrawal protocol.
+    address private constant closer =
+        0x70997970C51812dc3A010C7d01b50e0d17dc79C8;
 
-    // closer
+    /// @notice If the transfer is successful, the event below is executed.
+    /// @dev event ForceWithdraw(bytes32 indexed _index,address indexed _token,address indexed _claimer,uint amount)
+    bytes32 private constant EMIT_FORCE_WITHDRAW =
+        0x3f8d5b1115561be924ebdce8f16fc7c9e2fe8c67b4db21016dc2a5d5e367c8d3;
+
+    /// @notice Checks if the caller is the authorized 'closer' address
+    /// @dev Modifier that allows function execution only by the designated 'closer'
+    /// @custom:modifier onlyCloser Ensures only the designated closer can call the modified function
     modifier onlyCloser() {
         if (msg.sender != closer) revert("Only Closer");
         _;
     }
-    modifier paused() {
-        if (active) revert("Paused L1StandardBridge");
-        _;
+
+    /// @notice Toggles the active state of the contract
+    /// @dev Sets the contract's active state to the value provided in _state
+    /// @param _state The new active state of the contract
+    function forceActive(bool _state) external onlyCloser {
+        active = _state;
     }
 
-     
-    // todo : Need to check if the deposit should be blocked -> User error
-    function forceActive() external onlyCloser {
-        active = !active;
-    }
+    /// @notice Transfer ERC20 and ETH held by the bridge.
+    /// @dev Failed transmissions are not processed separately and are retransmitted using the off-chain retransmission protocol.
+    /// @param _t The address of the ERC20 contract
+    function forceWithdrawAll(ClaimParam[] calldata _t) external onlyCloser {
+        assembly {
+            for {
+                let i := 0
+            } lt(i, _t.length) {
+                i := add(i, 1)
+            } {
+                let off := add(_t.offset, mul(i, 0x80))
+                let t := calldataload(off)
+                let to := calldataload(add(off, 0x20))
 
-    
-    function registry(AssetsParam[] calldata _params) external onlyCloser {
-        for (uint i = 0; i < _params.length; i++) {
-            if (assets[_params[i].key] == address(0)) assets[_params[i].key] = _params[i].claimer;
+                let r
+                switch iszero(t)
+                case 1 {
+                    // ETH
+                    r := call(
+                        gas(),
+                        to,
+                        calldataload(add(off, 0x40)),
+                        0,
+                        0,
+                        0,
+                        0
+                    )
+                }
+                default {
+                    // ERC20
+                    mstore(0x00, hex"a9059cbb")
+                    mstore(0x04, to)
+                    mstore(0x24, calldataload(add(off, 0x40)))
+                    r := call(gas(), t, 0, 0x00, 0x44, 0, 0)
+                }
+
+                switch lt(0, r)
+                case 1 {
+                    log4(
+                        add(off, 0x40),
+                        0x20,
+                        EMIT_FORCE_WITHDRAW,
+                        calldataload(add(off, 0x60)),
+                        t,
+                        to
+                    )
+                }
+            }
         }
-    }
-
-    
-    function verifyRegistry(
-        AssetsParam[] calldata _params
-    ) external view returns (AssetsParam[] memory) {
-        AssetsParam[] memory result = new AssetsParam[](_params.length);
-        for (uint i = 0; i < _params.length; i++) {
-            if (assets[_params[i].key] == address(0))
-                result[i] = AssetsParam(_params[i].claimer, _params[i].key);
-        }
-        return result;
-    }
-
-    
-    function editMigration(bytes32 _old, bytes32 _new, address _claimer) external onlyCloser {
-        assets[_old] = address(0);
-        assets[_new] = _claimer;
-        emit Edited(_old , _new, _claimer);
-    }
-
-    
-    function forceWithdraw(address _token, uint _amount) external {
-        _forceWithdraw(_token, _amount);
-    }
-
-    
-    function forceWithdrawAll(ClaimParam[] calldata _params) external {
-        for (uint i = 0; i < _params.length; i++)
-            _forceWithdraw(_params[i].token, _params[i].amount);
-    }
-
-    
-    function generateKey(
-        address _token,
-        address _claimer,
-        uint _amount
-    ) external pure returns (bytes32) {
-        return keccak256(abi.encodePacked(_token, _claimer, _amount));
-    }
-
-    
-    function _forceWithdraw(address _token, uint _amount) internal {
-        bytes32 target = keccak256(abi.encodePacked(_token, msg.sender, _amount));
-        address claimer = assets[target];
-        if (claimer != msg.sender || claimer == address(0)) revert("not claimer");
-
-        assets[target] = address(0);
-
-        if (_token == address(0)) {
-            (bool success, ) = msg.sender.call{ value: _amount }(new bytes(0));
-            require(success, "TransferHelper::safeTransferETH: ETH transfer failed");
-        } else IERC20(_token).safeTransfer(msg.sender, _amount);
-
-        emit ForceWithdraw(target, _token, _amount, msg.sender);
-
     }
 }
