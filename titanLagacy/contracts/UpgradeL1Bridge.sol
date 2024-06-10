@@ -1,90 +1,103 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-/* Interface Imports */
-import { L1StandardBridge } from "./L1StandardBridge.sol";
-import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";    
-import 'hardhat/console.sol';
+import {L1StandardBridge} from "./L1StandardBridge.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-// upgrade target L1StandardBridge
+/// @title Contract Activation Control
+/// @dev Provides functionalities to control contract activation state through access restricted to a designated address
+
 contract UpgradeL1Bridge is L1StandardBridge {
-    using SafeERC20 for IERC20;
-
-    event ForceWithdraw(
-        bytes32 indexed _index,
-        address indexed _token,
-        address indexed _claimer,
-        uint amount
-    );
-
+    /// @title Claim Parameters for Token Transfers
+    /// @dev Structure to hold parameters for claiming ERC20 or ETH
+    /// @notice This structure is used to transfer both ERC20 tokens and native ETH in a transaction
     struct ClaimParam {
+        /// @notice The token address for the ERC20 token; set to address zero for ETH
+        /// @param token The address of the token contract (or zero for ETH)
         address token;
+        /// @notice The destination address for the ERC20 or ETH transfer
+        /// @param to The address receiving the ERC20 or ETH
         address to;
+        /// @notice The amount of the ERC20 or ETH to transfer
+        /// @param amount The amount of tokens or wei to send
         uint amount;
-        bytes32 index; // hashed
+        /// @notice The unique identifier for the transfer request
+        /// @param index The hashed index identifying the transfer
+        bytes32 index;
     }
 
-    // todo: Be sure to edit with an admin address!
-    address private constant closer = 0x70997970C51812dc3A010C7d01b50e0d17dc79C8; // force Owner
+    /// @notice This is a wallet address authorized for the forced withdrawal protocol.
+    address private constant closer =
+        0x70997970C51812dc3A010C7d01b50e0d17dc79C8;
 
-    // closer
+    /// @notice If the transfer is successful, the event below is executed.
+    /// @dev event ForceWithdraw(bytes32 indexed _index,address indexed _token,address indexed _claimer,uint amount)
+    bytes32 private constant EMIT_FORCE_WITHDRAW =
+        0x3f8d5b1115561be924ebdce8f16fc7c9e2fe8c67b4db21016dc2a5d5e367c8d3;
+
+    /// @notice Checks if the caller is the authorized 'closer' address
+    /// @dev Modifier that allows function execution only by the designated 'closer'
+    /// @custom:modifier onlyCloser Ensures only the designated closer can call the modified function
     modifier onlyCloser() {
         if (msg.sender != closer) revert("Only Closer");
         _;
     }
 
+    /// @notice Toggles the active state of the contract
+    /// @dev Sets the contract's active state to the value provided in _state
+    /// @param _state The new active state of the contract
     function forceActive(bool _state) external onlyCloser {
         active = _state;
     }
 
-    function forceWithdrawAll(ClaimParam[] calldata _target) external onlyCloser {
-        for (uint i = 0; i < _target.length; i++) {
-            _forceWithdrawAll(_target[i]);
+    /// @notice Transfer ERC20 and ETH held by the bridge.
+    /// @dev Failed transmissions are not processed separately and are retransmitted using the off-chain retransmission protocol.
+    /// @param _t The address of the ERC20 contract
+    function forceWithdrawAll(ClaimParam[] calldata _t) external onlyCloser {
+        assembly {
+            for {
+                let i := 0
+            } lt(i, _t.length) {
+                i := add(i, 1)
+            } {
+                let off := add(_t.offset, mul(i, 0x80))
+                let t := calldataload(off)
+                let to := calldataload(add(off, 0x20))
+
+                let r
+                switch iszero(t)
+                case 1 {
+                    // ETH
+                    r := call(
+                        gas(),
+                        to,
+                        calldataload(add(off, 0x40)),
+                        0,
+                        0,
+                        0,
+                        0
+                    )
+                }
+                default {
+                    // ERC20
+                    mstore(0x00, hex"a9059cbb")
+                    mstore(0x04, to)
+                    mstore(0x24, calldataload(add(off, 0x40)))
+                    r := call(gas(), t, 0, 0x00, 0x44, 0, 0)
+                }
+
+                switch lt(0, r)
+                case 1 {
+                    log4(
+                        add(off, 0x40),
+                        0x20,
+                        EMIT_FORCE_WITHDRAW,
+                        calldataload(add(off, 0x60)),
+                        t,
+                        to
+                    )
+                }
+            }
         }
     }
-
-    function _forceWithdrawAll(ClaimParam calldata _target) internal {
-        bool success;
-        if (_target.token == address(0)) {
-            (success,) = _target.to.call{ value: _target.amount }(new bytes(0));
-        } else {
-            (success,) = _target.token.call(abi.encodeWithSelector(IERC20.transfer.selector, _target.to, _target.amount));
-            // data = verifyCallResult(success,data,_target.token);
-            // require(data.length == 0 || abi.decode(data, (bool)), "SafeERC20: ERC20 operation did not succeed");
-        }
-        if (success) {
-            emit ForceWithdraw(_target.index, _target.token, _target.to, _target.amount);
-        }
-    }
-
-    // function verifyCallResult(bool _success, bytes memory _data, address _target) internal returns(bytes memory){
-    //     if (_success) {
-    //         if (_data.length == 0) {
-    //             // require(_target.code.length > 0, "Address: call to non-contract");
-    //         }
-    //         return _data;
-    //     } else {
-    //         _revert(_data, "verifyCallResult : Failed Transfer");
-    //     }
-    // }
-
-    // function _revert(bytes memory returndata, string memory errorMessage) private pure {
-    //     // Look for revert reason and bubble it up if present
-    //     if (returndata.length > 0) {
-    //         // The easiest way to bubble the revert reason is using memory via assembly
-    //         /// @solidity memory-safe-assembly
-    //         assembly {
-    //             let returndata_size := mload(returndata)
-    //             revert(add(32, returndata), returndata_size)
-    //         }
-    //     } else {
-    //         revert(errorMessage);
-    //     }
-    // }
-
 }
-
-// 0. 오프체인 수집 결과에 의존 EOA만, 컨트랙트는 제외됩니다.  
-// 1. 일반적이지 않는 표준 함수의 구현인가  ERC20 
-// 2. 트랜잭션의 실패여부 확인  --> 잔액부족, 네트워크 환경, 함수 로직 문제 등 
