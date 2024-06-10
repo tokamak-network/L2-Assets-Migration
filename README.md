@@ -240,5 +240,5 @@ generate-assets1.json, generate-assets2.json, generate-assets3.json"
 
 
 ## Generated Assets Collection Report
-!["test"]<img src = "https://github.com/tokamak-network/L2-Assets-Migration/blob/dev/gernated_example.png" width="50%" height="50%">
+<img src = "https://github.com/tokamak-network/L2-Assets-Migration/blob/dev/gernated_example.png" width="80%" height="80%">
 
