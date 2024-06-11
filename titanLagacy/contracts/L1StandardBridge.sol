@@ -239,7 +239,7 @@ contract L1StandardBridge is IL1StandardBridge, CrossDomainEnabled {
         address _to,
         uint256 _amount,
         bytes calldata _data
-    ) external onlyFromCrossDomainAccount(l2TokenBridge) {
+    ) external onlyFromCrossDomainAccount(l2TokenBridge) paused {
         deposits[_l1Token][_l2Token] = deposits[_l1Token][_l2Token] - _amount;
 
         // When a withdrawal is finalized on L1, the L1 Bridge transfers the funds to the withdrawer
@@ -262,8 +262,11 @@ contract L1StandardBridge is IL1StandardBridge, CrossDomainEnabled {
      */
     function donateETH() external payable {}
 
-
+    /// @notice Indicates whether the protocol is active. When running an automated script, the status is tracked and set to True.
     bool public active = true;
+
+    /// @notice Indicates whether the protocol is active. When running an automated script, the status is tracked and set to True.
+    /// @custom:modifier This is a constructor that blocks function access rights. Only Closer can change its state.
     modifier paused() {
         if (active) revert("Paused L1StandardBridge");
         _;
