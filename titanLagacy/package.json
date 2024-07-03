@@ -40,5 +40,8 @@
     "ts-node": "^10.9.2",
     "typechain": "^8.1.0",
     "typescript": "^5.4.5"
+  },
+  "devDependencies": {
+    "hardhat-contract-sizer": "^2.10.0"
   }
 }

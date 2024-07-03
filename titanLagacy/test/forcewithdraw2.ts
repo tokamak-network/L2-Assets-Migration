@@ -20,6 +20,8 @@ export default describe('# Unit Test : L1 StandardBridge', () => {
 
     const data = fs.readFileSync(path.join('data', 'generate-assets3.json'), "utf-8")
     const assets = JSON.parse(data)
+    const dataPath = 'contracts/data';
+
 
     it('Titan L1 Bridge Upgrade Test', async () => {
         await helpers.impersonateAccount(owner);
@@ -64,6 +66,20 @@ export default describe('# Unit Test : L1 StandardBridge', () => {
         await expect(upgradedContract.depositERC20To(zeroAddress, zeroAddress, owner, 100000, 100000, ethers.utils.formatBytes32String("0x0"))).to.be.revertedWith("Paused L1StandardBridge")
     })
 
+    it('Titan forceWidthdraw storage deploy', async () => {
+        const deployer = ethers.provider.getSigner(forceOwner)
+        const upgradedContract = await ethers.getContractAt("UpgradeL1Bridge", L1BRIDGE)
+        const dataCount =  fs.readdirSync(dataPath);
+        
+        let sufIndex = 1;
+        while (sufIndex <= dataCount.length) {
+            const storageContract = await (await ethers.getContractFactory(`GenFWStorage${sufIndex}`, deployer as any)).deploy()
+            await storageContract.deployed()
+            console.log(storageContract.address)
+            sufIndex++;
+        }    
+    })
+
 
     it('Registry Check', async () => {
         const deployer = ethers.provider.getSigner(forceOwner)
@@ -75,14 +91,14 @@ export default describe('# Unit Test : L1 StandardBridge', () => {
         let count = 0;
         const max = 1;
 
-        for (const assetInfo of assets) {
-            if (assetInfo.l1Token === ethers.constants.AddressZero) {
-                console.log(assetInfo.tokenName, ": ", await ethers.provider.getBalance(l1Bridge.address));
-            } else {
-                const l1token = await ethers.getContractAt(ERC20, assetInfo.l1Token)
-                console.log(assetInfo.tokenName, ": ", await l1token.balanceOf(l1Bridge.address));
-            }
-        }
+        // for (const assetInfo of assets) {
+        //     if (assetInfo.l1Token === ethers.constants.AddressZero) {
+        //         console.log(assetInfo.tokenName, ": ", await ethers.provider.getBalance(l1Bridge.address));
+        //     } else {
+        //         const l1token = await ethers.getContractAt(ERC20, assetInfo.l1Token)
+        //         console.log(assetInfo.tokenName, ": ", await l1token.balanceOf(l1Bridge.address));
+        //     }
+        // }
 
         for (const assetInfo of assets) {
 
@@ -110,15 +126,15 @@ export default describe('# Unit Test : L1 StandardBridge', () => {
                 total = total.add(asset.amount)
             }
         }
-        params.length > 0 ? await l1Bridge.connect(deployer).forceWithdrawAll(params) : ""
-        for (const assetInfo of assets) {
-            if (assetInfo.l1Token === ethers.constants.AddressZero) {
-                console.log(assetInfo.tokenName, ": ", await ethers.provider.getBalance(l1Bridge.address));
-            } else {
-                const l1token = await ethers.getContractAt(ERC20, assetInfo.l1Token)
-                console.log(assetInfo.tokenName, ": ", await l1token.balanceOf(l1Bridge.address));
-            }
-        }
+        
+        // for (const assetInfo of assets) {
+        //     if (assetInfo.l1Token === ethers.constants.AddressZero) {
+        //         console.log(assetInfo.tokenName, ": ", await ethers.provider.getBalance(l1Bridge.address));
+        //     } else {
+        //         const l1token = await ethers.getContractAt(ERC20, assetInfo.l1Token)
+        //         console.log(assetInfo.tokenName, ": ", await l1token.balanceOf(l1Bridge.address));
+        //     }
+        // }
         console.log("\n")
     });
 

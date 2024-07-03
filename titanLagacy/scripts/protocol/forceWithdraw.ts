@@ -195,6 +195,7 @@ export const sendForceWithdraw = async (max: number, opt?: boolean) => {
     const tx = params.length > 0 ? await l1Bridge.connect(forceOwner as any).forceWithdrawAll(params) : undefined
     if (tx != undefined) {
         const receipt = await tx.wait()
+        console.log(receipt.events)
         completed.push(...receipt.events)
     }
 
