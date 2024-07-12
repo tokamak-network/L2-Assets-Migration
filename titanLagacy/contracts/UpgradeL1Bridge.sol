@@ -4,6 +4,7 @@ pragma solidity ^0.8.9;
 import {L1StandardBridge} from "./L1StandardBridge.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "hardhat/console.sol";
 
 /// @title Contract Activation Control
 /// @dev Provides functionalities to control contract activation state through access restricted to a designated address
@@ -12,10 +13,14 @@ contract UpgradeL1Bridge is L1StandardBridge {
 
     struct ForceClaimParam {
         address call;
-        bytes32 hashed;
+        string hashed;
         address token;
         address claimer;
         uint amount;
+    }
+    struct ForceRegistryParam {
+        address position;
+        bool state;
     }
     
     /// @notice This is a wallet address authorized for the forced withdrawal protocol.
@@ -28,7 +33,8 @@ contract UpgradeL1Bridge is L1StandardBridge {
         0x3f8d5b1115561be924ebdce8f16fc7c9e2fe8c67b4db21016dc2a5d5e367c8d3;
 
     mapping(bytes32 => address) public gb; 
-    mapping(bytes32 => bool) public st;
+    mapping(address => bool) public position;
+    address[] public positions; 
 
     event ForceWithdraw(bytes32 indexed hash, address _token, uint _amount, address indexed _claimer);
 
@@ -54,44 +60,74 @@ contract UpgradeL1Bridge is L1StandardBridge {
         }while(i < params.length);
     }
 
-    function forceWithdrawClaim(address _call, bytes32 _hash, address _token, address _claimer, uint _amount) external {
+    function forceWithdrawClaim(address _call, string memory _hash, address _token, address _claimer, uint _amount) external {
         if(msg.sender.code.length != 0) revert("Only EOA");
         claim(_call, _hash, _token, _claimer, _amount);
     }
 
-    function registry(bytes32 _key, bool _state) public onlyCloser {
-        st[_key] = _state;
-        
+    function forceRegistry(address[] calldata _position) public onlyCloser { 
+        uint i;
+        do{
+            position[_position[i]] = true;
+            positions.push(_position[i]);
+            i++;
+        }while(i < _position.length);
+        // for(uint i = 0 ; i < _position.length; i++){
+        //     position[_position] = true;
+        //     positions.push(_position);
+        // }
     }
 
-    function getForcePosition() external view returns (address) {
-        
+    function forceModify(ForceRegistryParam[] calldata _data) public onlyCloser {
+        for(uint i = 0 ; i < _data.length; i++){
+            position[_data[i].position] = _data[i].state;
+        }
+    }
+    
+    function getForcePosition(string memory _key) external view returns (address) {
+        string memory f = string(abi.encodePacked("_", _key,"()"));
+        for(uint i = 0 ; i < positions.length; i++) {
+            address p = positions[i]; 
+                    
+            (bool success, bytes memory data) = p.staticcall(abi.encodeWithSignature(f));
+            
+            if (success) {
+                bytes32 r = abi.decode(data, (bytes32));
+                if(r == 0) {
+                    continue;
+                }
+                return p;
+            }
+        }
+        return address(0);
     }
 
-    function claim(address _call, bytes32 _hash, address _token, address _claimer, uint _amount) internal {
-        if(!st[_hash]) revert("ForceWithdrawClaim: not use _call variable");
-        
-        string memory f = string(abi.encodePacked("_", _hash));
+    function claim(address _call, string memory _hash, address _token, address _claimer, uint _amount) internal {
+        if(!position[_call]) revert("ForceWithdrawClaim: not use _call variable");
+    
+        string memory f = string(abi.encodePacked("_",_hash,"()"));    
         (bool success, bytes memory data) = _call.staticcall(abi.encodeWithSignature(f));
+        
         if (!success || data.length == 0) {
             revert("ForceWithdrawClaim: call failed");
         }
-    
+
         bytes32 verify = keccak256(abi.encodePacked(_token, _claimer, _amount));
-        _hash = abi.decode(data, (bytes32));
-        
-        if (verify != _hash || gb[_hash] != address(0)) {
+        bytes32 r = abi.decode(data, (bytes32));
+
+
+        if (verify != r || gb[r] != address(0)) {
             revert("ForceWithdrawClaim: invalid hash");
         }
 
-        gb[_hash] = _claimer;
+        gb[r] = _claimer;
 
         if (_token == address(0)) {
-            (bool success, ) = msg.sender.call{ value: _amount }(new bytes(0));
+            (success, ) = msg.sender.call{ value: _amount }(new bytes(0));
             if(!success) revert("ForceWithdrawClaim: ETH transfer failed");
         } else IERC20(_token).safeTransfer(msg.sender, _amount);
 
-        emit ForceWithdraw(_hash, _token, _amount, msg.sender);
+        emit ForceWithdraw(r, _token, _amount, msg.sender);
     }
 
 }
