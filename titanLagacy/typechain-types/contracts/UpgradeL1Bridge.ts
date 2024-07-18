@@ -40,7 +40,7 @@ export declare namespace UpgradeL1Bridge {
   };
 
   export type ForceClaimParamStruct = {
-    call: PromiseOrValue<string>;
+    position: PromiseOrValue<string>;
     hashed: PromiseOrValue<string>;
     token: PromiseOrValue<string>;
     amount: PromiseOrValue<BigNumberish>;
@@ -68,8 +68,8 @@ export interface UpgradeL1BridgeInterface extends utils.Interface {
     "forceActive(bool)": FunctionFragment;
     "forceModify((address,bool)[])": FunctionFragment;
     "forceRegistry(address[])": FunctionFragment;
-    "forceWithdrawClaim(address,string,address,address,uint256)": FunctionFragment;
-    "forceWithdrawClaimAll((address,string,address,address,uint256)[])": FunctionFragment;
+    "forceWithdrawClaim(address,string,address,uint256)": FunctionFragment;
+    "forceWithdrawClaimAll((address,string,address,uint256)[])": FunctionFragment;
     "gb(bytes32)": FunctionFragment;
     "getForcePosition(string)": FunctionFragment;
     "initialize(address,address)": FunctionFragment;
@@ -178,7 +178,6 @@ export interface UpgradeL1BridgeInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "forceWithdrawClaim",
     values: [
-      PromiseOrValue<string>,
       PromiseOrValue<string>,
       PromiseOrValue<string>,
       PromiseOrValue<string>,
@@ -466,7 +465,7 @@ export interface UpgradeL1Bridge extends BaseContract {
     ): Promise<ContractTransaction>;
 
     forceWithdrawClaim(
-      _call: PromiseOrValue<string>,
+      _position: PromiseOrValue<string>,
       _hash: PromiseOrValue<string>,
       _token: PromiseOrValue<string>,
       _amount: PromiseOrValue<BigNumberish>,
@@ -587,7 +586,7 @@ export interface UpgradeL1Bridge extends BaseContract {
   ): Promise<ContractTransaction>;
 
   forceWithdrawClaim(
-    _call: PromiseOrValue<string>,
+    _position: PromiseOrValue<string>,
     _hash: PromiseOrValue<string>,
     _token: PromiseOrValue<string>,
     _amount: PromiseOrValue<BigNumberish>,
@@ -706,7 +705,7 @@ export interface UpgradeL1Bridge extends BaseContract {
     ): Promise<void>;
 
     forceWithdrawClaim(
-      _call: PromiseOrValue<string>,
+      _position: PromiseOrValue<string>,
       _hash: PromiseOrValue<string>,
       _token: PromiseOrValue<string>,
       _amount: PromiseOrValue<BigNumberish>,
@@ -903,7 +902,7 @@ export interface UpgradeL1Bridge extends BaseContract {
     ): Promise<BigNumber>;
 
     forceWithdrawClaim(
-      _call: PromiseOrValue<string>,
+      _position: PromiseOrValue<string>,
       _hash: PromiseOrValue<string>,
       _token: PromiseOrValue<string>,
       _amount: PromiseOrValue<BigNumberish>,
@@ -1025,7 +1024,7 @@ export interface UpgradeL1Bridge extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     forceWithdrawClaim(
-      _call: PromiseOrValue<string>,
+      _position: PromiseOrValue<string>,
       _hash: PromiseOrValue<string>,
       _token: PromiseOrValue<string>,
       _amount: PromiseOrValue<BigNumberish>,

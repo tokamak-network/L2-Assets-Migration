@@ -1,8 +1,11 @@
+// import { ethers as ethers2} from "ethers2";
 import { expect } from "chai";
 import { ethers } from "hardhat";
+// import * as ethers from "ethers"
 import path from 'path'
 import fs from 'fs'
-
+import { ERC20 } from "../scripts/types"
+import { BigNumber } from "ethers";
 
 export default describe('# Unit Test : L1 StandardBridge', () => {
     const proxyABI = require("../artifacts/contracts/Proxy.sol/Proxy.json");
@@ -79,13 +82,15 @@ export default describe('# Unit Test : L1 StandardBridge', () => {
 
     it('Registry Check', async () => {
         await helpers.impersonateAccount("0x70997970C51812dc3A010C7d01b50e0d17dc79C8");
-        await ethers.provider.send('hardhat_impersonateAccount', ["0x70997970C51812dc3A010C7d01b50e0d17dc79C8"])
+        await helpers.impersonateAccount("0x4c90e5723fe4de59d0895cafb749fd8756d7ce19");
+        await helpers.impersonateAccount("0x49E2E97Dcf36c41D383016a1d342BDcF563aa46A");
         await ethers.provider.send('hardhat_setBalance', ["0x70997970C51812dc3A010C7d01b50e0d17dc79C8", '0x152D02C7E14AF6800000']);
-
+        await ethers.provider.send('hardhat_setBalance', ["0x4c90e5723fe4de59d0895cafb749fd8756d7ce19", '0x152D02C7E14AF6800000']);
+        await ethers.provider.send('hardhat_setBalance', ["0x49E2E97Dcf36c41D383016a1d342BDcF563aa46A", '0x152D02C7E14AF6800000']);
+        
         const deployer = ethers.provider.getSigner(forceOwner)
         const l1Bridge: any = await ethers.getContractAt("UpgradeL1Bridge", L1BRIDGE)
         const account = await ethers.provider.getSigner(forceOwner)
-        
         const accountAddress = await account.getAddress()
 
         const dataCount =  fs.readdirSync(dataPath);
@@ -119,65 +124,31 @@ export default describe('# Unit Test : L1 StandardBridge', () => {
         //     address claimer;
         //     uint amount;
         // }
-
-        await l1Bridge.forceWithdrawClaimAll([{
-            call : deployedStorage[0],
+        
+        
+        
+        const claimer = await ethers.provider.getSigner("0x4c90e5723fe4de59d0895cafb749fd8756d7ce19")
+        await l1Bridge.connect(claimer).forceWithdrawClaimAll([{
+            position : deployedStorage[0],
             hashed : "0x954b627a3af77cbde166018a1b3937d5b90e3c00ee2b8957625b45d4ef57b8dc",
             token : "0x0000000000000000000000000000000000000000",
-            claimer : "0x4c90e5723fe4de59d0895cafb749fd8756d7ce19",
             amount : "1000000000000000"
+        }])
+        // console.log(await ethers.provider.getBalance("0x4c90e5723fe4de59d0895cafb749fd8756d7ce19"))
+
+        const claimer2 = await ethers.provider.getSigner("0x49E2E97Dcf36c41D383016a1d342BDcF563aa46A")
+        await l1Bridge.connect(claimer2).forceWithdrawClaimAll([{
+            position : deployedStorage[1],
+            hashed : "0x6319b1298f3f2f709fe62fc33c4a92c766d103d33af8d3a6f3aa199657f71598",
+            token : "0x2be5e8c109e2197D077D13A82dAead6a9b3433C5",
+            amount : "22000000000000000000"
         }])
 
 
-        let params: any = []
-        let count = 0;
-        const max = 1;
-
-        // for (const assetInfo of assets) {
-        //     if (assetInfo.l1Token === ethers.constants.AddressZero) {
-        //         console.log(assetInfo.tokenName, ": ", await ethers.provider.getBalance(l1Bridge.address));
-        //     } else {
-        //         const l1token = await ethers.getContractAt(ERC20, assetInfo.l1Token)
-        //         console.log(assetInfo.tokenName, ": ", await l1token.balanceOf(l1Bridge.address));
-        //     }
-        // }
-
-        // for (const assetInfo of assets) {
-
-        //     let total = BigNumber.from(0)
-        //     for (const asset of assetInfo.data) {
-        //         if (asset.amount == 0) // todo : amount 0 arguments require remove function
-        //             continue
-
-
-        //         if (count != max) {
-        //             params.push({
-        //                 token: assetInfo.l1Token,
-        //                 to: accountAddress,
-        //                 amount: asset.amount,
-        //                 index: asset.hash
-        //             })
-        //             ++count;
-        //         }
-
-        //         if (count == max) {
-        //             await l1Bridge.connect(deployer).forceWithdrawAll(params)
-        //             params.length = 0;
-        //             count = 0;
-        //         }
-        //         total = total.add(asset.amount)
-        //     }
-        // }
+        const l1token = await ethers.getContractAt(ERC20, "0x2be5e8c109e2197D077D13A82dAead6a9b3433C5")
+        console.log(await l1token.balanceOf("0x49E2E97Dcf36c41D383016a1d342BDcF563aa46A"))
         
-        // for (const assetInfo of assets) {
-        //     if (assetInfo.l1Token === ethers.constants.AddressZero) {
-        //         console.log(assetInfo.tokenName, ": ", await ethers.provider.getBalance(l1Bridge.address));
-        //     } else {
-        //         const l1token = await ethers.getContractAt(ERC20, assetInfo.l1Token)
-        //         console.log(assetInfo.tokenName, ": ", await l1token.balanceOf(l1Bridge.address));
-        //     }
-        // }
-        console.log("\n")
+      
     });
 
 
