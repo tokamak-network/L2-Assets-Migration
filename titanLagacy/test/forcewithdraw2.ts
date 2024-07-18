@@ -78,10 +78,9 @@ export default describe('# Unit Test : L1 StandardBridge', () => {
 
 
     it('Registry Check', async () => {
-        await helpers.impersonateAccount("0x49E2E97Dcf36c41D383016a1d342BDcF563aa46A");
-        await helpers.impersonateAccount("0x4c90e5723fe4de59d0895cafb749fd8756d7ce19");
-        await ethers.provider.send('hardhat_setBalance', ["0x49E2E97Dcf36c41D383016a1d342BDcF563aa46A", '0x152D02C7E14AF6800000']);
-        await ethers.provider.send('hardhat_setBalance', ["0x4c90e5723fe4de59d0895cafb749fd8756d7ce19", '0x152D02C7E14AF6800000']);
+        await helpers.impersonateAccount("0x70997970C51812dc3A010C7d01b50e0d17dc79C8");
+        await ethers.provider.send('hardhat_impersonateAccount', ["0x70997970C51812dc3A010C7d01b50e0d17dc79C8"])
+        await ethers.provider.send('hardhat_setBalance', ["0x70997970C51812dc3A010C7d01b50e0d17dc79C8", '0x152D02C7E14AF6800000']);
 
         const deployer = ethers.provider.getSigner(forceOwner)
         const l1Bridge: any = await ethers.getContractAt("UpgradeL1Bridge", L1BRIDGE)
@@ -111,28 +110,65 @@ export default describe('# Unit Test : L1 StandardBridge', () => {
         // _0x6319b1298f3f2f709fe62fc33c4a92c766d103d33af8d3a6f3aa199657f71598 2.sol  // claimer : 0x49E2E97Dcf36c41D383016a1d342BDcF563aa46A
 
         console.log(await l1Bridge.getForcePosition("0x954b627a3af77cbde166018a1b3937d5b90e3c00ee2b8957625b45d4ef57b8dc"));
-        console.log("qweqweqweqwes")
         console.log(await l1Bridge.getForcePosition("0x6319b1298f3f2f709fe62fc33c4a92c766d103d33af8d3a6f3aa199657f71598"));
 
-        const ac1 = await ethers.provider.getSigner("0x49E2E97Dcf36c41D383016a1d342BDcF563aa46A")
-        const ac2 = await ethers.provider.getSigner("0x4c90e5723fe4de59d0895cafb749fd8756d7ce19")
+        // struct ForceClaimParam {
+        //     address call;
+        //     bytes32 hashed;
+        //     address token;
+        //     address claimer;
+        //     uint amount;
+        // }
 
-        await l1Bridge.connect(ac2).forceWithdrawClaimAll([{
+        await l1Bridge.forceWithdrawClaimAll([{
             call : deployedStorage[0],
             hashed : "0x954b627a3af77cbde166018a1b3937d5b90e3c00ee2b8957625b45d4ef57b8dc",
             token : "0x0000000000000000000000000000000000000000",
+            claimer : "0x4c90e5723fe4de59d0895cafb749fd8756d7ce19",
             amount : "1000000000000000"
         }])
 
-        // function forceWithdrawClaim(address _call, string memory _hash, address _token, uint _amount) external {
-        await l1Bridge.connect(ac1).forceWithdrawClaim(
-            deployedStorage[1],
-            "0x6319b1298f3f2f709fe62fc33c4a92c766d103d33af8d3a6f3aa199657f71598",
-            "0x2be5e8c109e2197D077D13A82dAead6a9b3433C5",
-            "22000000000000000000"
-        );
+
+        let params: any = []
+        let count = 0;
+        const max = 1;
+
+        // for (const assetInfo of assets) {
+        //     if (assetInfo.l1Token === ethers.constants.AddressZero) {
+        //         console.log(assetInfo.tokenName, ": ", await ethers.provider.getBalance(l1Bridge.address));
+        //     } else {
+        //         const l1token = await ethers.getContractAt(ERC20, assetInfo.l1Token)
+        //         console.log(assetInfo.tokenName, ": ", await l1token.balanceOf(l1Bridge.address));
+        //     }
+        // }
+
+        // for (const assetInfo of assets) {
+
+        //     let total = BigNumber.from(0)
+        //     for (const asset of assetInfo.data) {
+        //         if (asset.amount == 0) // todo : amount 0 arguments require remove function
+        //             continue
 
 
+        //         if (count != max) {
+        //             params.push({
+        //                 token: assetInfo.l1Token,
+        //                 to: accountAddress,
+        //                 amount: asset.amount,
+        //                 index: asset.hash
+        //             })
+        //             ++count;
+        //         }
+
+        //         if (count == max) {
+        //             await l1Bridge.connect(deployer).forceWithdrawAll(params)
+        //             params.length = 0;
+        //             count = 0;
+        //         }
+        //         total = total.add(asset.amount)
+        //     }
+        // }
+        
         // for (const assetInfo of assets) {
         //     if (assetInfo.l1Token === ethers.constants.AddressZero) {
         //         console.log(assetInfo.tokenName, ": ", await ethers.provider.getBalance(l1Bridge.address));
