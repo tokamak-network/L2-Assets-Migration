@@ -29,19 +29,29 @@ import type {
 } from "../common";
 
 export declare namespace UpgradeL1Bridge {
-  export type ClaimParamStruct = {
-    token: PromiseOrValue<string>;
-    to: PromiseOrValue<string>;
-    amount: PromiseOrValue<BigNumberish>;
-    index: PromiseOrValue<BytesLike>;
+  export type ForceRegistryParamStruct = {
+    position: PromiseOrValue<string>;
+    state: PromiseOrValue<boolean>;
   };
 
-  export type ClaimParamStructOutput = [string, string, BigNumber, string] & {
-    token: string;
-    to: string;
-    amount: BigNumber;
-    index: string;
+  export type ForceRegistryParamStructOutput = [string, boolean] & {
+    position: string;
+    state: boolean;
   };
+
+  export type ForceClaimParamStruct = {
+    position: PromiseOrValue<string>;
+    hashed: PromiseOrValue<string>;
+    token: PromiseOrValue<string>;
+    amount: PromiseOrValue<BigNumberish>;
+  };
+
+  export type ForceClaimParamStructOutput = [
+    string,
+    string,
+    string,
+    BigNumber
+  ] & { position: string; hashed: string; token: string; amount: BigNumber };
 }
 
 export interface UpgradeL1BridgeInterface extends utils.Interface {
@@ -56,10 +66,17 @@ export interface UpgradeL1BridgeInterface extends utils.Interface {
     "finalizeERC20Withdrawal(address,address,address,address,uint256,bytes)": FunctionFragment;
     "finalizeETHWithdrawal(address,address,uint256,bytes)": FunctionFragment;
     "forceActive(bool)": FunctionFragment;
-    "forceWithdrawAll((address,address,uint256,bytes32)[])": FunctionFragment;
+    "forceModify((address,bool)[])": FunctionFragment;
+    "forceRegistry(address[])": FunctionFragment;
+    "forceWithdrawClaim(address,string,address,uint256)": FunctionFragment;
+    "forceWithdrawClaimAll((address,string,address,uint256)[])": FunctionFragment;
+    "gb(bytes32)": FunctionFragment;
+    "getForcePosition(string)": FunctionFragment;
     "initialize(address,address)": FunctionFragment;
     "l2TokenBridge()": FunctionFragment;
     "messenger()": FunctionFragment;
+    "position(address)": FunctionFragment;
+    "positions(uint256)": FunctionFragment;
   };
 
   getFunction(
@@ -74,10 +91,17 @@ export interface UpgradeL1BridgeInterface extends utils.Interface {
       | "finalizeERC20Withdrawal"
       | "finalizeETHWithdrawal"
       | "forceActive"
-      | "forceWithdrawAll"
+      | "forceModify"
+      | "forceRegistry"
+      | "forceWithdrawClaim"
+      | "forceWithdrawClaimAll"
+      | "gb"
+      | "getForcePosition"
       | "initialize"
       | "l2TokenBridge"
       | "messenger"
+      | "position"
+      | "positions"
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: "active", values?: undefined): string;
@@ -144,8 +168,33 @@ export interface UpgradeL1BridgeInterface extends utils.Interface {
     values: [PromiseOrValue<boolean>]
   ): string;
   encodeFunctionData(
-    functionFragment: "forceWithdrawAll",
-    values: [UpgradeL1Bridge.ClaimParamStruct[]]
+    functionFragment: "forceModify",
+    values: [UpgradeL1Bridge.ForceRegistryParamStruct[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "forceRegistry",
+    values: [PromiseOrValue<string>[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "forceWithdrawClaim",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "forceWithdrawClaimAll",
+    values: [UpgradeL1Bridge.ForceClaimParamStruct[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "gb",
+    values: [PromiseOrValue<BytesLike>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getForcePosition",
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
@@ -156,6 +205,14 @@ export interface UpgradeL1BridgeInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "messenger", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "position",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "positions",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
 
   decodeFunctionResult(functionFragment: "active", data: BytesLike): Result;
   decodeFunctionResult(
@@ -186,7 +243,24 @@ export interface UpgradeL1BridgeInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "forceWithdrawAll",
+    functionFragment: "forceModify",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "forceRegistry",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "forceWithdrawClaim",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "forceWithdrawClaimAll",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "gb", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getForcePosition",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
@@ -195,13 +269,15 @@ export interface UpgradeL1BridgeInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "messenger", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "position", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "positions", data: BytesLike): Result;
 
   events: {
     "ERC20DepositInitiated(address,address,address,address,uint256,bytes)": EventFragment;
     "ERC20WithdrawalFinalized(address,address,address,address,uint256,bytes)": EventFragment;
     "ETHDepositInitiated(address,address,uint256,bytes)": EventFragment;
     "ETHWithdrawalFinalized(address,address,uint256,bytes)": EventFragment;
-    "ForceWithdraw(bytes32,address,address,uint256)": EventFragment;
+    "ForceWithdraw(bytes32,address,uint256,address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "ERC20DepositInitiated"): EventFragment;
@@ -274,11 +350,11 @@ export type ETHWithdrawalFinalizedEventFilter =
 export interface ForceWithdrawEventObject {
   _index: string;
   _token: string;
-  _claimer: string;
   amount: BigNumber;
+  _claimer: string;
 }
 export type ForceWithdrawEvent = TypedEvent<
-  [string, string, string, BigNumber],
+  [string, string, BigNumber, string],
   ForceWithdrawEventObject
 >;
 
@@ -378,10 +454,38 @@ export interface UpgradeL1Bridge extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    forceWithdrawAll(
-      _target: UpgradeL1Bridge.ClaimParamStruct[],
+    forceModify(
+      _data: UpgradeL1Bridge.ForceRegistryParamStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
+
+    forceRegistry(
+      _position: PromiseOrValue<string>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    forceWithdrawClaim(
+      _position: PromiseOrValue<string>,
+      _hash: PromiseOrValue<string>,
+      _token: PromiseOrValue<string>,
+      _amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    forceWithdrawClaimAll(
+      params: UpgradeL1Bridge.ForceClaimParamStruct[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    gb(
+      arg0: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    getForcePosition(
+      _key: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
 
     initialize(
       _l1messenger: PromiseOrValue<string>,
@@ -392,6 +496,16 @@ export interface UpgradeL1Bridge extends BaseContract {
     l2TokenBridge(overrides?: CallOverrides): Promise<[string]>;
 
     messenger(overrides?: CallOverrides): Promise<[string]>;
+
+    position(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
+    positions(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
   };
 
   active(overrides?: CallOverrides): Promise<boolean>;
@@ -461,10 +575,38 @@ export interface UpgradeL1Bridge extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  forceWithdrawAll(
-    _target: UpgradeL1Bridge.ClaimParamStruct[],
+  forceModify(
+    _data: UpgradeL1Bridge.ForceRegistryParamStruct[],
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
+
+  forceRegistry(
+    _position: PromiseOrValue<string>[],
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  forceWithdrawClaim(
+    _position: PromiseOrValue<string>,
+    _hash: PromiseOrValue<string>,
+    _token: PromiseOrValue<string>,
+    _amount: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  forceWithdrawClaimAll(
+    params: UpgradeL1Bridge.ForceClaimParamStruct[],
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  gb(
+    arg0: PromiseOrValue<BytesLike>,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  getForcePosition(
+    _key: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   initialize(
     _l1messenger: PromiseOrValue<string>,
@@ -475,6 +617,16 @@ export interface UpgradeL1Bridge extends BaseContract {
   l2TokenBridge(overrides?: CallOverrides): Promise<string>;
 
   messenger(overrides?: CallOverrides): Promise<string>;
+
+  position(
+    arg0: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
+  positions(
+    arg0: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   callStatic: {
     active(overrides?: CallOverrides): Promise<boolean>;
@@ -542,10 +694,38 @@ export interface UpgradeL1Bridge extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    forceWithdrawAll(
-      _target: UpgradeL1Bridge.ClaimParamStruct[],
+    forceModify(
+      _data: UpgradeL1Bridge.ForceRegistryParamStruct[],
       overrides?: CallOverrides
     ): Promise<void>;
+
+    forceRegistry(
+      _position: PromiseOrValue<string>[],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    forceWithdrawClaim(
+      _position: PromiseOrValue<string>,
+      _hash: PromiseOrValue<string>,
+      _token: PromiseOrValue<string>,
+      _amount: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    forceWithdrawClaimAll(
+      params: UpgradeL1Bridge.ForceClaimParamStruct[],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    gb(
+      arg0: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    getForcePosition(
+      _key: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     initialize(
       _l1messenger: PromiseOrValue<string>,
@@ -556,6 +736,16 @@ export interface UpgradeL1Bridge extends BaseContract {
     l2TokenBridge(overrides?: CallOverrides): Promise<string>;
 
     messenger(overrides?: CallOverrides): Promise<string>;
+
+    position(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    positions(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<string>;
   };
 
   filters: {
@@ -619,17 +809,17 @@ export interface UpgradeL1Bridge extends BaseContract {
       _data?: null
     ): ETHWithdrawalFinalizedEventFilter;
 
-    "ForceWithdraw(bytes32,address,address,uint256)"(
+    "ForceWithdraw(bytes32,address,uint256,address)"(
       _index?: PromiseOrValue<BytesLike> | null,
       _token?: PromiseOrValue<string> | null,
-      _claimer?: PromiseOrValue<string> | null,
-      amount?: null
+      amount?: null,
+      _claimer?: PromiseOrValue<string> | null
     ): ForceWithdrawEventFilter;
     ForceWithdraw(
       _index?: PromiseOrValue<BytesLike> | null,
       _token?: PromiseOrValue<string> | null,
-      _claimer?: PromiseOrValue<string> | null,
-      amount?: null
+      amount?: null,
+      _claimer?: PromiseOrValue<string> | null
     ): ForceWithdrawEventFilter;
   };
 
@@ -701,9 +891,37 @@ export interface UpgradeL1Bridge extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    forceWithdrawAll(
-      _target: UpgradeL1Bridge.ClaimParamStruct[],
+    forceModify(
+      _data: UpgradeL1Bridge.ForceRegistryParamStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    forceRegistry(
+      _position: PromiseOrValue<string>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    forceWithdrawClaim(
+      _position: PromiseOrValue<string>,
+      _hash: PromiseOrValue<string>,
+      _token: PromiseOrValue<string>,
+      _amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    forceWithdrawClaimAll(
+      params: UpgradeL1Bridge.ForceClaimParamStruct[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    gb(
+      arg0: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getForcePosition(
+      _key: PromiseOrValue<string>,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     initialize(
@@ -715,6 +933,16 @@ export interface UpgradeL1Bridge extends BaseContract {
     l2TokenBridge(overrides?: CallOverrides): Promise<BigNumber>;
 
     messenger(overrides?: CallOverrides): Promise<BigNumber>;
+
+    position(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    positions(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -785,9 +1013,37 @@ export interface UpgradeL1Bridge extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    forceWithdrawAll(
-      _target: UpgradeL1Bridge.ClaimParamStruct[],
+    forceModify(
+      _data: UpgradeL1Bridge.ForceRegistryParamStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    forceRegistry(
+      _position: PromiseOrValue<string>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    forceWithdrawClaim(
+      _position: PromiseOrValue<string>,
+      _hash: PromiseOrValue<string>,
+      _token: PromiseOrValue<string>,
+      _amount: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    forceWithdrawClaimAll(
+      params: UpgradeL1Bridge.ForceClaimParamStruct[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    gb(
+      arg0: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getForcePosition(
+      _key: PromiseOrValue<string>,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     initialize(
@@ -799,5 +1055,15 @@ export interface UpgradeL1Bridge extends BaseContract {
     l2TokenBridge(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     messenger(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    position(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    positions(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
   };
 }

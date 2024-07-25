@@ -91,6 +91,7 @@ export default describe('# Unit Test : L1 StandardBridge', () => {
                 if (asset.amount == 0) // todo : amount 0 arguments require remove function
                     continue
 
+
                 if (count != max) {
                     params.push({
                         token: assetInfo.l1Token,

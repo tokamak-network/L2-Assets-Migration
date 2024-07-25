@@ -4,6 +4,7 @@ import "hardhat-gas-reporter";
 import "@nomicfoundation/hardhat-ethers"
 import "@nomicfoundation/hardhat-toolbox";
 import * as dotenv from 'dotenv'
+import "hardhat-contract-sizer";
 
 task("upgrade", "Upgrades the L1 bridge", async (args, hre) => {
   const { upgradeL1bridge } = require("./scripts/protocol/forceWithdraw");
@@ -37,9 +38,8 @@ const config: HardhatUserConfig = {
       forking: {
         url: process.env.L1_RPC_URL_SDK || "", // process.env.CONTRACT_RPC_URL_L1 || "",
         // blockNumber: 19973387,
-      }
+      },
     },
-
     main: {
       url: process.env.CONTRACT_RPC_URL_L1 || "",
       accounts: [process.env.L1_PORXY_OWNER || "", process.env.L1_FORCE_OWNER || ""]
