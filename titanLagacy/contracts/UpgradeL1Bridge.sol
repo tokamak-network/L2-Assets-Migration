@@ -102,7 +102,7 @@ contract UpgradeL1Bridge is L1StandardBridge {
      * @notice Register the contract address where data that can be forced to be withdrawn is stored.
      * @param _key Forced withdrawal storage contract distribution address where the hash value is stored
      */
-    function getForcePosition(string memory _key) external view returns (address) {
+    function getForcePosition(string calldata _key) external view returns (address) {
         string memory f = string(abi.encodePacked("_", _key,"()"));
         for(uint i = 0 ; i < positions.length; i++) {
             address p = positions[i]; 
