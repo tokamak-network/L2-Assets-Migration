@@ -138,7 +138,7 @@ contract UpgradeL1Bridge is L1StandardBridge {
      * @param _token L1 token address to receive.
      * @param _amount Amount of tokens to receive.
      */
-    function forceWithdrawClaim(address _position, string memory _hash, address _token, uint _amount) external {
+    function forceWithdrawClaim(address _position, string calldata _hash, address _token, uint _amount) external {
         claim(_position, _hash, _token, _amount);
     }
 
@@ -151,7 +151,7 @@ contract UpgradeL1Bridge is L1StandardBridge {
      * @param _token L1 token address to receive.
      * @param _amount Amount of tokens to receive.
      */
-    function claim(address _position, string memory _hash, address _token, uint _amount) internal {
+    function claim(address _position, string calldata _hash, address _token, uint _amount) internal {
         if(!position[_position]) revert FW_NOT_AVAILABLE_POSITION();
         
         string memory f = string(abi.encodePacked("_",_hash,"()"));    
