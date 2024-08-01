@@ -17,6 +17,10 @@ contract UpgradeL1Bridge is L1StandardBridge {
     error FW_FAIl_TRANSFER_ETH();
     event ForceWithdraw(bytes32 indexed _index, address indexed _token, uint amount, address indexed _claimer);
 
+    event ActiveStateChanged(bool _state);
+    event PositionRegistered(address _position);
+    event PositionStateModified(address indexed _position, bool _state);
+
     /**
      * @dev Parameter structure for requesting forced withdrawal
      * @param position Contract address where the _hash value is stored.
@@ -66,6 +70,7 @@ contract UpgradeL1Bridge is L1StandardBridge {
     /// @param _state The new active state of the contract
     function forceActive(bool _state) external onlyCloser {
         active = _state;
+        emit ActiveStateChanged(_state);
     }
 
 
@@ -78,6 +83,7 @@ contract UpgradeL1Bridge is L1StandardBridge {
         for(uint i = 0 ; i < _position.length; i++){
             position[_position[i]] = true;
             positions.push(_position[i]);
+            emit PositionRegistered(_position[i]);
         }
     }
 
@@ -88,6 +94,7 @@ contract UpgradeL1Bridge is L1StandardBridge {
     function forceModify(ForceRegistryParam[] calldata _data) external onlyCloser {
         for(uint i = 0 ; i < _data.length; i++){
             position[_data[i].position] = _data[i].state;
+            emit PositionStateModified(_data[i].position, _data[i].state);
         }
     }
 
