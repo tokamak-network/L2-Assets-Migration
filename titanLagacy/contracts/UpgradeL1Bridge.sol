@@ -174,4 +174,19 @@ contract UpgradeL1Bridge is L1StandardBridge {
         emit ForceWithdraw(r, _token, _amount, msg.sender);
     }
 
+    // multisig 5/3 
+    event SubmitTransaction(
+        address indexed owner,
+        uint256 indexed txIndex,
+        address indexed to,
+        uint256 value,
+        bytes data
+    );
+
+    event ConfirmTransaction(address indexed owner, uint256 indexed txIndex);
+    event RevokeConfirmation(address indexed owner, uint256 indexed txIndex);
+    event ExecuteTransaction(address indexed owner, uint256 indexed txIndex);
+    
+
+
 }
