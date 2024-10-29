@@ -1,8 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-import {L1StandardBridge} from "./L1StandardBridge.sol";
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import { IDAOCommittee } from "./dao/IDAOCommittee.sol";
+import { ICandidate } from "./dao/ICandidate.sol";
+import { L1StandardBridge } from "./L1StandardBridge.sol";
+import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 /// @title Contract Activation Control
@@ -45,7 +47,13 @@ contract UpgradeL1Bridge is L1StandardBridge {
     mapping(address => bool) public position;
     /// @notice (token,claim,amount) Stores Hashed value, used to check position status in front service.
     address[] public positions; 
+
+    /// @notice DAOCommittee contract address
+    IDAOCommittee private constant dao = IDAOCommittee(0xDD9f0cCc044B0781289Ee318e5971b0139602C26); // mainnet : 0xDD9f0cCc044B0781289Ee318e5971b0139602C26
     
+    ICandidate private constant candidate = ICandidate(0x0); // mainnet : 0x0
+
+
     /// @notice This is a wallet address authorized for the forced withdrawal protocol.
     address private constant closer = 0x70997970C51812dc3A010C7d01b50e0d17dc79C8;
 
@@ -60,6 +68,19 @@ contract UpgradeL1Bridge is L1StandardBridge {
         if (msg.sender != closer) revert FW_ONLY_CLOSER();
         _;
     }
+
+     modifier onlyMember() {
+        require(dao.isMember(msg.sender), "StorageStateCommittee: not a member");
+        _;
+    }
+
+    // 이부분 .. 
+    modifier onlyMemberContract() {
+        address candidate = ICandidate(msg.sender).candidate();
+        require(dao.isMember(candidate), "StorageStateCommittee: not a member");
+        _;
+    }
+
 
     /// @notice Toggles the active state of the contract
     /// @dev Sets the contract's active state to the value provided in _state
@@ -174,19 +195,9 @@ contract UpgradeL1Bridge is L1StandardBridge {
         emit ForceWithdraw(r, _token, _amount, msg.sender);
     }
 
-    // multisig 5/3 
-    event SubmitTransaction(
-        address indexed owner,
-        uint256 indexed txIndex,
-        address indexed to,
-        uint256 value,
-        bytes data
-    );
 
-    event ConfirmTransaction(address indexed owner, uint256 indexed txIndex);
-    event RevokeConfirmation(address indexed owner, uint256 indexed txIndex);
-    event ExecuteTransaction(address indexed owner, uint256 indexed txIndex);
-    
+   
+
 
 
 }
