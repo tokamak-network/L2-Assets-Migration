@@ -47,14 +47,8 @@ contract UpgradeL1Bridge is L1StandardBridge {
     mapping(address => bool) public position;
     /// @notice (token,claim,amount) Stores Hashed value, used to check position status in front service.
     address[] public positions; 
-
-    /// @notice DAOCommittee contract address
-    IDAOCommittee private constant dao = IDAOCommittee(0xDD9f0cCc044B0781289Ee318e5971b0139602C26); // mainnet : 0xDD9f0cCc044B0781289Ee318e5971b0139602C26
     
-    ICandidate private constant candidate = ICandidate(0x0); // mainnet : 0x0
-
-
-    /// @notice This is a wallet address authorized for the forced withdrawal protocol.
+    /// @notice Addresses of Multisig and DAO contracts that will control the protocol
     address private constant closer = 0x70997970C51812dc3A010C7d01b50e0d17dc79C8;
 
     /// @notice If the transfer is successful, the event below is executed.
@@ -69,26 +63,12 @@ contract UpgradeL1Bridge is L1StandardBridge {
         _;
     }
 
-     modifier onlyMember() {
-        require(dao.isMember(msg.sender), "StorageStateCommittee: not a member");
-        _;
-    }
-
-    // 이부분 .. 
-    modifier onlyMemberContract() {
-        address candidate = ICandidate(msg.sender).candidate();
-        require(dao.isMember(candidate), "StorageStateCommittee: not a member");
-        _;
-    }
-
-
     /// @notice Toggles the active state of the contract
     /// @dev Sets the contract's active state to the value provided in _state
     /// @param _state The new active state of the contract
     function forceActive(bool _state) external onlyCloser {
         active = _state;
     }
-
 
     /**
      * @notice Register the contract address where data that can be forced to be withdrawn is stored.
@@ -197,7 +177,4 @@ contract UpgradeL1Bridge is L1StandardBridge {
 
 
    
-
-
-
 }
