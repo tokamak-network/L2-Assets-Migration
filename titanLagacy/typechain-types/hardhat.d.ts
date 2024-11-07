@@ -21,6 +21,14 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC20__factory>;
     getContractFactory(
+      name: "ICandidate",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ICandidate__factory>;
+    getContractFactory(
+      name: "IDAOCommittee",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IDAOCommittee__factory>;
+    getContractFactory(
       name: "GenFWStorage1",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.GenFWStorage1__factory>;
@@ -79,6 +87,16 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.IERC20>;
+    getContractAt(
+      name: "ICandidate",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ICandidate>;
+    getContractAt(
+      name: "IDAOCommittee",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IDAOCommittee>;
     getContractAt(
       name: "GenFWStorage1",
       address: string,

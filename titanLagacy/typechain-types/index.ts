@@ -12,6 +12,10 @@ export type { IERC20Permit } from "./@openzeppelin/contracts/token/ERC20/extensi
 export { IERC20Permit__factory } from "./factories/@openzeppelin/contracts/token/ERC20/extensions/IERC20Permit__factory";
 export type { IERC20 } from "./@openzeppelin/contracts/token/ERC20/IERC20";
 export { IERC20__factory } from "./factories/@openzeppelin/contracts/token/ERC20/IERC20__factory";
+export type { ICandidate } from "./contracts/dao/ICandidate";
+export { ICandidate__factory } from "./factories/contracts/dao/ICandidate__factory";
+export type { IDAOCommittee } from "./contracts/dao/IDAOCommittee";
+export { IDAOCommittee__factory } from "./factories/contracts/dao/IDAOCommittee__factory";
 export type { GenFWStorage1 } from "./contracts/data/GenFWStorage1";
 export { GenFWStorage1__factory } from "./factories/contracts/data/GenFWStorage1__factory";
 export type { GenFWStorage2 } from "./contracts/data/GenFWStorage2";
