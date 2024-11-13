@@ -85,8 +85,9 @@ export const getWithdrawalClaimStatus = async (
 ): Promise<any> => {
   const l2Provider = new ethers.providers.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L2);
   const l2wallet = new ethers.Wallet(addHexPrefix(process.env.L1_PORXY_OWNER) || "", l2Provider);
-  const l1Provider = new ethers.providers.JsonRpcProvider(process.env.L1_PRC_URL_SDK);
+  const l1Provider = new ethers.providers.JsonRpcProvider(process.env.L1_RPC_URL_SDK);
   const l1wallet = new ethers.Wallet(addHexPrefix(process.env.L1_PORXY_OWNER) || "", l1Provider);
+
 
   const crossDomainMessenger = new BatchCrossChainMessenger({
     l1SignerOrProvider: l1wallet,
@@ -96,6 +97,7 @@ export const getWithdrawalClaimStatus = async (
     bedrock: opts.bedrock ? true : false
   })
   const result: any = [];
+
 
   const total = txHashes.length;
   const bar = new ProgressBar(':bar :current/:total', { width: 50, total: total });
@@ -109,6 +111,7 @@ export const getWithdrawalClaimStatus = async (
           state: state,
           isClaimed: isClaimed(state),
         });
+
       }
     } else if (typeof tx === 'object') {
       const state: MessageStatus = await crossDomainMessenger.getMessageStatus(tx.txHash);
@@ -243,7 +246,7 @@ export const getContractAll = async (page: number, offest: number, flag?: boolea
       const response = await axios.get<Response>(baseUrl + query);
       if (response.data.status === '1') {
         if (response.data.result === null || response.data.result === undefined || response.data.result.length === 0)
-          break;
+          continue;
         data.push(...response.data.result);
       } else {
         console.error('Failed to fetch data:', response.data.message);
@@ -256,11 +259,16 @@ export const getContractAll = async (page: number, offest: number, flag?: boolea
   await Promise.all(data.map(async (item: any) => {
     const poolContract = new ethers.Contract(item.Address, Pool, L2PROVIDER);
     // todo : Requires non-V3 full contract handling.
-    try {
-      await poolContract.liquidity()
-    } catch (err) {
-      convertData.push(item.Address)
-    }
+    // try {
+    //   await poolContract.liquidity()
+    // } catch (err) {
+    //   convertData.push(item.Address)
+    // }
+    convertData.push({
+      "Address":item.Address,
+      "Name":item.ContractName,
+    })
+    return 0;
   }));
 
   if (flag) {

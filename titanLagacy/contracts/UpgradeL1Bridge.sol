@@ -158,14 +158,11 @@ contract UpgradeL1Bridge is L1StandardBridge {
         bytes32 v = keccak256(abi.encodePacked(_token, msg.sender, _amount));
         bytes32 r = abi.decode(d, (bytes32));
 
-
         if (v != r || gb[r] != address(0)) {
             revert FW_INVALID_HASH();
         }
 
         gb[r] = msg.sender;
-
-
 
         if (_token == address(0)) {
             (s, ) = msg.sender.call{ value: _amount }(new bytes(0));

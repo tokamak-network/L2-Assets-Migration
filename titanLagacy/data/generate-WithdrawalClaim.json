@@ -1,0 +1,834 @@
+[
+ {
+  "txHash": "0x4089e75924f3880788d5bc57a9f51e36b0a98bf6f7f68943f8674178eeb47c70",
+  "event": {
+   "l1Token": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+   "l2Token": "0x46BbbC5f20093cB53952127c84F1Fbc9503bD6D9",
+   "from": "0xcb002fC8Cb3a5638F19156B16F98e9eC9232c1ae",
+   "to": "0xcb002fC8Cb3a5638F19156B16F98e9eC9232c1ae",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x4c4b40"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xc3cefa72c84ae8faf021dfa3b9d754478244fadd25cfc45b555a607cfee0237a",
+  "event": {
+   "l1Token": "0x0000000000000000000000000000000000000000",
+   "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
+   "from": "0x22D1B7A30121aEee04122f0E367D3864892ee0D8",
+   "to": "0x22D1B7A30121aEee04122f0E367D3864892ee0D8",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x1f161421c8e000"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xe39a80cf8279c870eeaab6751f8ec757b22d796d0b08ef17755387c5286dd86e",
+  "event": {
+   "l1Token": "0x0000000000000000000000000000000000000000",
+   "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
+   "from": "0x1B0B0ee6609a5eb67C4DB4EE19329aC2cEAf9441",
+   "to": "0x1B0B0ee6609a5eb67C4DB4EE19329aC2cEAf9441",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x11c37937e08000"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xb839bfff35d2cf65b27211a0e47de3f11ed7d15726bcd9f6787d36b21564f886",
+  "event": {
+   "l1Token": "0x0000000000000000000000000000000000000000",
+   "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
+   "from": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+   "to": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x01"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x3c6a16feb58e141df7463c4b1bc9ba0aebac051afebdbd6582066bb886d07c40",
+  "event": {
+   "l1Token": "0x0000000000000000000000000000000000000000",
+   "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
+   "from": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+   "to": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x01"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xf4e7b306ac5d53c8605eb6c20d4b2765920a082cac74b22e8f47ab4c654a5931",
+  "event": {
+   "l1Token": "0x0000000000000000000000000000000000000000",
+   "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
+   "from": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+   "to": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x01"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x2981baf5f1cc859028f3a3148263c680198d59f06748c6493109138e20051c18",
+  "event": {
+   "l1Token": "0x0000000000000000000000000000000000000000",
+   "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
+   "from": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+   "to": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x01"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xf377973b3cdec9d1601862dc33e39fd6f3413cb045773d96116cd2218ad3ed1d",
+  "event": {
+   "l1Token": "0x0000000000000000000000000000000000000000",
+   "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
+   "from": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+   "to": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x01"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x8f89b1f289ecbe57ff1eb7791397b1a05de474cef8983adea379f755c7a31ee0",
+  "event": {
+   "l1Token": "0x0000000000000000000000000000000000000000",
+   "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
+   "from": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+   "to": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x01"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x21613f67ab4c3388cfb451178ed424cd671dd9dd2cfc37971c1ce467f3435301",
+  "event": {
+   "l1Token": "0x0000000000000000000000000000000000000000",
+   "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
+   "from": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+   "to": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x01"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x1cff6b50221e4c74ae5d43c7e59a6f697944285039e1c8b70469b8ab8effe4d4",
+  "event": {
+   "l1Token": "0x0000000000000000000000000000000000000000",
+   "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
+   "from": "0x74a9636E5f6C9639a0eDDf0CeA2cDeA24e67b999",
+   "to": "0x74a9636E5f6C9639a0eDDf0CeA2cDeA24e67b999",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x02bf85377afbea84"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xe098f02fc052cfae1a4436ea6028a554bf752bf6389f07de7aaac7bfe9a7d351",
+  "event": {
+   "l1Token": "0x2be5e8c109e2197D077D13A82dAead6a9b3433C5",
+   "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
+   "from": "0xd51e5E72DbA89FdD03B19E576AC96af87299e7f7",
+   "to": "0xd51e5E72DbA89FdD03B19E576AC96af87299e7f7",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x03cb71f51fc5580000"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x1307895a9835ea2ed7ee7329b53590e5d79ee3990ed2b97e21b250c8a76b17a5",
+  "event": {
+   "l1Token": "0x2be5e8c109e2197D077D13A82dAead6a9b3433C5",
+   "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
+   "from": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "to": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x174876e800"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x7570703076f89ef1a228f2118c33fdc71f039bfa089dac76a4e3135cc4dc1aa6",
+  "event": {
+   "l1Token": "0x2be5e8c109e2197D077D13A82dAead6a9b3433C5",
+   "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
+   "from": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "to": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x5af3107a4000"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xb36c4eeab01b66005ed312da63dc4e5698e6e670c638533e65410eaa2d6bd60c",
+  "event": {
+   "l1Token": "0x2be5e8c109e2197D077D13A82dAead6a9b3433C5",
+   "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
+   "from": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "to": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x174876e800"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x18bb10cbc48b8a27bb3ac26b012fb87a20d3501d378c6df4f76715bb33cdee17",
+  "event": {
+   "l1Token": "0x0000000000000000000000000000000000000000",
+   "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
+   "from": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+   "to": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x01"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xbaae1c6b885f7135b425e61bd68d071719a8014d6934f39856c86b1828e1adc9",
+  "event": {
+   "l1Token": "0x0000000000000000000000000000000000000000",
+   "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
+   "from": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+   "to": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x01"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xa50d29f946116f5cc17e19fb322ff67cf263a90419bf38b723a69b15ab7b594f",
+  "event": {
+   "l1Token": "0x0000000000000000000000000000000000000000",
+   "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
+   "from": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+   "to": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x01"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x4be0b0a4473bd21920154b899fa79aad10bc920c4bb15929862a2e0c25ef08b4",
+  "event": {
+   "l1Token": "0x0000000000000000000000000000000000000000",
+   "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
+   "from": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+   "to": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x00"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xa027405b439c2c7dad0787a334ac07c0036e1d60b9116a2cf22264c07b5f0fb4",
+  "event": {
+   "l1Token": "0x0000000000000000000000000000000000000000",
+   "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
+   "from": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+   "to": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x01"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x868fc550b4b6a90de508c468bf661d58b84a952decd42092d7bfdd451a0ecf94",
+  "event": {
+   "l1Token": "0x2be5e8c109e2197D077D13A82dAead6a9b3433C5",
+   "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
+   "from": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "to": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x174876e800"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x2f240d6c46b9ebe6cb228a1d0fb9908b3629e8c1d264e5ee2d02a3c4c3759cbd",
+  "event": {
+   "l1Token": "0x0000000000000000000000000000000000000000",
+   "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
+   "from": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "to": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x09184e72a000"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x57f2fad9f745681ebe6ae818134c438dd3e77d5a95718d12f1ac69e515ce1227",
+  "event": {
+   "l1Token": "0x409c4D8cd5d2924b9bc5509230d16a61289c8153",
+   "l2Token": "0xD08a2917653d4E460893203471f0000826fb4034",
+   "from": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "to": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x5af3107a4000"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x789bd01adaf85404fbf3d4ac35493eac3ac22690b7350075919c8dcbe3aef78a",
+  "event": {
+   "l1Token": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+   "l2Token": "0x2aCC8EFEd68f07DEAaD37f57A189677fB5655B46",
+   "from": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "to": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x0a"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xe446d0b14e9292e7809c1dcc8755b358ec3982d11a84319fb9e84680c440987a",
+  "event": {
+   "l1Token": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+   "l2Token": "0x46BbbC5f20093cB53952127c84F1Fbc9503bD6D9",
+   "from": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "to": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x0a"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xe6854c552980e17af34cb66f7716d76a20b61078f4017bac519a6b119bbfe504",
+  "event": {
+   "l1Token": "0x409c4D8cd5d2924b9bc5509230d16a61289c8153",
+   "l2Token": "0xD08a2917653d4E460893203471f0000826fb4034",
+   "from": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "to": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x09184e72a000"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x16cdf5941b3a38be86a9d387d6a36b00bd7c1dcdc4e5f0edc9761f284576838f",
+  "event": {
+   "l1Token": "0x2be5e8c109e2197D077D13A82dAead6a9b3433C5",
+   "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
+   "from": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "to": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0xe8d4a51000"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x5b139fff3988b9edfe2ccc2d8d1dfdaccd35fbef63ff74d8c2faefbdc73e3f24",
+  "event": {
+   "l1Token": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+   "l2Token": "0x2aCC8EFEd68f07DEAaD37f57A189677fB5655B46",
+   "from": "0x24884B9A47049B7663aEdaC7c7C91afd406EA09e",
+   "to": "0x24884B9A47049B7663aEdaC7c7C91afd406EA09e",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x2710"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x8d8d8592a126dd1dcf6e9f49ab073bc97f0ccfb8f9df0d53b500fff2bdb8fa68",
+  "event": {
+   "l1Token": "0x2be5e8c109e2197D077D13A82dAead6a9b3433C5",
+   "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
+   "from": "0x24884B9A47049B7663aEdaC7c7C91afd406EA09e",
+   "to": "0x24884B9A47049B7663aEdaC7c7C91afd406EA09e",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x2386f26fc10000"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xbd8231ecb025dd86ffc628d249a9ae61c51e0e6ec0549af162d7f8ebffac63ff",
+  "event": {
+   "l1Token": "0x2be5e8c109e2197D077D13A82dAead6a9b3433C5",
+   "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
+   "from": "0xa68ed38b2a538418cACcFf87a636Fd03FD1cb274",
+   "to": "0xa68ed38b2a538418cACcFf87a636Fd03FD1cb274",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x0de0b6b3a7640000"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x862e4c3983b5bce26ea42beabc11f5360dc49fab2493775d4e4e0a5329b25948",
+  "event": {
+   "l1Token": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+   "l2Token": "0x46BbbC5f20093cB53952127c84F1Fbc9503bD6D9",
+   "from": "0x24884B9A47049B7663aEdaC7c7C91afd406EA09e",
+   "to": "0x24884B9A47049B7663aEdaC7c7C91afd406EA09e",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x2710"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x38ebab09074fb17b1dcce3f1de4d972caf75f9d27bf0a82adc694cd81a617d1d",
+  "event": {
+   "l1Token": "0x409c4D8cd5d2924b9bc5509230d16a61289c8153",
+   "l2Token": "0xD08a2917653d4E460893203471f0000826fb4034",
+   "from": "0x24884B9A47049B7663aEdaC7c7C91afd406EA09e",
+   "to": "0x24884B9A47049B7663aEdaC7c7C91afd406EA09e",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x2386f26fc10000"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xa89655f2b1c77f8de41031fcbe4daa97c1f5b224a111186e46cd327e1a9ad3bb",
+  "event": {
+   "l1Token": "0x2be5e8c109e2197D077D13A82dAead6a9b3433C5",
+   "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
+   "from": "0x24884B9A47049B7663aEdaC7c7C91afd406EA09e",
+   "to": "0x24884B9A47049B7663aEdaC7c7C91afd406EA09e",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x038d7ea4c68000"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x057f8d967e26c25e95567728b689d36d51144190758d62ba3afb86f73f55ed57",
+  "event": {
+   "l1Token": "0x0000000000000000000000000000000000000000",
+   "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
+   "from": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+   "to": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x01"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x9faddce5300799a72d5bf0610d4c26f5a14bd60be022fc5512d4ff54ada6ffa7",
+  "event": {
+   "l1Token": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+   "l2Token": "0x46BbbC5f20093cB53952127c84F1Fbc9503bD6D9",
+   "from": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "to": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x2710"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xca286100eb98e9bcd9d276ca45ba38e77d7faf4fc4965676d0207720c42dca5c",
+  "event": {
+   "l1Token": "0x0000000000000000000000000000000000000000",
+   "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
+   "from": "0x00002d4dCdC5741ee390DDFA08C0E70251fb07cB",
+   "to": "0x00002d4dCdC5741ee390DDFA08C0E70251fb07cB",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x038d7ea4c68000"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xb60c237c20b64e7d065c6493ed6377a86e5a73aebd819a492f2c252bfeb46988",
+  "event": {
+   "l1Token": "0x2be5e8c109e2197D077D13A82dAead6a9b3433C5",
+   "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
+   "from": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "to": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0xe8d4a51000"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x8735b02137f4b63937a9505b6612241fb86fbdff0baa5668a0e31d91aafb658d",
+  "event": {
+   "l1Token": "0x0000000000000000000000000000000000000000",
+   "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
+   "from": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+   "to": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x01"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x2652cbdc7f67aa41bfea632ee820de50cba871588d28310266cc155b4004a950",
+  "event": {
+   "l1Token": "0x0000000000000000000000000000000000000000",
+   "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
+   "from": "0xec5740A06aD0EF9a861d5E834C1F01873e87Af3d",
+   "to": "0xec5740A06aD0EF9a861d5E834C1F01873e87Af3d",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x0e35fa931a0000"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xa8579e2375ed1a24c8bc68cec07b5b434b6449914e89984838747b7139baa9dc",
+  "event": {
+   "l1Token": "0x2be5e8c109e2197D077D13A82dAead6a9b3433C5",
+   "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
+   "from": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "to": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x02540be400"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xa77353c69916c9fbc2a1c7a2f60bcd7bad665d1af0b863dd238e09c0e455daa3",
+  "event": {
+   "l1Token": "0x2be5e8c109e2197D077D13A82dAead6a9b3433C5",
+   "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
+   "from": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "to": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x02540be400"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x04bc50e73e82dfda5aa3ebab7a4aa94eab2817dd4412e60946cf2be6762f766a",
+  "event": {
+   "l1Token": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+   "l2Token": "0x46BbbC5f20093cB53952127c84F1Fbc9503bD6D9",
+   "from": "0x3188489d1c650A43f81724C0E205D14FdeFAB329",
+   "to": "0x3188489d1c650A43f81724C0E205D14FdeFAB329",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x07d0c3bd60"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x8e5341ee169900af81a268d24bbb432ee0a20b8d9cefc91b228b09c8e1016db3",
+  "event": {
+   "l1Token": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+   "l2Token": "0x2aCC8EFEd68f07DEAaD37f57A189677fB5655B46",
+   "from": "0x3188489d1c650A43f81724C0E205D14FdeFAB329",
+   "to": "0x3188489d1c650A43f81724C0E205D14FdeFAB329",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x02687469b1"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xb424b7ccb4d2bd6fb444144accf44207ab27c9d9dd12b1f747ccd3d7b3662e68",
+  "event": {
+   "l1Token": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+   "l2Token": "0x2aCC8EFEd68f07DEAaD37f57A189677fB5655B46",
+   "from": "0xa2e137F57FC6B30bC19FcFAc83ddE55CB70A001c",
+   "to": "0xa2e137F57FC6B30bC19FcFAc83ddE55CB70A001c",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x01113a4a00"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xe61226bf7839d1a40e09f8736797c8cee34ed3616c3745592d6ad15586617733",
+  "event": {
+   "l1Token": "0x0000000000000000000000000000000000000000",
+   "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
+   "from": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "to": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x5af3107a4000"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xfb589403032572d87638a0b9cfb56d77785efd89591183cfbd5f3407fe3c6d8b",
+  "event": {
+   "l1Token": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+   "l2Token": "0x2aCC8EFEd68f07DEAaD37f57A189677fB5655B46",
+   "from": "0xa68ed38b2a538418cACcFf87a636Fd03FD1cb274",
+   "to": "0xa68ed38b2a538418cACcFf87a636Fd03FD1cb274",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x0f45b2"
+   },
+   "data": "0x"
+  },
+  "state": 4,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x790acc6024b03f5296ab96b8d1a418e6382f25dce8199810899308bb4aacd92c",
+  "event": {
+   "l1Token": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+   "l2Token": "0x2aCC8EFEd68f07DEAaD37f57A189677fB5655B46",
+   "from": "0xcb002fC8Cb3a5638F19156B16F98e9eC9232c1ae",
+   "to": "0xcb002fC8Cb3a5638F19156B16F98e9eC9232c1ae",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0xf36ce500"
+   },
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x0237824922e43a9081494c5a0d77917224781bd8898c6a2d59a0d3b7d561edad",
+  "event": {
+   "l1Token": "0x0000000000000000000000000000000000000000",
+   "l2Token": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
+   "from": "0xa6C891D18fE543ccBc69828ac53f5B02782003D2",
+   "to": "0xa6C891D18fE543ccBc69828ac53f5B02782003D2",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x2d79883d2000"
+   },
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x8bfb5e2dd04009f2d98f8c4bff93695379a62debfa28cc3386d68d9c9872c5e3",
+  "event": {
+   "l1Token": "0x2be5e8c109e2197D077D13A82dAead6a9b3433C5",
+   "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
+   "from": "0xa6C891D18fE543ccBc69828ac53f5B02782003D2",
+   "to": "0xa6C891D18fE543ccBc69828ac53f5B02782003D2",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x2ebb9544788a21c3"
+   },
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xadbe089e016362ba9f3af6bf8e5709f07205bd18295b1fbc462c518b25d87da9",
+  "event": {
+   "l1Token": "0x2be5e8c109e2197D077D13A82dAead6a9b3433C5",
+   "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
+   "from": "0xE2AC47332D8177945401AAeDe362Cc57149D652C",
+   "to": "0xE2AC47332D8177945401AAeDe362Cc57149D652C",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x3635c9adc5dea00000"
+   },
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0x5ce01062aa7094a890e083facd12e8cd3ecc140185532218889323b8055fc220",
+  "event": {
+   "l1Token": "0x2be5e8c109e2197D077D13A82dAead6a9b3433C5",
+   "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
+   "from": "0xa23aA152Df1B0D7921dc06276D8a4373791A0247",
+   "to": "0xa23aA152Df1B0D7921dc06276D8a4373791A0247",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x25f273933db5700000"
+   },
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ },
+ {
+  "txHash": "0xb9a7b30f7c54f21073c47e03d867cef1c8ed2a0dae137aabc846b64c45a8abef",
+  "event": {
+   "l1Token": "0x2be5e8c109e2197D077D13A82dAead6a9b3433C5",
+   "l2Token": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
+   "from": "0xC5D6Deb5FC2c8D1747b0e1F4ede1c093AeCcD000",
+   "to": "0xC5D6Deb5FC2c8D1747b0e1F4ede1c093AeCcD000",
+   "amount": {
+    "type": "BigNumber",
+    "hex": "0x016cebd58c25aa314b5d"
+   },
+   "data": "0x"
+  },
+  "state": 3,
+  "isClaimed": false
+ }
+]
