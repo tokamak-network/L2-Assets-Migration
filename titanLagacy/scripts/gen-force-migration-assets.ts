@@ -94,8 +94,24 @@ const main = async () => {
   // ethca = results[2]
   // etheoa_str = results[3]
   // console.log('\n')
-  contractAllInToken = await getContractAll(1, 10000, false)
+  contractAllInToken = await getContractAll(1, 10000, true)
+  console.log(contractAllInToken)
   console.log(contractAllInToken.length)
+
+  fs.mkdir(dirPath, { recursive: true }, (err) => {
+    if (err) {
+      console.log(err);
+      process.exit(1);
+    }
+    fs.writeFile(path.join(dirPath, 'generate-contract.json'), JSON.stringify(contractAllInToken, null, 1), 'utf-8', (err) => {
+      if (err) {
+        console.log(err);
+        process.exit(1);
+      }
+    })
+  
+    console.log("\n")
+  })
   return 0;
 
   const withdrawClaimed: WithdrawClaimed[] = [];

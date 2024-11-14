@@ -240,6 +240,14 @@ export const getTotalAddressAll = async (page: number, offest: number, flag?: bo
 export const getContractAll = async (page: number, offest: number, flag?: boolean) => {
   const result: any = [];
   let data: any = [];
+
+  
+  const poolContract = new ethers.Contract("0x430eE968F74cf0BD2b7529592F6969Ec7199D461", Pool, L2PROVIDER);
+  const value = await poolContract.factory()
+  console.log(value)
+  return 0;
+
+
   try {
     for (let i = 1; i <= page; i++) {
       const query = `module=contract&action=listcontracts&page=${i}&offset=${offest}`;
@@ -268,7 +276,7 @@ export const getContractAll = async (page: number, offest: number, flag?: boolea
       "Address":item.Address,
       "Name":item.ContractName,
     })
-    return 0;
+
   }));
 
   if (flag) {
@@ -277,19 +285,32 @@ export const getContractAll = async (page: number, offest: number, flag?: boolea
     console.log(blue.bgBlue.bold("🔍 Retrieving All Contract list (token included)..."))
     for (const contract of convertData) {
       await sleep(100)
-      const query = `module=account&action=tokenlist&address=${contract}&page=1&offset=9999`;
+      const query = `module=account&action=tokenlist&address=${contract.Address}&page=1&offset=9999`;
       try {
         const response = await axios.get<Response>(baseUrl + query);
-        if (response.data.status === '1') {
-          if (response.data.result === null || response.data.result === undefined || response.data.result.length === 0)
-            continue;
+        const nativeBalance = await L2PROVIDER.getBalance(contract.Address);
+        const nativeTokenInfo = nativeBalance.gt(0) ? {
+            "balance": nativeBalance.toString(),
+            "contractAddress": "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000",
+            "decimals": "18",
+            "name": "Ethereum",
+            "symbol": "ETH",
+            "type": "Native"
+        }: undefined;
 
+        if (response.data.status === '1') {
+          if (response.data.result === null || response.data.result === undefined || response.data.result.length === 0){
+          }else{
+            result.push({
+              caAddress: contract,
+              tokens: [nativeTokenInfo, ...response.data.result]
+            })
+          }
+        } else if(nativeTokenInfo != undefined){
           result.push({
             caAddress: contract,
-            tokens: response.data.result
+            tokens: [nativeTokenInfo]
           })
-        } else {
-          // console.error('Failed to fetch data:', response.data.message);
         }
 
       } catch (error) {
@@ -299,6 +320,7 @@ export const getContractAll = async (page: number, offest: number, flag?: boolea
     }
   } else return convertData;
 
+  
   return result
 }
 
