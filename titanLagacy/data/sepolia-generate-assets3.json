@@ -1,0 +1,46 @@
+[
+ {
+  "l1Token": "0x093144B5e482D664B1cCC1eA4913aC29000a0B90",
+  "l2Token": "0x72855Bd554170BcdB9e1e5d04831E767021DA9B9",
+  "tokenName": "MockUSDT",
+  "data": [
+   {
+    "claimer": "0x0000000000000000000000000000000000000000",
+    "amount": "0",
+    "hash": "0x59aa85ce953b13f476f8d3ba17354e606f8dbbb297aef9970f9a0fa7f6aeb8b9"
+   },
+   {
+    "claimer": "0xe6BDAB42d78C635502f5ef5707Ac1e4524C1E9A9",
+    "amount": "112000000000000000000",
+    "hash": "0x847b159dc0a5d9926af150cbf50bddfee3a1071b8a6bd06734692f9d12411139"
+   },
+   {
+    "claimer": "0x90F281ccEDD4366c8cCA81d2ba3D54A808Baa806",
+    "amount": "90000000000000000000",
+    "hash": "0xb6aecd07781d1e1fdc17806f3cd614ea25d0539a6dc96b5092d449bbd7115123"
+   }
+  ]
+ },
+ {
+  "l1Token": "0x28Cb7d05153CA96AaB7B39150155cc4921CE83A3",
+  "l2Token": "0x65035dcC7C775E61650ae1A2f3E9D665eA139Fb3",
+  "tokenName": "MockUSDC",
+  "data": [
+   {
+    "claimer": "0x0000000000000000000000000000000000000000",
+    "amount": "0",
+    "hash": "0x693bad217b53b5ffc67b004de0fa33c8bf98ff340472bf64ecd2f21caf341404"
+   },
+   {
+    "claimer": "0xe6BDAB42d78C635502f5ef5707Ac1e4524C1E9A9",
+    "amount": "114000000000000000000",
+    "hash": "0x37811a6e16f74091f1871ceb149aa8577ca5f812c6c97d7611830b202e55ac50"
+   },
+   {
+    "claimer": "0x90F281ccEDD4366c8cCA81d2ba3D54A808Baa806",
+    "amount": "11000000000000000000",
+    "hash": "0xefef39492c198ffef18de102bc202bb4a556f662dba7fb9585ebc90df093b31e"
+   }
+  ]
+ }
+]
