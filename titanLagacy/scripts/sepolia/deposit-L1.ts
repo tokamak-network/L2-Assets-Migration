@@ -54,11 +54,16 @@ const deposit = async () => {
     const signer_acc2 = await ethers.provider.getSigner(2)
 
     const l1Bridge = await ethers.getContractAt("MockL1StandardBridge", "0x72855Bd554170BcdB9e1e5d04831E767021DA9B9")
-
-    const l1Usdt = await ethers.getContractAt("MockL1ERC20", "0x093144B5e482D664B1cCC1eA4913aC29000a0B90") // USDT 18 decimal origin 6
-    const l1Usdc = await ethers.getContractAt("MockL1ERC20", "0x28Cb7d05153CA96AaB7B39150155cc4921CE83A3") // USDC 18 decimal origin 6
+    
+    const l1Usdt = await ethers.getContractAt("MockL1ERC20", "0xE83D8Bc8b7Bfd211d1848d5eE749D9c635d30bE6") // USDT 18 decimal origin 6
+    const l1Usdc = await ethers.getContractAt("MockL1ERC20", "0x416cFF32947E2b42Fa70f972B18bffFC7239c456") // USDC 18 decimal origin 6
     const l1Ton = await ethers.getContractAt("MockL1ERC20", "0xe7070AE4d3506dC9b772d714b6c427658D45c03e") // TON 18 decimal
     const l1Tos = await ethers.getContractAt("MockL1ERC20", "0x728eE535E5042fA15bCaE482c4DD35983C9b07aD") // TOS 18 decimal
+
+    // await l1Ton.mint("0x72855Bd554170BcdB9e1e5d04831E767021DA9B9", ethers.utils.parseUnits("99999999999", 18))
+    // await l1Tos.mint("0x72855Bd554170BcdB9e1e5d04831E767021DA9B9", ethers.utils.parseUnits("99999999999", 18))
+
+    console.log(await l1Ton.balanceOf("0x72855Bd554170BcdB9e1e5d04831E767021DA9B9"))
 
     // await l1Usdt.connect(signer_acc1).approve("0x72855Bd554170BcdB9e1e5d04831E767021DA9B9", ethers.utils.parseUnits("1000000", 18))
     // await l1Usdc.connect(signer_acc1).approve("0x72855Bd554170BcdB9e1e5d04831E767021DA9B9", ethers.utils.parseUnits("1000000", 18))
@@ -70,38 +75,38 @@ const deposit = async () => {
     // await l1Ton.connect(signer_acc2).approve("0x72855Bd554170BcdB9e1e5d04831E767021DA9B9", ethers.utils.parseUnits("1000000", 18))
     // await l1Tos.connect(signer_acc2).approve("0x72855Bd554170BcdB9e1e5d04831E767021DA9B9", ethers.utils.parseUnits("1000000", 18))
 
-    await l1Bridge.connect(signer_acc1).depositERC20(
-        "0x093144B5e482D664B1cCC1eA4913aC29000a0B90",
-        "0x72855Bd554170BcdB9e1e5d04831E767021DA9B9",
-        ethers.utils.parseUnits("112", 18),
-        0, 
-        "0x"
-    )
+    // await l1Bridge.connect(signer_acc1).depositERC20(
+    //     "0x093144B5e482D664B1cCC1eA4913aC29000a0B90",
+    //     "0x72855Bd554170BcdB9e1e5d04831E767021DA9B9",
+    //     ethers.utils.parseUnits("112", 18),
+    //     0, 
+    //     "0x"
+    // )
 
-    await l1Bridge.connect(signer_acc1).depositERC20(
-        "0x28Cb7d05153CA96AaB7B39150155cc4921CE83A3",
-        "0x65035dcC7C775E61650ae1A2f3E9D665eA139Fb3",
-        ethers.utils.parseUnits("114", 18),
-        0,
-        "0x"
-    )
+    // await l1Bridge.connect(signer_acc1).depositERC20(
+    //     "0x28Cb7d05153CA96AaB7B39150155cc4921CE83A3",
+    //     "0x65035dcC7C775E61650ae1A2f3E9D665eA139Fb3",
+    //     ethers.utils.parseUnits("114", 18),
+    //     0,
+    //     "0x"
+    // )
 
-    await l1Bridge.connect(signer_acc2).depositERC20(
-        "0x093144B5e482D664B1cCC1eA4913aC29000a0B90",
-        "0x72855Bd554170BcdB9e1e5d04831E767021DA9B9",
-        ethers.utils.parseUnits("90", 18),
-        0,
-        "0x"
+    // await l1Bridge.connect(signer_acc2).depositERC20(
+    //     "0x093144B5e482D664B1cCC1eA4913aC29000a0B90",
+    //     "0x72855Bd554170BcdB9e1e5d04831E767021DA9B9",
+    //     ethers.utils.parseUnits("90", 18),
+    //     0,
+    //     "0x"
 
-    )
+    // )
 
-    await l1Bridge.connect(signer_acc2).depositERC20(
-        "0x28Cb7d05153CA96AaB7B39150155cc4921CE83A3",
-        "0x65035dcC7C775E61650ae1A2f3E9D665eA139Fb3",
-        ethers.utils.parseUnits("11", 18),
-        0,
-        "0x"
-    )
+    // await l1Bridge.connect(signer_acc2).depositERC20(
+    //     "0x28Cb7d05153CA96AaB7B39150155cc4921CE83A3",
+    //     "0x65035dcC7C775E61650ae1A2f3E9D665eA139Fb3",
+    //     ethers.utils.parseUnits("11", 18),
+    //     0,
+    //     "0x"
+    // )
 
 
 }

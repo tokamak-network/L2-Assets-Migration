@@ -51,10 +51,6 @@ contract UpgradeL1Bridge is L1StandardBridge {
     /// @notice Addresses of Multisig and DAO contracts that will control the protocol
     address private constant closer = 0x70997970C51812dc3A010C7d01b50e0d17dc79C8;
 
-    /// @notice If the transfer is successful, the event below is executed.
-    /// @dev event ForceWithdraw(bytes32 indexed _index,address indexed _token,address indexed _claimer,uint amount)
-    bytes32 private constant EMIT_FORCE_WITHDRAW = 0x3f8d5b1115561be924ebdce8f16fc7c9e2fe8c67b4db21016dc2a5d5e367c8d3;
-
     /// @notice Checks if the caller is the authorized 'closer' address
     /// @dev Modifier that allows function execution only by the designated 'closer'
     /// @custom:modifier onlyCloser Ensures only the designated closer can call the modified function
@@ -100,7 +96,9 @@ contract UpgradeL1Bridge is L1StandardBridge {
         string memory f = string(abi.encodePacked("_", _key,"()"));
         for(uint i = 0 ; i < positions.length; i++) {
             address p = positions[i]; 
-                    
+                
+            if(position[p] == false) 
+                continue;
             (bool success, bytes memory data) = p.staticcall(abi.encodeWithSignature(f));
             
             if (success) {

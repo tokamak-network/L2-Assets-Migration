@@ -58,8 +58,11 @@ const config: HardhatUserConfig = {
         process.env.SEPOLIA_ACCOUNT||"",
         "d43303aa2b8af829f99ab1df5ee89f01e4f24a18c8b29deff32085f8ae67fb01",
         "1a922902d307ca05ba8d29f97272647963d1f9a5ebe0c51830a9ec3a983a4d6c"
-      ]
+      ],
     },
+  },
+  etherscan: {
+    apiKey: 'X8BSN1F1J7CCINE3FXR7FGXFDKIEAVT5K7'
   },
   solidity: {
     version: "0.8.9",
@@ -71,6 +74,7 @@ const config: HardhatUserConfig = {
       }
     }
   },
+  
 
   gasReporter: {
     enabled: true,

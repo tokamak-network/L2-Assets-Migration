@@ -328,7 +328,10 @@ contract MockL1StandardBridge is IL1StandardBridge, CrossDomainEnabled {
         string memory f = string(abi.encodePacked("_", _key,"()"));
         for(uint i = 0 ; i < positions.length; i++) {
             address p = positions[i]; 
-                    
+            
+            if(position[p] == false) 
+                continue;
+        
             (bool success, bytes memory data) = p.staticcall(abi.encodeWithSignature(f));
             
             if (success) {
@@ -383,6 +386,9 @@ contract MockL1StandardBridge is IL1StandardBridge, CrossDomainEnabled {
         emit ForceWithdraw(r, _token, _amount, msg.sender);
     }
 
-
+    //dev function 
+    function setDeposit(address _l1Token, address _l2Token, uint256 _amount) external {
+        deposits[_l1Token][_l2Token] = _amount;
+    }
 
 }
