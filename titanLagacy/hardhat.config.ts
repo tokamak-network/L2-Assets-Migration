@@ -36,18 +36,33 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       forking: {
-        url: process.env.L1_RPC_URL_SDK || "", // process.env.CONTRACT_RPC_URL_L1 || "",
-        // blockNumber: 19973387,
+        url: process.env.SEPOLIA_L1 || "", // L1
+        // url: process.env.SEPOLIA_TITAN || "", // L2
       },
+      accounts: [
+        {
+          privateKey: process.env.SEPOLIA_ACCOUNT || "",
+          balance: "10000000000000000000",
+        },
+      ],
+      // loggingEnabled: true
     },
     main: {
       url: process.env.CONTRACT_RPC_URL_L1 || "",
       accounts: [process.env.L1_PORXY_OWNER || "", process.env.L1_FORCE_OWNER || ""]
     },
-    test: {
-      url: "http://127.0.0.1:8545/",
-      // accounts: [process.env.L1_PORXY_OWNER || "", process.env.L1_FORCE_OWNER || ""]
+    sepolia: {
+      url: process.env.SEPOLIA_L1 || "", // L1
+      // url: process.env.SEPOLIA_TITAN || "", // L2
+      accounts: [
+        process.env.SEPOLIA_ACCOUNT||"",
+        "d43303aa2b8af829f99ab1df5ee89f01e4f24a18c8b29deff32085f8ae67fb01",
+        "1a922902d307ca05ba8d29f97272647963d1f9a5ebe0c51830a9ec3a983a4d6c"
+      ],
     },
+  },
+  etherscan: {
+    apiKey: 'X8BSN1F1J7CCINE3FXR7FGXFDKIEAVT5K7'
   },
   solidity: {
     version: "0.8.9",
@@ -59,6 +74,7 @@ const config: HardhatUserConfig = {
       }
     }
   },
+  
 
   gasReporter: {
     enabled: true,

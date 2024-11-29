@@ -1,8 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-import {L1StandardBridge} from "./L1StandardBridge.sol";
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import { IDAOCommittee } from "./dao/IDAOCommittee.sol";
+import { ICandidate } from "./dao/ICandidate.sol";
+import { L1StandardBridge } from "./L1StandardBridge.sol";
+import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 /// @title Contract Activation Control
@@ -46,12 +48,8 @@ contract UpgradeL1Bridge is L1StandardBridge {
     /// @notice (token,claim,amount) Stores Hashed value, used to check position status in front service.
     address[] public positions; 
     
-    /// @notice This is a wallet address authorized for the forced withdrawal protocol.
+    /// @notice Addresses of Multisig and DAO contracts that will control the protocol
     address private constant closer = 0x70997970C51812dc3A010C7d01b50e0d17dc79C8;
-
-    /// @notice If the transfer is successful, the event below is executed.
-    /// @dev event ForceWithdraw(bytes32 indexed _index,address indexed _token,address indexed _claimer,uint amount)
-    bytes32 private constant EMIT_FORCE_WITHDRAW = 0x3f8d5b1115561be924ebdce8f16fc7c9e2fe8c67b4db21016dc2a5d5e367c8d3;
 
     /// @notice Checks if the caller is the authorized 'closer' address
     /// @dev Modifier that allows function execution only by the designated 'closer'
@@ -67,7 +65,6 @@ contract UpgradeL1Bridge is L1StandardBridge {
     function forceActive(bool _state) external onlyCloser {
         active = _state;
     }
-
 
     /**
      * @notice Register the contract address where data that can be forced to be withdrawn is stored.
@@ -99,7 +96,9 @@ contract UpgradeL1Bridge is L1StandardBridge {
         string memory f = string(abi.encodePacked("_", _key,"()"));
         for(uint i = 0 ; i < positions.length; i++) {
             address p = positions[i]; 
-                    
+                
+            if(position[p] == false) 
+                continue;
             (bool success, bytes memory data) = p.staticcall(abi.encodeWithSignature(f));
             
             if (success) {
@@ -157,14 +156,11 @@ contract UpgradeL1Bridge is L1StandardBridge {
         bytes32 v = keccak256(abi.encodePacked(_token, msg.sender, _amount));
         bytes32 r = abi.decode(d, (bytes32));
 
-
         if (v != r || gb[r] != address(0)) {
             revert FW_INVALID_HASH();
         }
 
         gb[r] = msg.sender;
-
-
 
         if (_token == address(0)) {
             (s, ) = msg.sender.call{ value: _amount }(new bytes(0));
@@ -174,4 +170,6 @@ contract UpgradeL1Bridge is L1StandardBridge {
         emit ForceWithdraw(r, _token, _amount, msg.sender);
     }
 
+
+   
 }

@@ -1,8 +1,8 @@
 {
  "L1startBlock": 0,
- "L1endBlock": 19973387,
+ "L1endBlock": 21161586,
  "L2startBlock": 0,
- "L2endBlock": 19973387,
+ "L2endBlock": 21161586,
  "data": [
   {
    "l1Token": "0x0000000000000000000000000000000000000000",
@@ -36,7 +36,7 @@
     },
     {
      "claimer": "0xe49c9ea00337182374e112c452247a2d1db61798",
-     "amount": "2045579740576273",
+     "amount": "16377585643733",
      "type": 0
     },
     {
@@ -46,7 +46,7 @@
     },
     {
      "claimer": "0xb68aa9e398c054da7ebaaa446292f611ca0cd52b",
-     "amount": "11610068380772142",
+     "amount": "11314029306528022",
      "type": 0
     },
     {
@@ -56,22 +56,22 @@
     },
     {
      "claimer": "0x6e1c4a442e9b9dda59382ee78058650f1723e0f6",
-     "amount": "9558303510428444",
+     "amount": "2265595480814880",
      "type": 0
     },
     {
      "claimer": "0xf0b595d10a92a5a9bc3ffea7e79f5d266b6035ea",
-     "amount": "9593357902873340",
+     "amount": "9491539331375684",
      "type": 0
     },
     {
      "claimer": "0x0c957270b84196749eb2be14cb242e8265ecab93",
-     "amount": "28377972460461837",
+     "amount": "26609337162294089",
      "type": 0
     },
     {
      "claimer": "0x24884b9a47049b7663aedac7c7c91afd406ea09e",
-     "amount": "62666542481437927",
+     "amount": "70268045745294299",
      "type": 0
     },
     {
@@ -91,7 +91,7 @@
     },
     {
      "claimer": "0xcb002fc8cb3a5638f19156b16f98e9ec9232c1ae",
-     "amount": "12007777721482830",
+     "amount": "12408241487873150",
      "type": 0
     },
     {
@@ -156,7 +156,7 @@
     },
     {
      "claimer": "0xa4cb7fb1abb9d6f7750bddead7b11f7a3ec4ed10",
-     "amount": "397949652701829836",
+     "amount": "184524350320910800",
      "type": 0
     },
     {
@@ -206,42 +206,42 @@
     },
     {
      "claimer": "0x8c595da827f4182bc0e3917bcca8e654df8223e1",
-     "amount": "7598838410401588",
+     "amount": "6553246359132584",
      "type": 0
     },
     {
      "claimer": "0xc3c6c3538eb6351b1a8aad9a7cbfd6e00efd2429",
-     "amount": "28185906019701360",
+     "amount": "16669824083000700",
      "type": 0
     },
     {
      "claimer": "0xea7c74d8286d256fa5d3b51d941608ff166538b9",
-     "amount": "8345219922435372",
+     "amount": "7754983839372552",
      "type": 0
     },
     {
      "claimer": "0x1e0e51d6db814086a06a40cc946a5310146a8202",
-     "amount": "100680375349045560",
+     "amount": "98251738094853120",
      "type": 0
     },
     {
      "claimer": "0x5da0a50c04e4d8dc07740b5c66bc2250566883c2",
-     "amount": "5477823067341632",
+     "amount": "3815877046343700",
      "type": 0
     },
     {
      "claimer": "0x942d6ac7a6702bb1852676f3f22aee38bd442e4c",
-     "amount": "1188301474653250",
+     "amount": "46042417382934",
      "type": 0
     },
     {
      "claimer": "0x71a85558bf573f2cc8c25a8a27c917fb296ce9d5",
-     "amount": "80678594559075005",
+     "amount": "78881642166174041",
      "type": 0
     },
     {
      "claimer": "0x99d9be65d954851dcdfd5d127ddd77e6db0b4986",
-     "amount": "10194406027250849",
+     "amount": "110133386192541",
      "type": 0
     },
     {
@@ -276,7 +276,7 @@
     },
     {
      "claimer": "0x65fca476c346e361fa3b327e971d2e4aa3e7bb0e",
-     "amount": "104175241446451586",
+     "amount": "725218786886677478",
      "type": 0
     },
     {
@@ -306,7 +306,7 @@
     },
     {
      "claimer": "0x44bfc8355fea67b2d4d599294e2a15b27fb7923d",
-     "amount": "488074648358675704",
+     "amount": "487016713312421616",
      "type": 0
     },
     {
@@ -376,7 +376,7 @@
     },
     {
      "claimer": "0x0c4a118cd6aaffa1dc3e18a86d1f3c1218a3451d",
-     "amount": "44964976137622346",
+     "amount": "25546582511603394",
      "type": 0
     },
     {
@@ -446,7 +446,7 @@
     },
     {
      "claimer": "0x8e85abd6de597cd75f40980990feec0526444637",
-     "amount": "3875708406104496",
+     "amount": "42117814990196",
      "type": 0
     },
     {
@@ -461,12 +461,12 @@
     },
     {
      "claimer": "0xb418e17ada0bad6af182d54c0329c236b72174b3",
-     "amount": "4915615012099008",
+     "amount": "610471772940788",
      "type": 0
     },
     {
      "claimer": "0xa23aa152df1b0d7921dc06276d8a4373791a0247",
-     "amount": "958204215679628",
+     "amount": "806710572750088",
      "type": 0
     },
     {
@@ -491,7 +491,7 @@
     },
     {
      "claimer": "0x8bcfafd30d4e945b556ffe4db897ea6376ae85a5",
-     "amount": "3117535424083642",
+     "amount": "2145221858783682",
      "type": 0
     },
     {
@@ -521,7 +521,7 @@
     },
     {
      "claimer": "0x3188489d1c650a43f81724c0e205d14fdefab329",
-     "amount": "98949711498457592",
+     "amount": "88168975685210892",
      "type": 0
     },
     {
@@ -546,7 +546,7 @@
     },
     {
      "claimer": "0x340c44089bc45f86060922d2d89efee9e0cdf5c7",
-     "amount": "27215816500975796",
+     "amount": "11164219435588724",
      "type": 0
     },
     {
@@ -771,7 +771,7 @@
     },
     {
      "claimer": "0xe59d88eb24df45e7ef72b2af0e40714fa3277733",
-     "amount": "200000000000000000",
+     "amount": "48741856116934736",
      "type": 0
     },
     {
@@ -801,7 +801,7 @@
     },
     {
      "claimer": "0x3bfda92fa3bc0ab080cac3775147b6318b1c5115",
-     "amount": "98381832404251436",
+     "amount": "97939743882494296",
      "type": 0
     },
     {
@@ -815,18 +815,23 @@
      "type": 0
     },
     {
+     "claimer": "0x5b4b5887f5fe32ca05b90a2b42e9cc41a9cc396e",
+     "amount": "9557238234918088",
+     "type": 0
+    },
+    {
      "claimer": "0x092bb4344848d25cc132a8b1d93deb59a3765f57",
      "amount": "49116330609717700",
      "type": 0
     },
     {
      "claimer": "0x3ad4df56e6b8f7dc02ed8d5ccf9c13f5e3452de3",
-     "amount": "86093513057862117",
+     "amount": "83182575426497232",
      "type": 0
     },
     {
      "claimer": "0xbd5c6a99b97ef79f4bee97bc1a6597683b397579",
-     "amount": "4949855923331833",
+     "amount": "1995188188327913",
      "type": 0
     },
     {
@@ -891,7 +896,7 @@
     },
     {
      "claimer": "0xfc72431c801b8d298692bbedb89568482f1c6ba8",
-     "amount": "34122093452867164",
+     "amount": "1033998726164908",
      "type": 0
     },
     {
@@ -901,7 +906,7 @@
     },
     {
      "claimer": "0x488f2a6ead2ce4a0216a792f8ecdb1e8a13e659c",
-     "amount": "17798407392410652",
+     "amount": "16772421291745620",
      "type": 0
     },
     {
@@ -911,7 +916,7 @@
     },
     {
      "claimer": "0xfbd46d2aac1b7f44a35fc3026876d9f4177feb82",
-     "amount": "77215422616192341",
+     "amount": "5424484632233700",
      "type": 0
     },
     {
@@ -1196,12 +1201,17 @@
     },
     {
      "claimer": "0xf24e378e0964e6f491fc88ae42eab2276f93fb01",
-     "amount": "27137569228244072",
+     "amount": "25934786240308164",
      "type": 0
     },
     {
      "claimer": "0x8d58995c2eb561ca21c9bd7935015d739a75c5c0",
-     "amount": "3754874543698400",
+     "amount": "8293583306102488",
+     "type": 0
+    },
+    {
+     "claimer": "0x9d1a5f3a778e2d7d70eecf7810402f1cdeb0aa56",
+     "amount": "1848225145931272",
      "type": 0
     },
     {
@@ -1226,7 +1236,7 @@
     },
     {
      "claimer": "0xceb2196addf345f68d1f536ddaa49fe54bcbddad",
-     "amount": "102108888181695745",
+     "amount": "77638570257779752",
      "type": 0
     },
     {
@@ -1246,27 +1256,27 @@
     },
     {
      "claimer": "0x2d45af0a92a0ac16ed063956d965295a6457461f",
-     "amount": "68583441453498",
+     "amount": "2087529614017082",
      "type": 0
     },
     {
      "claimer": "0x3d827286780dbc00ace4ee416ad8a4c5daac972c",
-     "amount": "19123089460290192",
+     "amount": "18506486498329284",
      "type": 0
     },
     {
      "claimer": "0xc2909ad31c23da67591b8bc277c48ae050d06d5f",
-     "amount": "29613841083108853",
+     "amount": "29315531965523177",
      "type": 0
     },
     {
      "claimer": "0xf109a6faa0c8adae8ccb114f4ab55d47e8fd4be6",
-     "amount": "7004244222506460",
+     "amount": "9332966147029504",
      "type": 0
     },
     {
      "claimer": "0xe6a52c4fc2dddee407ade4275b803a5c83729563",
-     "amount": "74377839963105281",
+     "amount": "149413796126292853",
      "type": 0
     },
     {
@@ -1276,7 +1286,7 @@
     },
     {
      "claimer": "0x7f208e97d51bca51a4c70ad4da02bfca749b380e",
-     "amount": "6397058649656045",
+     "amount": "6704092106321865",
      "type": 0
     },
     {
@@ -1296,22 +1306,22 @@
     },
     {
      "claimer": "0x8091c2fd8a79a9ef812d487052496243f6825b02",
-     "amount": "4811056773866718",
+     "amount": "2530650696096282",
      "type": 0
     },
     {
      "claimer": "0x8ec6e633f79f038e352d794d02ee053fb3895f94",
-     "amount": "9529558489978340",
+     "amount": "3834815633530540",
      "type": 0
     },
     {
      "claimer": "0x97480065cd63143b9913ca67872dfc3a191e4c9e",
-     "amount": "14878159432357905",
+     "amount": "13684164238690429",
      "type": 0
     },
     {
      "claimer": "0x6bece336c19217d1eb3bdd8df37999dc7f5bf968",
-     "amount": "8344978055388976",
+     "amount": "7290145067665956",
      "type": 0
     },
     {
@@ -1321,7 +1331,7 @@
     },
     {
      "claimer": "0xe2ac47332d8177945401aaede362cc57149d652c",
-     "amount": "1047510395381420",
+     "amount": "348735839347748",
      "type": 0
     },
     {
@@ -1331,17 +1341,17 @@
     },
     {
      "claimer": "0x0c37ebe80c3096550cc976b2d5afa4ae95e444b0",
-     "amount": "5236365137664028",
+     "amount": "4488846599887908",
      "type": 0
     },
     {
      "claimer": "0xfe00fa244d69bfd8b1c108321c4713993f9ebb7c",
-     "amount": "3509762632534504",
+     "amount": "800709514988116",
      "type": 0
     },
     {
      "claimer": "0x1ea148ff8339c903fd207903e00f429de26e0b45",
-     "amount": "129174428960774054",
+     "amount": "108038789247769718",
      "type": 0
     },
     {
@@ -1351,12 +1361,12 @@
     },
     {
      "claimer": "0x049bf8c1291938ae5a8cbb109062a91af3a153e5",
-     "amount": "97666416456653312",
+     "amount": "351647092187963160",
      "type": 0
     },
     {
      "claimer": "0x11fcad4109b9a52ce4be45948ad0e8c3968a05e7",
-     "amount": "4009075680872656",
+     "amount": "3393030341190124",
      "type": 0
     },
     {
@@ -1371,7 +1381,7 @@
     },
     {
      "claimer": "0xacbf5fd60415a10db875d1d70a61956a1c15e945",
-     "amount": "79429010081396",
+     "amount": "4792048523790452",
      "type": 0
     },
     {
@@ -1386,17 +1396,17 @@
     },
     {
      "claimer": "0x7511ca0a18132f651f6f966f2b50b7236a5da0ea",
-     "amount": "175602138225556",
+     "amount": "9877573712779068",
      "type": 0
     },
     {
      "claimer": "0xe1bbb6d6bd12af8421b2459cac904415416eceb1",
-     "amount": "323261246299256",
+     "amount": "349699800025448",
      "type": 0
     },
     {
      "claimer": "0x00002d4dcdc5741ee390ddfa08c0e70251fb07cb",
-     "amount": "2165415639196660",
+     "amount": "6330605785718276",
      "type": 0
     },
     {
@@ -1406,7 +1416,7 @@
     },
     {
      "claimer": "0xa68ed38b2a538418caccff87a636fd03fd1cb274",
-     "amount": "4635703820919136",
+     "amount": "53626275656053368",
      "type": 0
     },
     {
@@ -1420,13 +1430,18 @@
      "type": 0
     },
     {
+     "claimer": "0xb5c3c20e4fc04724ed40e3c9ac804d02b518dfe3",
+     "amount": "5942852527071760",
+     "type": 0
+    },
+    {
      "claimer": "0x7b06def7e1ebe693f921864406890f12765790ea",
-     "amount": "2245800282350568",
+     "amount": "2094306639421028",
      "type": 0
     },
     {
      "claimer": "0x8f656e76f624add0e17d1f566bbc7bfcd1301d35",
-     "amount": "95000000000000000",
+     "amount": "92218467776569868",
      "type": 0
     },
     {
@@ -1446,27 +1461,302 @@
     },
     {
      "claimer": "0x3380fcf51d9b1a1f472ba361ed9645698c08fe6c",
-     "amount": "6760695915568861",
+     "amount": "6122436313041",
      "type": 0
     },
     {
      "claimer": "0xda9b006a2d6c39f69e447924994018c08e268f7a",
-     "amount": "1549349648488024",
+     "amount": "3675147992931039",
      "type": 0
     },
     {
      "claimer": "0xa6a89a0405032b854ced02f95599d91ed7935610",
-     "amount": "249626320627212",
+     "amount": "99257180254424",
      "type": 0
     },
     {
      "claimer": "0x59e8d5dfae4dd0eb794cbfe08de6ec0672cceb32",
-     "amount": "2949345109488024",
+     "amount": "1582845839637492",
      "type": 0
     },
     {
      "claimer": "0x4f359b3b5be7549a9cacab70510335f9aca5023a",
-     "amount": "4849349648488024",
+     "amount": "3453917621208336",
+     "type": 0
+    },
+    {
+     "claimer": "0x1a681d0e32f8a1d0a5ba94113ecbc1a5df92e50f",
+     "amount": "4330411340603828",
+     "type": 0
+    },
+    {
+     "claimer": "0xc8d1c3737a50a52341ef6d72c03720984c99f2e7",
+     "amount": "434005595624293",
+     "type": 0
+    },
+    {
+     "claimer": "0x59af6d1958d22dbe03fa2522650ac8fbc631500e",
+     "amount": "96831048673720",
+     "type": 0
+    },
+    {
+     "claimer": "0xca23117abe4da2bc4d096151bcb3b03f6c70e602",
+     "amount": "565671116140124",
+     "type": 0
+    },
+    {
+     "claimer": "0xabf0a9dad465346dd2a7e87be77d7f14d22f71ea",
+     "amount": "349349648488024",
+     "type": 0
+    },
+    {
+     "claimer": "0xb77e24c7b0d2b38bc57460f94676422f7aab1642",
+     "amount": "6750517215958884",
+     "type": 0
+    },
+    {
+     "claimer": "0xab4c14eac6bb0d9a7dfc843a9ed3958f1b759358",
+     "amount": "315020776628148",
+     "type": 0
+    },
+    {
+     "claimer": "0xa00efcd04c6bc0749ce21e753ade3e3e80c02c3b",
+     "amount": "547205654046508",
+     "type": 0
+    },
+    {
+     "claimer": "0xeca5a8a842afcb45b65ae10117019d9b51200ec6",
+     "amount": "43217585764255998",
+     "type": 0
+    },
+    {
+     "claimer": "0x30515190148166ce58b0604699b3c6e1a1d61f6d",
+     "amount": "1896540560534532",
+     "type": 0
+    },
+    {
+     "claimer": "0x85cc7da8ee323325bcd678c7cfc4eb61e76657fb",
+     "amount": "199117280264181660",
+     "type": 0
+    },
+    {
+     "claimer": "0x01ab7d55c9878feb9e4b5249373c9d04eb3ea1ad",
+     "amount": "474493130453392",
+     "type": 0
+    },
+    {
+     "claimer": "0x4e0af6520fb7eb595d92b3d98dd20567e26bc442",
+     "amount": "1002792108908844",
+     "type": 0
+    },
+    {
+     "claimer": "0x1076eb26580e2691e74d16b4594a6d0c1f7d2453",
+     "amount": "741030468108016",
+     "type": 0
+    },
+    {
+     "claimer": "0xf7f036f3e66c41ff9b62816003c2fc5efd451718",
+     "amount": "1234943092096068",
+     "type": 0
+    },
+    {
+     "claimer": "0xa6c891d18fe543ccbc69828ac53f5b02782003d2",
+     "amount": "218688943134792",
+     "type": 0
+    },
+    {
+     "claimer": "0x0fa9a9082b6eac1e0a2d8c3873b3db2b983b2639",
+     "amount": "89816212348936",
+     "type": 0
+    },
+    {
+     "claimer": "0xbd1544d28fe2f1d1f781a2db101ae71bd8fd6a5b",
+     "amount": "741030468108016",
+     "type": 0
+    },
+    {
+     "claimer": "0x0219ffefdd54343f860b516db650765180a5f5bd",
+     "amount": "2703176224391408",
+     "type": 0
+    },
+    {
+     "claimer": "0x187b9a5503ff9854c31362a9f5818ddb3bb87de3",
+     "amount": "3223125604324048",
+     "type": 0
+    },
+    {
+     "claimer": "0xcbcdb72353d39e57cab03074f8007fe9c5569571",
+     "amount": "482078036216032",
+     "type": 0
+    },
+    {
+     "claimer": "0xff23b1bf2c6d34bf5258614f5ae7761933b81a27",
+     "amount": "254916801081872",
+     "type": 0
+    },
+    {
+     "claimer": "0x6d3563ff722de6ff0809818ee1b808f8a05f92c4",
+     "amount": "110000000000",
+     "type": 0
+    },
+    {
+     "claimer": "0xa2e137f57fc6b30bc19fcfac83dde55cb70a001c",
+     "amount": "2548039867464072",
+     "type": 0
+    },
+    {
+     "claimer": "0xec5740a06ad0ef9a861d5e834c1f01873e87af3d",
+     "amount": "1926391398283829",
+     "type": 0
+    },
+    {
+     "claimer": "0x4d145a5e90736ad71cbf0081366625bd9eb170cc",
+     "amount": "866409408885700",
+     "type": 0
+    },
+    {
+     "claimer": "0xb27ed13edefc6ead3791803e5779e65c4c04a245",
+     "amount": "3547481984185696",
+     "type": 0
+    },
+    {
+     "claimer": "0xdd9576be1d927279fe1f6a8693543a1688ca179f",
+     "amount": "1095502589649768",
+     "type": 0
+    },
+    {
+     "claimer": "0x7bb3d0ae167d90b7a452f98641528a468abc83be",
+     "amount": "7403774641040224",
+     "type": 0
+    },
+    {
+     "claimer": "0xefcb06b5ea58fb451c64ec278d957f4ebfd26df7",
+     "amount": "4055081032560300",
+     "type": 0
+    },
+    {
+     "claimer": "0x73dab48c8a022a576131525ce4ee46e1a22922eb",
+     "amount": "4397473739952096",
+     "type": 0
+    },
+    {
+     "claimer": "0x21654dd4ec7ec7aa702ec7fd811a6adcc52919e7",
+     "amount": "4852511282019092",
+     "type": 0
+    },
+    {
+     "claimer": "0xdcf645c7c245f4b34260374828a013d81875e642",
+     "amount": "3428874040310656",
+     "type": 0
+    },
+    {
+     "claimer": "0x706f9ac0c9d08d725b899cc8c2582620745cf930",
+     "amount": "100000000000000",
+     "type": 0
+    },
+    {
+     "claimer": "0xbde74c526ba2523b729b2f2a20676e58e189d745",
+     "amount": "5698136874697672",
+     "type": 0
+    },
+    {
+     "claimer": "0xbc5a1e5833dac6ce165c26f44c8b51284df53391",
+     "amount": "406774866899940",
+     "type": 0
+    },
+    {
+     "claimer": "0x34819bbec9579c914f641c20572cfd18a2e67eb9",
+     "amount": "6262083620012336",
+     "type": 0
+    },
+    {
+     "claimer": "0xd61c3e8f66e61f5842ab492100f06013a37a166d",
+     "amount": "4706914268966104",
+     "type": 0
+    },
+    {
+     "claimer": "0x9397990031db65cd36b855ce828b2a16d749fb4e",
+     "amount": "32816940976188",
+     "type": 0
+    },
+    {
+     "claimer": "0xe0bb22e4cefd5947747d8bef242038a7d4466670",
+     "amount": "104521985829781",
+     "type": 0
+    },
+    {
+     "claimer": "0x026510c75290c6ef53027494f1b784d8982f5441",
+     "amount": "111222698268057",
+     "type": 0
+    },
+    {
+     "claimer": "0x9d2f0a652d839508f1fcbaef3e45b4b91a14126c",
+     "amount": "234045458772222",
+     "type": 0
+    },
+    {
+     "claimer": "0x90813d87f16df9df6275420e73ed585e0d906988",
+     "amount": "841727295459503",
+     "type": 0
+    },
+    {
+     "claimer": "0xb4ecc787d165ccab873c946a588f1646901977f3",
+     "amount": "73309347086552",
+     "type": 0
+    },
+    {
+     "claimer": "0x90dfe9d0bf5e749e4533e47c98f4925039ee362f",
+     "amount": "2854388656181760",
+     "type": 0
+    },
+    {
+     "claimer": "0x99802e96072f889d6d09e528df118f67b08698e0",
+     "amount": "4297971352234860",
+     "type": 0
+    },
+    {
+     "claimer": "0xfc8071d3ba8f18c8661fd068745389a9cf2d027f",
+     "amount": "89673872904304",
+     "type": 0
+    },
+    {
+     "claimer": "0x352dbe29947a0d6943f0c30b96f8f9e150a0d931",
+     "amount": "19536858816942948",
+     "type": 0
+    },
+    {
+     "claimer": "0x9f2429c483802e5a8dcf8cd6af4e30c0479cd841",
+     "amount": "1382335308528736",
+     "type": 0
+    },
+    {
+     "claimer": "0x9ceb3e173d67997dfba57025c4a016efdcafbf17",
+     "amount": "9849630859627212",
+     "type": 0
+    },
+    {
+     "claimer": "0xc5d6deb5fc2c8d1747b0e1f4ede1c093aeccd000",
+     "amount": "2859663513243280",
+     "type": 0
+    },
+    {
+     "claimer": "0x966722817da5dc927b8be58afc1d73c65695b150",
+     "amount": "21000000000000000",
+     "type": 0
+    },
+    {
+     "claimer": "0x21becffe0a53263bc1c3fdf2eaf1762311f9f090",
+     "amount": "12500000000000000",
+     "type": 0
+    },
+    {
+     "claimer": "0x248d48e44da385476072c9d65c043113a3839b91",
+     "amount": "3800000000000000",
+     "type": 0
+    },
+    {
+     "claimer": "0x8a26c81b8f643fa8de03a8c216dc059d8d4ca7f2",
+     "amount": "4421762676386224",
      "type": 0
     }
    ]
@@ -1493,12 +1783,12 @@
     },
     {
      "claimer": "0x6E1c4a442E9B9ddA59382ee78058650F1723E0F6",
-     "amount": "1000000000000000000",
+     "amount": "0",
      "type": 0
     },
     {
      "claimer": "0x24884B9A47049B7663aEdaC7c7C91afd406EA09e",
-     "amount": "3066951470374080183",
+     "amount": "3055951470374080183",
      "type": 0
     },
     {
@@ -1523,7 +1813,7 @@
     },
     {
      "claimer": "0xA4Cb7fb1aBb9D6F7750BddeaD7B11F7a3eC4eD10",
-     "amount": "6000000000000000000000",
+     "amount": "0",
      "type": 0
     },
     {
@@ -1553,17 +1843,17 @@
     },
     {
      "claimer": "0x8c595DA827F4182bC0E3917BccA8e654DF8223E1",
-     "amount": "2000000000000000000000",
+     "amount": "0",
      "type": 0
     },
     {
      "claimer": "0xc3C6C3538EB6351b1a8aad9A7cBfd6E00eFD2429",
-     "amount": "2000000000000000000000",
+     "amount": "500000000000000000000",
      "type": 0
     },
     {
      "claimer": "0xEA7c74D8286D256FA5D3B51D941608ff166538b9",
-     "amount": "2000000000000000000000",
+     "amount": "0",
      "type": 0
     },
     {
@@ -1578,17 +1868,17 @@
     },
     {
      "claimer": "0x942d6ac7A6702Bb1852676f3f22AeE38bD442E4C",
-     "amount": "6000000000000000000000",
+     "amount": "0",
      "type": 0
     },
     {
      "claimer": "0x71a85558bf573f2cc8C25A8A27C917FB296ce9D5",
-     "amount": "1700000000000000000000",
+     "amount": "0",
      "type": 0
     },
     {
      "claimer": "0x99D9Be65D954851dCdFD5D127ddD77e6dB0b4986",
-     "amount": "2000000000000000000000",
+     "amount": "0",
      "type": 0
     },
     {
@@ -1643,7 +1933,7 @@
     },
     {
      "claimer": "0x65Fca476C346e361fa3b327E971d2E4aa3e7bb0e",
-     "amount": "2448010000000000000000",
+     "amount": "10000000000000000",
      "type": 0
     },
     {
@@ -1668,7 +1958,7 @@
     },
     {
      "claimer": "0x44BFc8355Fea67b2D4d599294e2a15b27fb7923D",
-     "amount": "2000000000000000000000",
+     "amount": "0",
      "type": 0
     },
     {
@@ -1868,7 +2158,7 @@
     },
     {
      "claimer": "0x8bCfafd30d4E945b556FfE4db897Ea6376Ae85A5",
-     "amount": "89944444444444444444",
+     "amount": "210944444444444444444",
      "type": 0
     },
     {
@@ -1898,7 +2188,7 @@
     },
     {
      "claimer": "0x3188489d1c650A43f81724C0E205D14FdeFAB329",
-     "amount": "10275000000000000000000",
+     "amount": "0",
      "type": 0
     },
     {
@@ -1923,7 +2213,7 @@
     },
     {
      "claimer": "0x340C44089bc45F86060922d2d89eFee9e0CDF5c7",
-     "amount": "17533896600000000000000",
+     "amount": "14013519766767843690496",
      "type": 0
     },
     {
@@ -2173,12 +2463,12 @@
     },
     {
      "claimer": "0x3bFda92Fa3bC0AB080Cac3775147B6318b1C5115",
-     "amount": "5380000000000000000000",
+     "amount": "4630000000000000000000",
      "type": 0
     },
     {
      "claimer": "0x0c957270b84196749Eb2be14cB242E8265ecAB93",
-     "amount": "14050000000000000000000",
+     "amount": "7140000000000000000000",
      "type": 0
     },
     {
@@ -2193,7 +2483,7 @@
     },
     {
      "claimer": "0x5B4b5887f5FE32Ca05b90A2B42e9cc41a9Cc396E",
-     "amount": "8800000000000000000000",
+     "amount": "2150000000000000000000",
      "type": 0
     },
     {
@@ -2203,7 +2493,7 @@
     },
     {
      "claimer": "0x3aD4Df56E6B8F7Dc02ED8D5CCf9c13F5E3452De3",
-     "amount": "1700000000000000000000",
+     "amount": "0",
      "type": 0
     },
     {
@@ -2283,7 +2573,7 @@
     },
     {
      "claimer": "0xfBd46D2AAC1b7f44A35FC3026876D9F4177FEb82",
-     "amount": "305005275700838802118",
+     "amount": "0",
      "type": 0
     },
     {
@@ -2563,7 +2853,7 @@
     },
     {
      "claimer": "0x9D1a5f3a778e2d7D70eEcf7810402F1cDEB0AA56",
-     "amount": "7185000000000000000000",
+     "amount": "3960000000000000000000",
      "type": 0
     },
     {
@@ -2573,7 +2863,7 @@
     },
     {
      "claimer": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
-     "amount": "288900381376672236212",
+     "amount": "360792059824222377590",
      "type": 0
     },
     {
@@ -2598,12 +2888,12 @@
     },
     {
      "claimer": "0xF24E378E0964E6f491Fc88Ae42eAB2276f93FB01",
-     "amount": "2000000000000000000000",
+     "amount": "726000000000000000000",
      "type": 0
     },
     {
      "claimer": "0xfc72431c801B8D298692BbedB89568482f1c6ba8",
-     "amount": "11540000000000000000000",
+     "amount": "6373000000000000000000",
      "type": 0
     },
     {
@@ -2673,12 +2963,12 @@
     },
     {
      "claimer": "0x8091C2fD8a79a9EF812d487052496243f6825B02",
-     "amount": "50000000000000000000",
+     "amount": "0",
      "type": 0
     },
     {
      "claimer": "0x8Ec6e633f79F038E352D794D02Ee053fB3895F94",
-     "amount": "0",
+     "amount": "100000000000000000000",
      "type": 0
     },
     {
@@ -2693,27 +2983,27 @@
     },
     {
      "claimer": "0xE2AC47332D8177945401AAeDe362Cc57149D652C",
-     "amount": "94944444444444444444",
-     "type": 0
-    },
-    {
-     "claimer": "0x97480065cd63143B9913CA67872DfC3A191e4c9e",
-     "amount": "2000000000000000000000",
-     "type": 0
-    },
-    {
-     "claimer": "0x0c37eBe80c3096550CC976B2D5Afa4aE95E444B0",
      "amount": "0",
      "type": 0
     },
     {
+     "claimer": "0x97480065cd63143B9913CA67872DfC3A191e4c9e",
+     "amount": "2900000000000000000000",
+     "type": 0
+    },
+    {
+     "claimer": "0x0c37eBe80c3096550CC976B2D5Afa4aE95E444B0",
+     "amount": "1050000000000000000000",
+     "type": 0
+    },
+    {
      "claimer": "0xfE00fa244D69BFD8B1c108321C4713993F9EbB7C",
-     "amount": "38000000000000000000",
+     "amount": "0",
      "type": 0
     },
     {
      "claimer": "0x1EA148FF8339C903fD207903E00F429dE26E0B45",
-     "amount": "50000000000000000000",
+     "amount": "0",
      "type": 0
     },
     {
@@ -2788,7 +3078,7 @@
     },
     {
      "claimer": "0xa68ed38b2a538418cACcFf87a636Fd03FD1cb274",
-     "amount": "6915000000000000000000",
+     "amount": "4458949997000000000000",
      "type": 0
     },
     {
@@ -2828,7 +3118,7 @@
     },
     {
      "claimer": "0xB5c3c20e4Fc04724ED40E3C9ac804D02B518dfE3",
-     "amount": "1111000000000000000000",
+     "amount": "1420000000000000000000",
      "type": 0
     },
     {
@@ -2838,7 +3128,7 @@
     },
     {
      "claimer": "0x8f656E76f624ADD0e17D1F566bbC7bfcd1301D35",
-     "amount": "15000000000000000000000",
+     "amount": "0",
      "type": 0
     },
     {
@@ -2848,6 +3138,146 @@
     },
     {
      "claimer": "0x0aDC4cc308E3c93f828e588E3d2761176C0C3831",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0x59E8d5DfaE4DD0Eb794cbFe08dE6eC0672CCeB32",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0x85cc7da8Ee323325bcD678C7CFc4EB61e76657Fb",
+     "amount": "3470000000000000000000",
+     "type": 0
+    },
+    {
+     "claimer": "0x0219FfEfdD54343F860B516DB650765180A5f5Bd",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0x1A681d0E32f8a1d0a5ba94113ecBc1A5dF92e50F",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xa00efCD04c6bc0749ce21E753ADE3e3E80c02c3B",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xF7f036f3E66C41fF9b62816003C2fc5efD451718",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xE59d88eb24dF45e7Ef72B2af0e40714FA3277733",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0x21654Dd4EC7EC7Aa702EC7fD811a6Adcc52919E7",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xDa9B006a2D6c39F69E447924994018C08e268f7a",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0x4f359B3B5BE7549a9CaCaB70510335F9ACA5023A",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xeCa5A8A842AfcB45b65aE10117019d9b51200ec6",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xBC5A1E5833daC6Ce165c26f44c8b51284DF53391",
+     "amount": "2017579700635658563",
+     "type": 0
+    },
+    {
+     "claimer": "0xc8d1C3737a50A52341EF6D72c03720984C99f2e7",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xb77E24C7b0d2B38bc57460f94676422f7Aab1642",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0x34819bBEC9579C914f641c20572cFd18a2e67Eb9",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0x9397990031db65cD36b855CE828B2A16d749fB4E",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xe4a86D1033c333bDB0c7e788c64ba99fBE659268",
+     "amount": "500000000000000000000",
+     "type": 0
+    },
+    {
+     "claimer": "0xB4Ecc787d165CcAb873C946A588F1646901977f3",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0x99802e96072F889D6D09E528dF118f67B08698E0",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0x352dbE29947A0d6943f0C30B96f8F9E150A0d931",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xa2e137F57FC6B30bC19FcFAc83ddE55CB70A001c",
+     "amount": "800000000000000000000",
+     "type": 0
+    },
+    {
+     "claimer": "0xeFCb06B5EA58fB451C64Ec278d957F4ebFD26df7",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xC5D6Deb5FC2c8D1747b0e1F4ede1c093AeCcD000",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xec5740A06aD0EF9a861d5E834C1F01873e87Af3d",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0x73DAb48c8a022A576131525CE4ee46E1a22922Eb",
+     "amount": "2500000000000000000000",
+     "type": 0
+    },
+    {
+     "claimer": "0x248D48e44Da385476072c9d65C043113a3839b91",
+     "amount": "250000000000000000000",
+     "type": 0
+    },
+    {
+     "claimer": "0xa6C891D18fE543ccBc69828ac53f5B02782003D2",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0x8a26C81b8F643Fa8De03a8c216dc059D8D4cA7F2",
      "amount": "0",
      "type": 0
     }
@@ -2865,12 +3295,12 @@
     },
     {
      "claimer": "0xB68AA9E398c054da7EBAaA446292f611CA0CD52B",
-     "amount": "135037078978535982",
+     "amount": "135037078978535981",
      "type": 0
     },
     {
      "claimer": "0x24884B9A47049B7663aEdaC7c7C91afd406EA09e",
-     "amount": "12284183689288735238",
+     "amount": "12274183689288735238",
      "type": 0
     },
     {
@@ -2895,7 +3325,7 @@
     },
     {
      "claimer": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
-     "amount": "117584245785788530268",
+     "amount": "1",
      "type": 0
     },
     {
@@ -2916,6 +3346,21 @@
     {
      "claimer": "0xfE00fa244D69BFD8B1c108321C4713993F9EbB7C",
      "amount": "953529291935895693",
+     "type": 0
+    },
+    {
+     "claimer": "0x254FaDCc5dDF4Dc1Bb31f7DBeD697e090fF8f995",
+     "amount": "1",
+     "type": 0
+    },
+    {
+     "claimer": "0xc8d1C3737a50A52341EF6D72c03720984C99f2e7",
+     "amount": "1244546193427391962",
+     "type": 0
+    },
+    {
+     "claimer": "0xe6A52c4FC2DdDee407ADe4275B803a5C83729563",
+     "amount": "705803167877071702",
      "type": 0
     }
    ]
@@ -2947,7 +3392,7 @@
     },
     {
      "claimer": "0x340C44089bc45F86060922d2d89eFee9e0CDF5c7",
-     "amount": "13620380000",
+     "amount": "4633549275",
      "type": 0
     },
     {
@@ -2982,7 +3427,7 @@
     },
     {
      "claimer": "0x3188489d1c650A43f81724C0E205D14FdeFAB329",
-     "amount": "620000",
+     "amount": "8391660000",
      "type": 0
     },
     {
@@ -2992,7 +3437,7 @@
     },
     {
      "claimer": "0x8c595DA827F4182bC0E3917BccA8e654DF8223E1",
-     "amount": "3715000000",
+     "amount": "0",
      "type": 0
     },
     {
@@ -3002,7 +3447,7 @@
     },
     {
      "claimer": "0x24884B9A47049B7663aEdaC7c7C91afd406EA09e",
-     "amount": "2652997",
+     "amount": "2642997",
      "type": 0
     },
     {
@@ -3027,7 +3472,7 @@
     },
     {
      "claimer": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
-     "amount": "113901368",
+     "amount": "113891358",
      "type": 0
     },
     {
@@ -3047,7 +3492,7 @@
     },
     {
      "claimer": "0xfc72431c801B8D298692BbedB89568482f1c6ba8",
-     "amount": "9020000",
+     "amount": "705380000",
      "type": 0
     },
     {
@@ -3072,6 +3517,91 @@
     },
     {
      "claimer": "0xBd5C6a99b97Ef79F4beE97Bc1A6597683B397579",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xe95abd571944643A2E8964cDA4F97D5434Ee3eaA",
+     "amount": "7000000000",
+     "type": 0
+    },
+    {
+     "claimer": "0xA4Cb7fb1aBb9D6F7750BddeaD7B11F7a3eC4eD10",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0x0c37eBe80c3096550CC976B2D5Afa4aE95E444B0",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xe6A52c4FC2DdDee407ADe4275B803a5C83729563",
+     "amount": "972471",
+     "type": 0
+    },
+    {
+     "claimer": "0x8Ec6e633f79F038E352D794D02Ee053fB3895F94",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xa2e137F57FC6B30bC19FcFAc83ddE55CB70A001c",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xec5740A06aD0EF9a861d5E834C1F01873e87Af3d",
+     "amount": "220309",
+     "type": 0
+    },
+    {
+     "claimer": "0xB27ED13eDeFC6eAD3791803e5779e65C4c04a245",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xDD9576be1d927279fe1F6a8693543A1688ca179F",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0x7bB3D0AE167d90B7a452F98641528a468abc83Be",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xeFCb06B5EA58fB451C64Ec278d957F4ebFD26df7",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0x73DAb48c8a022A576131525CE4ee46E1a22922Eb",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xD61C3E8F66e61f5842aB492100F06013A37A166d",
+     "amount": "14608340000",
+     "type": 0
+    },
+    {
+     "claimer": "0xDa9B006a2D6c39F69E447924994018C08e268f7a",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xBC5A1E5833daC6Ce165c26f44c8b51284DF53391",
+     "amount": "1977859",
+     "type": 0
+    },
+    {
+     "claimer": "0x9f2429c483802e5A8dcF8cD6AF4e30c0479cD841",
+     "amount": "100000",
+     "type": 0
+    },
+    {
+     "claimer": "0xF24E378E0964E6f491Fc88Ae42eAB2276f93FB01",
      "amount": "0",
      "type": 0
     }
@@ -3104,7 +3634,7 @@
     },
     {
      "claimer": "0x340C44089bc45F86060922d2d89eFee9e0CDF5c7",
-     "amount": "8506574727",
+     "amount": "5179055130",
      "type": 0
     },
     {
@@ -3114,12 +3644,12 @@
     },
     {
      "claimer": "0x24884B9A47049B7663aEdaC7c7C91afd406EA09e",
-     "amount": "19647264",
+     "amount": "16637264",
      "type": 0
     },
     {
      "claimer": "0x1E0E51d6Db814086a06A40CC946a5310146a8202",
-     "amount": "0",
+     "amount": "72000000",
      "type": 0
     },
     {
@@ -3144,7 +3674,7 @@
     },
     {
      "claimer": "0xceB2196aDdf345F68d1F536DdAA49FE54BcBDDAD",
-     "amount": "170286035",
+     "amount": "46045061",
      "type": 0
     },
     {
@@ -3179,7 +3709,7 @@
     },
     {
      "claimer": "0xfc72431c801B8D298692BbedB89568482f1c6ba8",
-     "amount": "0",
+     "amount": "1724000000",
      "type": 0
     },
     {
@@ -3199,6 +3729,211 @@
     },
     {
      "claimer": "0x4f359B3B5BE7549a9CaCaB70510335F9ACA5023A",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xc8d1C3737a50A52341EF6D72c03720984C99f2e7",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0x59Af6D1958d22dbe03fA2522650aC8fbc631500e",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0x1A681d0E32f8a1d0a5ba94113ecBc1A5dF92e50F",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xCA23117Abe4Da2BC4D096151bcB3B03F6C70E602",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xAbF0A9DAD465346DD2A7e87BE77D7F14d22F71EA",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xb77E24C7b0d2B38bc57460f94676422f7Aab1642",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xab4C14EAc6bB0D9A7DFC843a9ED3958F1b759358",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xa00efCD04c6bc0749ce21E753ADE3e3E80c02c3B",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0x942d6ac7A6702Bb1852676f3f22AeE38bD442E4C",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xeCa5A8A842AfcB45b65aE10117019d9b51200ec6",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0x30515190148166Ce58b0604699b3C6e1a1d61f6D",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xB5c3c20e4Fc04724ED40E3C9ac804D02B518dfE3",
+     "amount": "195000000",
+     "type": 0
+    },
+    {
+     "claimer": "0xE2AC47332D8177945401AAeDe362Cc57149D652C",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0x99D9Be65D954851dCdFD5D127ddD77e6dB0b4986",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xfBd46D2AAC1b7f44A35FC3026876D9F4177FEb82",
+     "amount": "1",
+     "type": 0
+    },
+    {
+     "claimer": "0x34819bBEC9579C914f641c20572cFd18a2e67Eb9",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xBC5A1E5833daC6Ce165c26f44c8b51284DF53391",
+     "amount": "2966774",
+     "type": 0
+    },
+    {
+     "claimer": "0xD61C3E8F66e61f5842aB492100F06013A37A166d",
+     "amount": "94000000",
+     "type": 0
+    },
+    {
+     "claimer": "0x3aD4Df56E6B8F7Dc02ED8D5CCf9c13F5E3452De3",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0x9397990031db65cD36b855CE828B2A16d749fB4E",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xf109A6faa0c8adAe8ccB114f4aB55d47e8FD4bE6",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xa2e137F57FC6B30bC19FcFAc83ddE55CB70A001c",
+     "amount": "4584000000",
+     "type": 0
+    },
+    {
+     "claimer": "0xec5740A06aD0EF9a861d5E834C1F01873e87Af3d",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xB27ED13eDeFC6eAD3791803e5779e65C4c04a245",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xDD9576be1d927279fe1F6a8693543A1688ca179F",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xeFCb06B5EA58fB451C64Ec278d957F4ebFD26df7",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0x73DAb48c8a022A576131525CE4ee46E1a22922Eb",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0x7bB3D0AE167d90B7a452F98641528a468abc83Be",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xBDe74C526bA2523b729b2f2a20676e58e189d745",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xe4a86D1033c333bDB0c7e788c64ba99fBE659268",
+     "amount": "13161000000",
+     "type": 0
+    },
+    {
+     "claimer": "0xa6a89A0405032b854cEd02f95599d91eD7935610",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0x59E8d5DfaE4DD0Eb794cbFe08dE6eC0672CCeB32",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xA4Cb7fb1aBb9D6F7750BddeaD7B11F7a3eC4eD10",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0x3188489d1c650A43f81724C0E205D14FdeFAB329",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xa68ed38b2a538418cACcFf87a636Fd03FD1cb274",
+     "amount": "1999118",
+     "type": 0
+    },
+    {
+     "claimer": "0xfC8071D3BA8f18C8661fD068745389A9cF2D027F",
+     "amount": "100000",
+     "type": 0
+    },
+    {
+     "claimer": "0x9f2429c483802e5A8dcF8cD6AF4e30c0479cD841",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0x7511CA0A18132F651f6f966f2B50b7236A5dA0Ea",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0x352dbE29947A0d6943f0C30B96f8F9E150A0d931",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0x9ceB3E173D67997dFBa57025C4a016efdcAfBF17",
+     "amount": "0",
+     "type": 0
+    },
+    {
+     "claimer": "0xC5D6Deb5FC2c8D1747b0e1F4ede1c093AeCcD000",
      "amount": "0",
      "type": 0
     }
