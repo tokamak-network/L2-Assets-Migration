@@ -2,3 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as messaging from "./messaging";
+export * as rollup from "./rollup";

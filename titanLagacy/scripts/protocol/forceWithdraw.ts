@@ -4,7 +4,6 @@ import { ERC20 } from "../types";
 import fs from 'fs'
 import path from 'path'
 import ProgressBar from 'progress';
-import * as dotenv from 'dotenv'
 
 const forkProxyOwner: string = "0xCaD132F770cFBC2B3c512C0FF35c4d9fc37476c9" // sepolia l1bridge proxy owner
 const forkForceOwner: string = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8" // sepolia l1bridge force owner
@@ -94,6 +93,29 @@ export const upgradeL1bridge = async (opt?: boolean) => {
         process.exit(0)
     }
 }
+
+// 업그레이드 절차 
+// 
+
+// cross domain upgrade
+export const UpgradeL1CrossDomainMessenger = async (opt?: boolean) => {
+    /* test suits sepolia */
+    opt ? console.log("Mainnet Mode") : await ethers.provider.send('hardhat_impersonateAccount', [forkForceOwner])
+    opt ? "" : await ethers.provider.send('hardhat_setBalance', [forkForceOwner, '0x152D02C7E14AF6800000'])
+    const forceOwner = opt ? await ethers.provider.getSigner(1) : await ethers.provider.getSigner(forkForceOwner)
+    /* test suits sepolia */
+
+
+
+
+
+
+}
+
+
+
+
+
 
 export const sendForceWithdraw = async (max: number, opt?: boolean) => {
     /* test suits sepolia */

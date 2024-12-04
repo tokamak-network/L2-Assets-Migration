@@ -3,3 +3,5 @@
 /* eslint-disable */
 import type * as bridge from "./bridge";
 export type { bridge };
+import type * as resolver from "./resolver";
+export type { resolver };

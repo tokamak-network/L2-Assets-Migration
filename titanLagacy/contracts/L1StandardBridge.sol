@@ -91,7 +91,7 @@ contract L1StandardBridge is IL1StandardBridge, CrossDomainEnabled {
         address _to,
         uint32 _l2Gas,
         bytes calldata _data
-    ) external payable  paused{
+    ) external payable  paused {
         _initiateETHDeposit(msg.sender, _to, _l2Gas, _data);
     }
 

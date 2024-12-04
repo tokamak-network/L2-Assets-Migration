@@ -36,16 +36,11 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       forking: {
-        url: process.env.SEPOLIA_L1 || "", // L1
+        // url: process.env.SEPOLIA_L1 || "", // L1
+        url: process.env.CONTRACT_RPC_URL_L1 || "", // mainnet,
         // url: process.env.SEPOLIA_TITAN || "", // L2
-      },
-      accounts: [
-        {
-          privateKey: process.env.SEPOLIA_ACCOUNT || "",
-          balance: "10000000000000000000",
-        },
-      ],
-      // loggingEnabled: true
+
+      }
     },
     main: {
       url: process.env.CONTRACT_RPC_URL_L1 || "",
@@ -62,12 +57,11 @@ const config: HardhatUserConfig = {
     },
   },
   etherscan: {
-    apiKey: 'X8BSN1F1J7CCINE3FXR7FGXFDKIEAVT5K7'
+    apiKey: process.env.ETHERSCAN_API_KEY
   },
   solidity: {
     version: "0.8.9",
     settings: {
-      viaIR: true,
       optimizer: {
         enabled: true,
         runs: 10000

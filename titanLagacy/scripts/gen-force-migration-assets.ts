@@ -89,31 +89,13 @@ const main = async () => {
   }
 
   // API total ethereumscan info
-  // const results = await getTotalAddressAll(1, 10000, true)
-  // ethpool = results[1]
-  // ethca = results[2]
-  // etheoa_str = results[3]
-  // console.log('\n')
+  const results = await getTotalAddressAll(1, 10000, true)
+  ethpool = results[1]
+  ethca = results[2]
+  etheoa_str = results[3]
+  console.log('\n')
   contractAllInToken = await getContractAll(1, 10000, true)
-  console.log(contractAllInToken)
-  console.log(contractAllInToken.length)
-
-  fs.mkdir(dirPath, { recursive: true }, (err) => {
-    if (err) {
-      console.log(err);
-      process.exit(1);
-    }
-    fs.writeFile(path.join(dirPath, 'generate-contract.json'), JSON.stringify(contractAllInToken, null, 1), 'utf-8', (err) => {
-      if (err) {
-        console.log(err);
-        process.exit(1);
-      }
-    })
   
-    console.log("\n")
-  })
-  return 0;
-
   const withdrawClaimed: WithdrawClaimed[] = [];
   // get L2 initWithdrawalclaim data 
   let l2WithdrawClaimed: any = [];

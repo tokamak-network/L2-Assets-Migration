@@ -20,9 +20,12 @@ const main = async (opt?: boolean) => {
     // const l1BridgeLogic = await (await ethers.getContractFactory("MockL1StandardBridge")).deploy()
 
     // logic address : 0x65035dcC7C775E61650ae1A2f3E9D665eA139Fb3
-    const proxy = await ethers.getContractAt("Proxy", "0x72855Bd554170BcdB9e1e5d04831E767021DA9B9")
-    const byteCode = await ethers.provider.getCode("0x46EBab80D2e4A88aa912a8544B8f15BB12d355a4")
-    await proxy.setCode(byteCode)
+
+    
+    // const proxy = await ethers.getContractAt("Proxy", "0x72855Bd554170BcdB9e1e5d04831E767021DA9B9")
+    const byteCode = await ethers.provider.getCode("0x94aD42A20BD72B673E510594dD5543740aAab24F")
+    console.log('byteCode : ',byteCode)
+    // await proxy.setCode(byteCode)
     
 
     // console.log('L1 Logic : ',l1BridgeLogic.address)   

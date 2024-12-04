@@ -2,3 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as bridge from "./bridge";
+export * as resolver from "./resolver";

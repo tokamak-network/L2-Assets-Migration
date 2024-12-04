@@ -13,6 +13,30 @@ import * as Contracts from ".";
 declare module "hardhat/types/runtime" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
     getContractFactory(
+      name: "OwnableUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.OwnableUpgradeable__factory>;
+    getContractFactory(
+      name: "Initializable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Initializable__factory>;
+    getContractFactory(
+      name: "PausableUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.PausableUpgradeable__factory>;
+    getContractFactory(
+      name: "ReentrancyGuardUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ReentrancyGuardUpgradeable__factory>;
+    getContractFactory(
+      name: "ContextUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ContextUpgradeable__factory>;
+    getContractFactory(
+      name: "Ownable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Ownable__factory>;
+    getContractFactory(
       name: "ERC20",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ERC20__factory>;
@@ -33,14 +57,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC165__factory>;
     getContractFactory(
-      name: "ICandidate",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.ICandidate__factory>;
-    getContractFactory(
-      name: "IDAOCommittee",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IDAOCommittee__factory>;
-    getContractFactory(
       name: "GenFWStorage1",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.GenFWStorage1__factory>;
@@ -52,6 +68,10 @@ declare module "hardhat/types/runtime" {
       name: "GenFWStorage1",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.GenFWStorage1__factory>;
+    getContractFactory(
+      name: "L1CrossDomainMessenger",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.L1CrossDomainMessenger__factory>;
     getContractFactory(
       name: "L1StandardBridge",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -85,6 +105,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.UpgradeL1Bridge__factory>;
     getContractFactory(
+      name: "UpgradeL1CrossDomainMessenger",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.UpgradeL1CrossDomainMessenger__factory>;
+    getContractFactory(
       name: "IL1ChugSplashDeployer",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IL1ChugSplashDeployer__factory>;
@@ -93,6 +117,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.L1ChugSplashProxy__factory>;
     getContractFactory(
+      name: "IL1CrossDomainMessenger",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IL1CrossDomainMessenger__factory>;
+    getContractFactory(
       name: "IL1ERC20Bridge",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IL1ERC20Bridge__factory>;
@@ -100,6 +128,18 @@ declare module "hardhat/types/runtime" {
       name: "IL1StandardBridge",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IL1StandardBridge__factory>;
+    getContractFactory(
+      name: "ICanonicalTransactionChain",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ICanonicalTransactionChain__factory>;
+    getContractFactory(
+      name: "IChainStorageContainer",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IChainStorageContainer__factory>;
+    getContractFactory(
+      name: "IStateCommitmentChain",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IStateCommitmentChain__factory>;
     getContractFactory(
       name: "IL2ERC20Bridge",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -112,7 +152,45 @@ declare module "hardhat/types/runtime" {
       name: "ICrossDomainMessenger",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ICrossDomainMessenger__factory>;
+    getContractFactory(
+      name: "Lib_AddressManager",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Lib_AddressManager__factory>;
+    getContractFactory(
+      name: "Lib_AddressResolver",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Lib_AddressResolver__factory>;
 
+    getContractAt(
+      name: "OwnableUpgradeable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.OwnableUpgradeable>;
+    getContractAt(
+      name: "Initializable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Initializable>;
+    getContractAt(
+      name: "PausableUpgradeable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.PausableUpgradeable>;
+    getContractAt(
+      name: "ReentrancyGuardUpgradeable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ReentrancyGuardUpgradeable>;
+    getContractAt(
+      name: "ContextUpgradeable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ContextUpgradeable>;
+    getContractAt(
+      name: "Ownable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Ownable>;
     getContractAt(
       name: "ERC20",
       address: string,
@@ -139,16 +217,6 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IERC165>;
     getContractAt(
-      name: "ICandidate",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.ICandidate>;
-    getContractAt(
-      name: "IDAOCommittee",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.IDAOCommittee>;
-    getContractAt(
       name: "GenFWStorage1",
       address: string,
       signer?: ethers.Signer
@@ -163,6 +231,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.GenFWStorage1>;
+    getContractAt(
+      name: "L1CrossDomainMessenger",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.L1CrossDomainMessenger>;
     getContractAt(
       name: "L1StandardBridge",
       address: string,
@@ -204,6 +277,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.UpgradeL1Bridge>;
     getContractAt(
+      name: "UpgradeL1CrossDomainMessenger",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.UpgradeL1CrossDomainMessenger>;
+    getContractAt(
       name: "IL1ChugSplashDeployer",
       address: string,
       signer?: ethers.Signer
@@ -214,6 +292,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.L1ChugSplashProxy>;
     getContractAt(
+      name: "IL1CrossDomainMessenger",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IL1CrossDomainMessenger>;
+    getContractAt(
       name: "IL1ERC20Bridge",
       address: string,
       signer?: ethers.Signer
@@ -223,6 +306,21 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.IL1StandardBridge>;
+    getContractAt(
+      name: "ICanonicalTransactionChain",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ICanonicalTransactionChain>;
+    getContractAt(
+      name: "IChainStorageContainer",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IChainStorageContainer>;
+    getContractAt(
+      name: "IStateCommitmentChain",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IStateCommitmentChain>;
     getContractAt(
       name: "IL2ERC20Bridge",
       address: string,
@@ -238,6 +336,16 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.ICrossDomainMessenger>;
+    getContractAt(
+      name: "Lib_AddressManager",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Lib_AddressManager>;
+    getContractAt(
+      name: "Lib_AddressResolver",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Lib_AddressResolver>;
 
     // default types
     getContractFactory(

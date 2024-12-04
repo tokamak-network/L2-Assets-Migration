@@ -3,3 +3,5 @@
 /* eslint-disable */
 import type * as messaging from "./messaging";
 export type { messaging };
+import type * as rollup from "./rollup";
+export type { rollup };
