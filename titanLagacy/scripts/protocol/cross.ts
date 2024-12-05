@@ -14,9 +14,14 @@ const main = async (opt?: boolean) => {
     // 그럼 가이드에 2번까지 내가 하고 실행을 관리자에게 해달라고 부탁해야함 
     // 그리고 업그레이드 잘됐는지 확인하고 끝 
 
-    
+
+    const CrossDomainABI = [
+        "function pause() external",
+        "function unpause() external",
+    ]
     const AddrManagerABI = [
-        "function setAddress(string memory _name, address _address)"
+        "function setAddress(string memory _name, address _address)",
+        "function getAddress(string memory _name) public view returns (address)"
     ];
 
     const MultiABI = [
@@ -28,8 +33,10 @@ const main = async (opt?: boolean) => {
         "function executeTransaction(uint256 _txIndex) external" // only owner 만 실행가능
     ]
     const MULTI_ADDR = "0x014E38eAA7C9B33FeF08661F8F0bFC6FE43f1496" 
+    const CROSS_ADDR = "0xfd76ef26315Ea36136dC40Aeafb5D276d37944AE"
     const proposerOwner1 = "0x961b6fb7D210298B88d7E4491E907cf09c9cD61d"
     const MULTI_OWNER = "0xc2fa14904E9f610006958A2bd2614fE52B8D6BC1"
+    
 
     const ADDRMANAGER_ADDR = "0xeDf6C92fA72Fa6015B15C9821ada145a16c85571"
 
@@ -46,22 +53,47 @@ const main = async (opt?: boolean) => {
     const proposerOwnerSigner = await ethers.provider.getSigner(MULTI_OWNER)
     
     // 업그레이드할 크로스 도메인 컨트랙트 배포
+    const crossDomainMessenger = await (await ethers.getContractFactory("UpgradeL1CrossDomainMessenger")).deploy()
+    console.log("crossDomainMessenger address : ", crossDomainMessenger.address)
+
 
     // 프로포절 진행
     const iface = new ethers.utils.Interface(AddrManagerABI);
     const param1 = "OVM_L1CrossDomainMessenger";
-    const param2 = "0x014E38eAA7C9B33FeF08661F8F0bFC6FE43f1496"; // 업그레이드 구현 계약 주소
+    const param2 = crossDomainMessenger.address; // 업그레이드 구현 계약 주소
 
     const data = iface.encodeFunctionData("setAddress", [param1, param2]);
-    console.log("Encoded data for setAddress:", data);
+    
+    console.log(await addrManagerProxy.getAddress("OVM_L1CrossDomainMessenger"));
 
-    console.log("len ->  ",await multiProxy.getTransactionCount())
 
     // 트랜잭션 데이터 생성
-    await multiProxy.connect(proposerSigner1 as any).proposeTransaction(ADDRMANAGER_ADDR, data)
+    await multiProxy.connect(proposerOwnerSigner as any).proposeTransaction(ADDRMANAGER_ADDR, data)
     // 트랜잭션 실행 --> 관리자가 해줘야함
-    await multiProxy.connect(proposerOwnerSigner as any).executeTransaction(0)    
+    await multiProxy.connect(proposerOwnerSigner as any).executeTransaction(0)   
+    
+    console.log(await addrManagerProxy.getAddress("OVM_L1CrossDomainMessenger"));
 
+
+    // 업그레이드 기능 테스트
+    const newCrossDomainMessenger = await ethers.getContractAt("UpgradeL1CrossDomainMessenger", CROSS_ADDR)
+    
+
+    // puase 실행
+    const iface2 = new ethers.utils.Interface(CrossDomainABI);
+    const data2 = iface2.encodeFunctionData("pause", []);
+    await multiProxy.connect(proposerOwnerSigner as any).proposeTransaction(ADDRMANAGER_ADDR, data2)
+    await multiProxy.connect(proposerOwnerSigner as any).executeTransaction(1)
+    
+    
+    // unpause 실행 
+    const iface3 = new ethers.utils.Interface(CrossDomainABI);
+    const data3 = iface3.encodeFunctionData("unpause", []);
+    await multiProxy.connect(proposerOwnerSigner as any).proposeTransaction(ADDRMANAGER_ADDR, data3)
+    await multiProxy.connect(proposerOwnerSigner as any).executeTransaction(2)
+
+    // await newCrossDomainMessenger.pause()
+    // await newCrossDomainMessenger.unpause()
     
 }
 
