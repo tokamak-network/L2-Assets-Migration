@@ -5,7 +5,6 @@ import { BigNumber } from "ethers"
 import { NonfungibleTokenPositionManager, L2Interface, ERC20, L1Interface, Pool, Closed, User, WithdrawClaimed } from './types';
 import { red, green, white, blue, } from 'console-log-colors';
 import { getWithdrawalClaimStatus, getCollectWETH, getTotalAddressAll, getContractAll, bigNumberAbs } from "./forceLib";
-import * as dotenv from 'dotenv';
 
 /* 
 // Before collecting a collection, you need to do some preliminary work.
@@ -123,9 +122,10 @@ const main = async () => {
     }
   
     l2WithdrawClaimed = await getWithdrawalClaimStatus(withdrawClaimed, { 
-      l1ChainId: 1,
-      l2ChainId: 55004,
-      save: true
+      l1ChainId: process.env.L1_CHAINID as any || 0,
+      l2ChainId: process.env.L2_CHAINID as any || 0,
+      save: true,
+      target: false, // false == testnet, true == mainnet
     })
     // console.log(red('generate-WithdrawalClaim.json is not exist. \n'));
     // process.exit(1);

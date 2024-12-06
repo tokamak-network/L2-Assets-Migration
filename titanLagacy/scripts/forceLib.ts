@@ -1,12 +1,11 @@
 import fs from 'fs'
 import path from 'path'
 import { BigNumber, ethers } from "ethers";
-import { BatchCrossChainMessenger, MessageStatus } from "@tokamak-network/titan-sdk"
+import { BatchCrossChainMessenger, MessageStatus, OEL2ContractsLike, OEContractsLike } from "@tokamak-network/titan-sdk"
 import { L2Interface, WithdrawClaimed, Pool, User } from './types';
 import { blue } from 'console-log-colors';
 import ProgressBar from 'progress';
 import axios from 'axios';
-import * as dotenv from 'dotenv';
 
 /*
 // Provides a function to easily obtain Ethereum balance based on Titan or track withdrawal request volume.
@@ -14,9 +13,39 @@ import * as dotenv from 'dotenv';
 const WETH = process.env.L2_WETH_ADDRESS || ""
 const L2PROVIDER = new ethers.providers.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L2 || ""); // L2 RPC URL
 const L2BRIDGE = process.env.CONTRACTS_L2BRIDGE_ADDRESS || ""; // L2 bridge address
-const baseUrl = "https://explorer.titan.tokamak.network/api?"
+const baseUrl = "https://explorer.titan-sepolia.tokamak.network/api?"
 const dirPath = "data"
 
+const SEPOLIA_L2_CONTRACT_ADDRESSES: OEL2ContractsLike = {
+  L2CrossDomainMessenger: '0x4200000000000000000000000000000000000007',
+  L2ToL1MessagePasser: '0x4200000000000000000000000000000000000000',
+  L2StandardBridge: '0x4200000000000000000000000000000000000010',
+  OVM_L1BlockNumber: '0x4200000000000000000000000000000000000013',
+  OVM_L2ToL1MessagePasser: '0x4200000000000000000000000000000000000000',
+  OVM_DeployerWhitelist: '0x4200000000000000000000000000000000000002',
+  OVM_ETH: '0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000',
+  OVM_GasPriceOracle: '0x420000000000000000000000000000000000000F',
+  OVM_SequencerFeeVault: '0x4200000000000000000000000000000000000011',
+  WETH: '0x4200000000000000000000000000000000000006',
+  BedrockMessagePasser: '0x4200000000000000000000000000000000000000',
+}
+
+const SEPOLIA_CONTRACTS: OEContractsLike = {
+  l1: {
+    AddressManager: '0x79a53E72e9CcfAe63B0fB9A4edb66C7563d74Dc3' as const,
+    L1CrossDomainMessenger:
+      '0xc123047238e8f4bFB7Ad849cA4364b721B5ABD8A' as const,
+    L1StandardBridge: '0x1F032B938125f9bE411801fb127785430E7b3971' as const,
+    StateCommitmentChain:
+      '0x89b6164E9e09f023D26A9A14fcC09100C843d59a' as const,
+    CanonicalTransactionChain:
+      '0xca60b60be6eeB69A390D6f906065130476F70C4d' as const,
+    BondManager: '0x6650CdF583a21a2B10aC4b7986881d4527Dd5C7F' as const,
+    OptimismPortal: '0x0000000000000000000000000000000000000000' as const,
+    L2OutputOracle: '0x0000000000000000000000000000000000000000' as const,
+  },
+  l2: SEPOLIA_L2_CONTRACT_ADDRESSES,
+}
 
 /**
  * Returns whether a claim is made and the status of the withdrawal tx.
@@ -80,25 +109,37 @@ export const getWithdrawalClaimStatus = async (
     l1ChainId: number,
     l2ChainId: number,
     bedrock?: boolean,
-    save?: boolean
+    save?: boolean,
+    target?: boolean // mainnet or test
   }
 ): Promise<any> => {
+
   const l2Provider = new ethers.providers.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L2);
   const l2wallet = new ethers.Wallet(addHexPrefix(process.env.L1_PORXY_OWNER) || "", l2Provider);
-  const l1Provider = new ethers.providers.JsonRpcProvider(process.env.L1_RPC_URL_SDK);
+  const l1Provider = new ethers.providers.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L1);
   const l1wallet = new ethers.Wallet(addHexPrefix(process.env.L1_PORXY_OWNER) || "", l1Provider);
+  let crossDomainMessenger;
+  // true mainnet
+  if(opts.target) {
+    crossDomainMessenger = new BatchCrossChainMessenger({
+      l1SignerOrProvider: l1wallet,
+      l2SignerOrProvider: l2wallet,
+      l1ChainId: opts.l1ChainId,
+      l2ChainId: opts.l2ChainId,
+      bedrock: opts.bedrock ? true : false
+    })
+  }else{ // false testnet
+    crossDomainMessenger = new BatchCrossChainMessenger({
+      l1SignerOrProvider: l1wallet,
+      l2SignerOrProvider: l2wallet,
+      l1ChainId: 11155111,
+      l2ChainId: 55007,
+      contracts: SEPOLIA_CONTRACTS,
+      bedrock: false
+    })
+  }
 
-
-  const crossDomainMessenger = new BatchCrossChainMessenger({
-    l1SignerOrProvider: l1wallet,
-    l2SignerOrProvider: l2wallet,
-    l1ChainId: opts.l1ChainId,
-    l2ChainId: opts.l2ChainId,
-    bedrock: opts.bedrock ? true : false
-  })
   const result: any = [];
-
-
   const total = txHashes.length;
   const bar = new ProgressBar(':bar :current/:total', { width: 50, total: total });
   console.log(blue.bgBlue.bold("🔍 Retrieving withdrawal claim status..."))
@@ -240,14 +281,6 @@ export const getTotalAddressAll = async (page: number, offest: number, flag?: bo
 export const getContractAll = async (page: number, offest: number, flag?: boolean) => {
   const result: any = [];
   let data: any = [];
-
-  
-  const poolContract = new ethers.Contract("0x430eE968F74cf0BD2b7529592F6969Ec7199D461", Pool, L2PROVIDER);
-  const value = await poolContract.factory()
-  console.log(value)
-  return 0;
-
-
   try {
     for (let i = 1; i <= page; i++) {
       const query = `module=contract&action=listcontracts&page=${i}&offset=${offest}`;

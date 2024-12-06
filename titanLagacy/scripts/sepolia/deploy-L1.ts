@@ -21,15 +21,22 @@ const main = async (opt?: boolean) => {
 
     // logic address : 0x65035dcC7C775E61650ae1A2f3E9D665eA139Fb3
 
+    // const owner = "0x37212a8F2abbb40000e974DA82D410DdbecFa956"
+    const owner = "0x0000000000000000000000000000000000000000"
+    await ethers.provider.send('hardhat_impersonateAccount', [owner])
+    await ethers.provider.send('hardhat_setBalance', [owner, '0x152D02C7E14AF6800000']);
+    const deployer:any = await ethers.provider.getSigner(owner)
+
     
-    // const proxy = await ethers.getContractAt("Proxy", "0x72855Bd554170BcdB9e1e5d04831E767021DA9B9")
-    const byteCode = await ethers.provider.getCode("0x94aD42A20BD72B673E510594dD5543740aAab24F")
-    console.log('byteCode : ',byteCode)
+    const proxy = await ethers.getContractAt("Proxy", "0x1F032B938125f9bE411801fb127785430E7b3971")
+    // const byteCode = await ethers.provider.getCode("0x94aD42A20BD72B673E510594dD5543740aAab24F")
+    // console.log('byteCode : ',byteCode)
     // await proxy.setCode(byteCode)
     
 
-    // console.log('L1 Logic : ',l1BridgeLogic.address)   
-    // console.log('L1 implementation : ',await proxy.getImplementation())   
+    // console.log('L1 implementation : ',await proxy.connect(deployer).getOwner())   
+    const a = await proxy.connect(deployer).callStatic.getOwner({})
+    console.log(await a)
 
     // 브릿지 초기화
     // const l1Bridge = await ethers.getContractAt("MockL1StandardBridge", "0x72855Bd554170BcdB9e1e5d04831E767021DA9B9")
