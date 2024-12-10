@@ -4,6 +4,17 @@ import { ethers } from "hardhat";
 // const l2BridgeContracts = new ethers.Contract(L2BRIDGE, L2Interface, L2PROVIDER);
 // const L1PROVIDER = new ethers.providers.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L1 || "");
 
+
+const main2 = async () => {
+    const l1Bridge = await (await ethers.getContractFactory("UpgradeL1Bridge")).deploy()
+    console.log(l1Bridge.address);
+
+    // 업그레이드할 크로스 도메인 컨트랙트 배포
+    const crossDomainMessenger = await (await ethers.getContractFactory("UpgradeL1CrossDomainMessenger")).deploy()
+    console.log("crossDomainMessenger address : ", crossDomainMessenger.address)
+}
+
+// main titan
 const main = async (opt?: boolean) => {
 
     // 업그레이드 방법 
@@ -12,6 +23,7 @@ const main = async (opt?: boolean) => {
     // 2. 그럴려면 MultiProposerableTransactionExecutor 에서 proposeTransaction() 호출해야함
     // 3. 그리고 트랜잭션을 실행해야함 
     // 그럼 가이드에 2번까지 내가 하고 실행을 관리자에게 해달라고 부탁해야함 
+
     // 그리고 업그레이드 잘됐는지 확인하고 끝 
 
 
@@ -97,4 +109,4 @@ const main = async (opt?: boolean) => {
     
 }
 
-main()
+main2()

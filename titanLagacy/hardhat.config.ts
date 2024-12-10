@@ -34,30 +34,26 @@ task("testRun", "Check whether it operates properly in the forked environment.")
 dotenv.config()
 const config: HardhatUserConfig = {
   networks: {
-    local: {
-      url: "http://127.0.0.1:8545/"
-    },
     hardhat: {
       forking: {
         url: process.env.CONTRACT_RPC_URL_L1 || "", // sepolia
         // url: "http://127.0.0.1:8545", // sepolia
-      //   // url: process.env.SEPOLIA_TITAN || "", // L2
-
+        //   // url: process.env.SEPOLIA_TITAN || "", // L2
       }
     },
     main: {
       url: process.env.CONTRACT_RPC_URL_L1 || "",
-      accounts: [process.env.L1_PORXY_OWNER || "", process.env.L1_FORCE_OWNER || ""]
+      // accounts: [process.env.L1_PORXY_OWNER || "", process.env.L1_FORCE_OWNER || ""]
     },
-    // sepolia: {
-    //   url: process.env.SEPOLIA_L1 || "", // L1
-    //   // url: process.env.SEPOLIA_TITAN || "", // L2
-    //   accounts: [
-    //     process.env.SEPOLIA_ACCOUNT||"",
-    //     "d43303aa2b8af829f99ab1df5ee89f01e4f24a18c8b29deff32085f8ae67fb01",
-    //     "1a922902d307ca05ba8d29f97272647963d1f9a5ebe0c51830a9ec3a983a4d6c"
-    //   ],
-    // },
+    sepolia: {
+      url: process.env.CONTRACT_RPC_URL_L1 || "", // L1
+      // url: process.env.SEPOLIA_TITAN || "", // L2
+      accounts: [
+        process.env.PERSONAL_ACCOUNT || "", // Personal account
+        process.env.DEPLOYER_ACCOUNT || "", // Deployer account
+
+      ],
+    },
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY
@@ -71,7 +67,6 @@ const config: HardhatUserConfig = {
       }
     }
   },
-  
 
   gasReporter: {
     enabled: true,

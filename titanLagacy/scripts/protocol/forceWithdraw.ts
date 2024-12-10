@@ -12,7 +12,7 @@ const upgradeABI = require("../../artifacts/contracts/UpgradeL1Bridge.sol/Upgrad
 const proxyABI = require("../../artifacts/contracts/Proxy.sol/Proxy.json")
 const dirPath: string = "data"
 
-const checkEnv = () => {
+export const checkEnv = () => {
     if (process.env.CONTRACT_RPC_URL_L1 === undefined || process.env.CONTRACT_RPC_URL_L1 === "") {
         console.log("Please set the environment variables in .env file {CONTRACT_RPC_URL_L1}")
         process.exit(0)

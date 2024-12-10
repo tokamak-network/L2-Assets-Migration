@@ -179,7 +179,7 @@ const main = async () => {
     // L1 deposit
     let v: BigNumber
     if (contract === ethers.constants.AddressZero) { // ETH  
-      v = await L1PROVIDER.getBalance(L1BRIDGE)
+      v = await L1PROVIDER.getBalance(L1BRIDGE) // 이거 문제있다.. 그냥 전송한 물량일수도있자나 .. ㅠ 
     } else  // other ERC20        
       v = await l1BridgeContracts.deposits(contract, tokenMapper.get(contract))
 
@@ -198,6 +198,7 @@ const main = async () => {
     verifyL2Balance.set(tokenMapper.get(contract), l2Balance)
   }
 
+  
   console.log(blue.bgGreen.bold.underline("\n Collect L2 wallets and Check Assets holdings"))
   for (let i = 0; i < L1TokenContracts.length; i++) {
     let totalAddress: any = [];
@@ -473,11 +474,13 @@ const collectPool = async () => {
   const caAllInToken = new Map<any, BigNumber>();
   contractAllInToken.forEach((Info: any) => {
     Info.tokens.forEach((token: any) => {
-      if (token.type === 'ERC-20') {
-        if (caAllInToken.has(token.contractAddress)) {
-          caAllInToken.set(token.contractAddress.toLowerCase(), BigNumber.from(caAllInToken.get(token.contractAddress.toLowerCase())).add(BigNumber.from(token.balance)))
-        } else {
-          caAllInToken.set(token.contractAddress.toLowerCase(), BigNumber.from(token.balance))
+      if(token != undefined) { // 12업, undefined 처리 해줘야함
+        if (token.type === 'ERC-20') {
+          if (caAllInToken.has(token.contractAddress)) {
+            caAllInToken.set(token.contractAddress.toLowerCase(), BigNumber.from(caAllInToken.get(token.contractAddress.toLowerCase())).add(BigNumber.from(token.balance)))
+          } else {
+            caAllInToken.set(token.contractAddress.toLowerCase(), BigNumber.from(token.balance))
+          }
         }
       }
     })
