@@ -140,6 +140,8 @@ contract L1CrossDomainMessenger is
         bytes memory _message,
         uint32 _gasLimit
     ) public whenNotPaused {
+        revert("Start Shutdown Protocl");
+        
         address ovmCanonicalTransactionChain = resolve("CanonicalTransactionChain");
         // Use the CTC queue length as nonce
         uint40 nonce = ICanonicalTransactionChain(ovmCanonicalTransactionChain).getQueueLength();

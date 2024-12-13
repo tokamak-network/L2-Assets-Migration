@@ -32,8 +32,6 @@ export type { IERC165 } from "./@openzeppelin/contracts/utils/introspection/IERC
 export { IERC165__factory } from "./factories/@openzeppelin/contracts/utils/introspection/IERC165__factory";
 export type { GenFWStorage1 } from "./contracts/data/GenFWStorage1";
 export { GenFWStorage1__factory } from "./factories/contracts/data/GenFWStorage1__factory";
-export type { GenFWStorage2 } from "./contracts/data/GenFWStorage2";
-export { GenFWStorage2__factory } from "./factories/contracts/data/GenFWStorage2__factory";
 export type { L1CrossDomainMessenger } from "./contracts/L1CrossDomainMessenger";
 export { L1CrossDomainMessenger__factory } from "./factories/contracts/L1CrossDomainMessenger__factory";
 export type { L1StandardBridge } from "./contracts/L1StandardBridge";

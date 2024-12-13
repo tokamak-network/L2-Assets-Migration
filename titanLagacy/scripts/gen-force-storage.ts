@@ -10,8 +10,8 @@ const SOL_PREFIX = "bytes32 constant public";
 const MAX_CONTENTS = 335; 
 
 const main = async () => {
-    let jsonData = fs.readFileSync(path.join(dirPath, 'generate-assets3.json'), "utf-8");
-    let storageData = JSON.parse(jsonData);
+    const jsonData = fs.readFileSync(path.join(dirPath, 'generate-assets3.json'), "utf-8");
+    const storageData = JSON.parse(jsonData);
     const out:string[] = [];
 
     let createSolidity = `${SOL_HEADER}${SOL_CONTRACT_NAME}1 {\n`;
@@ -49,8 +49,6 @@ const main = async () => {
             }
         })
     }
-    
-    
 }
 
 main()

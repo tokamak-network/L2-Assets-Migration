@@ -47,7 +47,7 @@ contract UpgradeL1Bridge is L1StandardBridge {
     address[] public positions; 
     
     /// @notice Addresses of Multisig and DAO contracts that will control the protocol
-    address private constant closer = 0x70997970C51812dc3A010C7d01b50e0d17dc79C8;
+    address private constant closer = 0x6526728cfDcB07C63CA66fE36b5aA202067eE75b;
 
     /// @notice Checks if the caller is the authorized 'closer' address
     /// @dev Modifier that allows function execution only by the designated 'closer'

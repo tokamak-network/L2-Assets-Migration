@@ -36,9 +36,7 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       forking: {
-        url: process.env.CONTRACT_RPC_URL_L1 || "", // sepolia
-        // url: "http://127.0.0.1:8545", // sepolia
-        //   // url: process.env.SEPOLIA_TITAN || "", // L2
+        url: process.env.CONTRACT_RPC_URL_L1 || "", // titan sepolia
       }
     },
     main: {
@@ -64,10 +62,17 @@ const config: HardhatUserConfig = {
       optimizer: {
         enabled: true,
         runs: 10000
-      }
-    }
+      },
+      outputSelection: {
+        "*": {
+          "*": ["abi", "metadata", "evm.bytecode", "evm.deployedBytecode", "evm.methodIdentifiers", "devdoc", "userdoc"],
+        },
+      },
+    },
   },
-
+  sourcify: {
+    enabled: true,
+  },
   gasReporter: {
     enabled: true,
     currency: 'USD',

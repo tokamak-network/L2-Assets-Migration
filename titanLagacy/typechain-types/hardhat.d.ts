@@ -61,14 +61,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.GenFWStorage1__factory>;
     getContractFactory(
-      name: "GenFWStorage2",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.GenFWStorage2__factory>;
-    getContractFactory(
-      name: "GenFWStorage1",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.GenFWStorage1__factory>;
-    getContractFactory(
       name: "L1CrossDomainMessenger",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.L1CrossDomainMessenger__factory>;
@@ -216,16 +208,6 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.IERC165>;
-    getContractAt(
-      name: "GenFWStorage1",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.GenFWStorage1>;
-    getContractAt(
-      name: "GenFWStorage2",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.GenFWStorage2>;
     getContractAt(
       name: "GenFWStorage1",
       address: string,

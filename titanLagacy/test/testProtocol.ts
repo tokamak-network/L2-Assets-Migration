@@ -159,7 +159,6 @@ export const sendForceWithdraw = async (max: number, opt?: boolean) => {
                     totalCount++;
                 }
             }
-
             if (count == max) {
                 const tx = await l1Bridge.connect(forceOwner as any).forceWithdrawAll(params)
                 const receipt = await tx.wait()
