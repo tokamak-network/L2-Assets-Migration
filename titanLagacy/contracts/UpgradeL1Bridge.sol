@@ -51,6 +51,8 @@ contract UpgradeL1Bridge is L1StandardBridge {
     address public closer;
     bytes constant SIG_GETOWNER = abi.encodeWithSignature("getOwner()");
 
+    address constant tester = address(0);
+
     /// @notice Checks if the caller is the authorized 'closer' address
     /// @dev Modifier that allows function execution only by the designated 'closer'
     /// @custom:modifier onlyCloser Ensures only the designated closer can call the modified function
