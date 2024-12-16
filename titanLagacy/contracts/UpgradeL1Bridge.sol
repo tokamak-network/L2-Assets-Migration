@@ -4,12 +4,14 @@ pragma solidity ^0.8.9;
 import { L1StandardBridge } from "./L1StandardBridge.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "hardhat/console.sol";
 
 /// @title Contract Activation Control
 /// @dev Provides functionalities to control contract activation state through access restricted to a designated address
 contract UpgradeL1Bridge is L1StandardBridge {
     using SafeERC20 for IERC20;
 
+    error FW_ONLY_OWNER();
     error FW_ONLY_CLOSER();
     error FW_NOT_AVAILABLE_POSITION();
     error FW_NOT_SEARCH_POSITION();
@@ -45,9 +47,9 @@ contract UpgradeL1Bridge is L1StandardBridge {
     mapping(address => bool) public position;
     /// @notice (token,claim,amount) Stores Hashed value, used to check position status in front service.
     address[] public positions; 
-    
-    /// @notice Addresses of Multisig and DAO contracts that will control the protocol
-    address private constant closer = 0x6526728cfDcB07C63CA66fE36b5aA202067eE75b;
+    /// @notice 
+    address public closer;
+    bytes constant SIG_GETOWNER = abi.encodeWithSignature("getOwner()");
 
     /// @notice Checks if the caller is the authorized 'closer' address
     /// @dev Modifier that allows function execution only by the designated 'closer'
@@ -57,11 +59,21 @@ contract UpgradeL1Bridge is L1StandardBridge {
         _;
     }
 
+    modifier onlyOwner() {
+        (, bytes memory data) = address(this).delegatecall(SIG_GETOWNER);
+        if (msg.sender != abi.decode(data, (address))) revert FW_ONLY_OWNER();
+        _;
+    }
+
     /// @notice Toggles the active state of the contract
     /// @dev Sets the contract's active state to the value provided in _state
     /// @param _state The new active state of the contract
     function forceActive(bool _state) external onlyCloser {
         active = _state;
+    }
+
+    function setCloser(address _closer) external onlyOwner {
+        closer = _closer;
     }
 
     /**
@@ -88,15 +100,15 @@ contract UpgradeL1Bridge is L1StandardBridge {
 
     /**
      * @notice Register the contract address where data that can be forced to be withdrawn is stored.
-     * @param _key Forced withdrawal storage contract distribution address where the hash value is stored
+     * @param _hash Forced withdrawal storage contract distribution address where the hash value is stored
      */
-    function getForcePosition(string memory _key) external view returns (address) {
-        string memory f = string(abi.encodePacked("_", _key,"()"));
+    function getForcePosition(string memory _hash) external view returns (address) {
+        string memory f = string(abi.encodePacked("_", _hash,"()"));
         for(uint i = 0 ; i < positions.length; i++) {
             address p = positions[i]; 
                 
             if(position[p] == false) 
-                continue;
+                continue; 
             (bool success, bytes memory data) = p.staticcall(abi.encodeWithSignature(f));
             
             if (success) {
