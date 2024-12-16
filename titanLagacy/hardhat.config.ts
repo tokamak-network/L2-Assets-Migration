@@ -36,7 +36,9 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       forking: {
-        url: process.env.CONTRACT_RPC_URL_L1 || "", // titan sepolia
+        url: process.env.CONTRACT_RPC_URL_L1 || "", // sepolia
+        // url: "http://127.0.0.1:8545", // sepolia
+        //   // url: process.env.SEPOLIA_TITAN || "", // L2
       }
     },
     main: {
@@ -52,6 +54,16 @@ const config: HardhatUserConfig = {
 
       ],
     },
+    titan: {
+      url: `${process.env.ETH_NODE_URI_TITAN}`,
+      accounts: [`${process.env.PERSONAL_ACCOUNT}`],
+      chainId: 55004,
+    },
+    titansepolia: {
+      url: `${process.env.ETH_NODE_URI_TITAN_SEPOLIA}`,
+      accounts: [`${process.env.PERSONAL_ACCOUNT}`],
+      chainId: 55007,
+    },
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY
@@ -62,17 +74,10 @@ const config: HardhatUserConfig = {
       optimizer: {
         enabled: true,
         runs: 10000
-      },
-      outputSelection: {
-        "*": {
-          "*": ["abi", "metadata", "evm.bytecode", "evm.deployedBytecode", "evm.methodIdentifiers", "devdoc", "userdoc"],
-        },
-      },
-    },
+      }
+    }
   },
-  sourcify: {
-    enabled: true,
-  },
+
   gasReporter: {
     enabled: true,
     currency: 'USD',

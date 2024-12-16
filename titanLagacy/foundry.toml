@@ -1,0 +1,15 @@
+[profile.default]
+src = 'contracts'
+out = 'forge-artifacts'
+optimizer = true
+optimizer_runs = 999999
+solc = "0.8.9"
+
+bytecode_hash = 'none'
+build_info = true
+build_info_path = 'artifacts/build-info'
+ffi = true
+fuzz_runs = 16
+
+[profile.ci]
+fuzz_runs = 512

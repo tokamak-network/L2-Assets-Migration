@@ -21,8 +21,8 @@
    },
    {
     "claimer": "0x961b6fb7d210298b88d7e4491e907cf09c9cd61d",
-    "amount": "100999999999467382",
-    "hash": "0xcdad4799813faa18436ef167ca7f7b380462613fa01d388002574a753300a71a"
+    "amount": "102099999999312403",
+    "hash": "0x9aca92b08055cb3b171466a14fb52e2fc177a21077a203279df305460582c0ff"
    },
    {
     "claimer": "0x757de9c340c556b56f62efae859da5e08baae7a2",
@@ -116,8 +116,8 @@
    },
    {
     "claimer": "0x233434c600e789d9d0595f7012c5964921ba4749",
-    "amount": "2199998999978959041",
-    "hash": "0x887f09f3de42f0910395849dfe0faed26da67a7655f9e21056a19c23f76a5a6e"
+    "amount": "2197998999967563827",
+    "hash": "0xc057c587962620479ed0f95885d972ab1c988ff2213ffe4381f885373b009247"
    },
    {
     "claimer": "0x1a681d0e32f8a1d0a5ba94113ecbc1a5df92e50f",
@@ -191,8 +191,8 @@
    },
    {
     "claimer": "0xf0b595d10a92a5a9bc3ffea7e79f5d266b6035ea",
-    "amount": "599859999953841151",
-    "hash": "0x23927725c719636d2ab8008db98104f0c1529ad3b75af94f1af46449880803a3"
+    "amount": "599859999953732915",
+    "hash": "0x85232d0df0fcbf3f4671133709ef9d2fe3beb7207b1b6c52ecbdd713933c79ad"
    },
    {
     "claimer": "0x11b08df706a425d7a1b280d953e1576557402149",
@@ -311,8 +311,8 @@
    },
    {
     "claimer": "0xb4032ff3335f0e54fb0291793b35955e5da30b0c",
-    "amount": "61130857990635102",
-    "hash": "0xaf0c1ffb50aa70980c778c259099c4557204022fa29575bb64652211cef82690"
+    "amount": "61130857985745177",
+    "hash": "0x94da7cde5b4f6ddc290e0b883d3f1aaaeaf7bb0135822b61436d20405350b347"
    },
    {
     "claimer": "0xb72d4693de57de4d9c013bc19141f4ff1a580f89",
@@ -688,6 +688,11 @@
     "claimer": "0x90f281ccedd4366c8cca81d2ba3d54a808baa806",
     "amount": "10000000000000000",
     "hash": "0x5e007b2365083fe794a67343501d8c8f70ff1c58ecba11357b4130dd37ca6f37"
+   },
+   {
+    "claimer": "0x8bce1e7c20cb7178dffeb5c2c08c1163e26c0295",
+    "amount": "1000000000000000",
+    "hash": "0x0133e1c98ff14948c50be12977e199c218ef65a155db8a1013fc49171c2a9e37"
    }
   ]
  },
@@ -748,13 +753,13 @@
    },
    {
     "claimer": "0x233434C600E789D9d0595f7012C5964921Ba4749",
-    "amount": "1528912376837145311604",
-    "hash": "0xa03e321cee625eeb2a8a7c97507b5a86f21809f59a8a0f7fe88dbc755baa7eac"
+    "amount": "1498912376837145311604",
+    "hash": "0x7ac05ddf38e6d0dccfb9bb4e3c62b7b2b5816018e2c27a172f78a86e4a896c89"
    },
    {
     "claimer": "0x961b6fb7D210298B88d7E4491E907cf09c9cD61d",
-    "amount": "80900000000000000000",
-    "hash": "0xc5452c7664f422490c5675ea3ad1f494e4647dbabb34635b7717923598d6ec1b"
+    "amount": "79900000000000000000",
+    "hash": "0xe9b9bc3caedeecbdb4033c3d22a19bb423a6c1b6c64333ff8fcf7a6c71e68c19"
    },
    {
     "claimer": "0x1A681d0E32f8a1d0a5ba94113ecBc1A5dF92e50F",
@@ -828,8 +833,8 @@
    },
    {
     "claimer": "0xf0B595d10a92A5a9BC3fFeA7e79f5d266b6035Ea",
-    "amount": "950999980000000000000",
-    "hash": "0x311faa86a29110aa80b101d4a77c63c6d4d7f980d9267cad6f731fcdc32a199a"
+    "amount": "0",
+    "hash": "0x5b8b408be571915d27187273cb8e2db395c94ad6b948a3c4dac150d92a9dadd1"
    },
    {
     "claimer": "0xA8E3D5fC664ed9c16c5F4750D7d91146A0135af8",
@@ -903,8 +908,8 @@
    },
    {
     "claimer": "0xB4032ff3335F0E54Fb0291793B35955e5dA30B0C",
-    "amount": "185334203210876443211",
-    "hash": "0xb10001a933f1aaf84606c5aba8cf2fe46916cb37a5e9d3cb482f688935fbc117"
+    "amount": "182334203210876443211",
+    "hash": "0x7ea6f817c458c53fd3ddf941d3453fcb070981a494051c132081cf61c88b1e03"
    },
    {
     "claimer": "0xB72D4693De57De4d9c013bC19141f4FF1a580f89",
@@ -943,8 +948,8 @@
    },
    {
     "claimer": "0x21a82A114d65DB20d5db33f5c9DBb54f1a8AcF4e",
-    "amount": "68503456789123456789",
-    "hash": "0x10192d22b423b334f0d6a899b85daedb14ab1595337b1cb087a25b475d159ed5"
+    "amount": "70003456789123456789",
+    "hash": "0x20c0f71ddf11b52ca365370ee994d6d313c3a892fb01aaa2180580dab55913f6"
    },
    {
     "claimer": "0x6099CEe6CB4573eD8D2b383C0b1d1f06A9a168b1",
@@ -1030,6 +1035,11 @@
     "claimer": "0xD3F8E0f099a172F4139A34CF8D4058C61F6a5dc4",
     "amount": "20000000000000000000",
     "hash": "0x8eeef9e75982ad16e4c035b69de74bb3f57c092dc23f0aeee5f5188a180ac2b6"
+   },
+   {
+    "claimer": "0x6526728cfDcB07C63CA66fE36b5aA202067eE75b",
+    "amount": "950999980000000000000",
+    "hash": "0x6410ab4eae97b2906b0d85e32f6cf86c8a2bc78f76f4ceb06ec72467e8fb3bec"
    }
   ]
  },
@@ -1140,8 +1150,8 @@
    },
    {
     "claimer": "0xf0B595d10a92A5a9BC3fFeA7e79f5d266b6035Ea",
-    "amount": "10000000000000000000",
-    "hash": "0x44ec157ed78cef8f4f244356a5a84c616a44dc27180a4fcd1189890afc433ff8"
+    "amount": "0",
+    "hash": "0x23b86b4306fde8070dd19188c107f9d230340983e32a9a7cc20127ee184e77a5"
    },
    {
     "claimer": "0xcFC2F094612e91458551677E00b8b4045610B3Df",
@@ -1167,6 +1177,11 @@
     "claimer": "0x867E273da32d3d213bb0779764d2CB621B0524d6",
     "amount": "2000000000000000000",
     "hash": "0xb4f3c336652112dce3e8c14dfeaed6b2cf38bde3ed3252d9677e7d510b546b80"
+   },
+   {
+    "claimer": "0x6526728cfDcB07C63CA66fE36b5aA202067eE75b",
+    "amount": "10000000000000000000",
+    "hash": "0x61a6ba4aea3317f631938d5e128ae1af6027884c4a5543a7c2f908ae3f50ec7d"
    }
   ]
  },
