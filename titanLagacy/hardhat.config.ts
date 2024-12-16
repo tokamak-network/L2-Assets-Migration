@@ -36,7 +36,7 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       forking: {
-        url: process.env.CONTRACT_RPC_URL_L1 || "", // sepolia
+        url: process.env.ETH_NODE_URI_TITAN_SEPOLIA || "", // sepolia
         // url: "http://127.0.0.1:8545", // sepolia
         //   // url: process.env.SEPOLIA_TITAN || "", // L2
       }
