@@ -12,7 +12,7 @@ const main = async () => {
     }   
 
     const developer:any = await ethers.provider.getSigner(0)
-    const proxy = await ethers.getContractAt("Proxy", "0x1F032B938125f9bE411801fb127785430E7b3971") // 브릿지 프록시 주소
+    const proxy = await ethers.getContractAt("Proxy", "0x1F032B938125f9bE411801fb127785430E7b3971") // L1 브릿지 프록시 주소
     const byteCode = await ethers.provider.getCode(L1_BRIDGE_ADDRESS) 
     await proxy.connect(developer).setCode(byteCode)
 }
