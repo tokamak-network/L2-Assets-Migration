@@ -47,8 +47,8 @@ const config: HardhatUserConfig = {
       url: process.env.CONTRACT_RPC_URL_L1 || "", // L1
       // url: process.env.SEPOLIA_TITAN || "", // L2
       accounts: [
-        process.env.PERSONAL_ACCOUNT || "", // Personal account
         process.env.DEPLOYER_ACCOUNT || "", // Deployer account
+        process.env.PERSONAL_ACCOUNT || "", // Personal account
 
       ],
     },

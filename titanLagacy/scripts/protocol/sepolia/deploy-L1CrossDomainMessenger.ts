@@ -2,6 +2,7 @@ import { ethers, run } from "hardhat";
 import * as dotenv from 'dotenv'
 
 const main = async () => {
+    
     // test account
     // const owner = "0x0000000000000000000000000000000000000000"
     // await ethers.provider.send('hardhat_impersonateAccount', [owner])
@@ -14,7 +15,7 @@ const main = async () => {
     }
     
     // contract deployer
-    const deployer = await ethers.provider.getSigner(1)
+    const deployer = await ethers.provider.getSigner(0)
     const crossContract = await (await ethers.getContractFactory("UpgradeL1CrossDomainMessenger", deployer as any)).deploy()
     console.log("CrossDomainMessenger Address : ", crossContract.address)
 
