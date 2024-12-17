@@ -409,10 +409,15 @@ async function queryContracts() {
 async function divideUniswapV3PoolContracts() {
 
   let readFile ='./data/accounts/'+hre.network.name+'_contract_nonZeroBalance.json'
+  let readLpFile ='./data/accounts/1.'+hre.network.name+'_contract_lp_tokens.json'
+
   let pools = {}
   let common = {}
   let json ;
+  let lpTokens ;
   if (await fs.existsSync(readFile)) json = JSON.parse(await fs.readFileSync(readFile));
+  if (await fs.existsSync(readLpFile)) lpTokens = JSON.parse(await fs.readFileSync(readLpFile));
+
   // console.log(json.count)
 
   var keys = Object.keys(json);
@@ -422,24 +427,35 @@ async function divideUniswapV3PoolContracts() {
     var obj = json[key]
     if (obj.name == "UniswapV3Pool") {
       pools[key] = obj
+    } else if(lpTokens[key] != undefined) {
+      pools[key] = obj
     } else if(key != "count") {
       common[key] = obj
     }
   }
 
-  let outFile1 ='./data/accounts/1.'+hre.network.name+'_contract_pools.json'
+  let outFile1 ='./data/accounts/2.'+hre.network.name+'_contract_pools.json'
   await fs.writeFileSync(outFile1, JSON.stringify(pools));
 
-  let outFile ='./data/accounts/2.'+hre.network.name+'_contract_commons.json'
+  let outFile ='./data/accounts/3.'+hre.network.name+'_contract_commons.json'
   await fs.writeFileSync(outFile, JSON.stringify(common));
 
 }
 
 async function calaculateAmountOfLps() {
+  // let readFile ='./data/accounts/1.'+hre.network.name+'_contract_pools.json'
+  // var pools
+  // if (await fs.existsSync(readFile)) pools = JSON.parse(await fs.readFileSync(readFile));
 
-  let readFile ='./data/accounts/1.'+hre.network.name+'_contract_pools.json'
   let poolLps = {}
-  if (await fs.existsSync(readFile)) pools = JSON.parse(await fs.readFileSync(readFile));
+  let sums = {
+      TON: BigNumber.from("0"),
+      TOS: BigNumber.from("0"),
+      USDC: BigNumber.from("0"),
+      USDT: BigNumber.from("0"),
+      WETH: BigNumber.from("0"),
+  }
+
   const L2PROVIDER = new ethers.providers.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L2 || ""); // L2 RPC URL
 
   const npmAbi = require("../abi/NonfungiblePositionManager.json");
@@ -482,6 +498,7 @@ async function calaculateAmountOfLps() {
 
     let poolAddress = await factory.getPool(lp.positions.token0, lp.positions.token1, lp.positions.fee)
     poolAddress = poolAddress.toLowerCase()
+
     if (poolLps[poolAddress] == undefined) poolLps[poolAddress] = []
 
     const calcAmount = await calcLiquidity(npm, i, lp.owner, lp.positions)
@@ -513,23 +530,24 @@ async function calaculateAmountOfLps() {
     else if(poolLp.token1 == USDT.toLowerCase()) poolLp.USDT = poolLp.amount1
     else if(poolLp.token1 == WETH.toLowerCase()) poolLp.WETH = poolLp.amount1
 
+    sums.TON = sums.TON.add(BigNumber.from(poolLp.TON))
+    sums.TOS = sums.TOS.add(BigNumber.from(poolLp.TOS))
+    sums.USDC = sums.USDC.add(BigNumber.from(poolLp.USDC))
+    sums.USDT = sums.USDT.add(BigNumber.from(poolLp.USDT))
+    sums.WETH = sums.WETH.add(BigNumber.from(poolLp.WETH))
+
     poolLps[poolAddress].push(poolLp)
   }
 
   // console.log(poolLps)
-  let outFile ='./data/accounts/2-1.'+hre.network.name+'_contract_lp_tokens.json'
-  await fs.writeFileSync(outFile, JSON.stringify(poolLps));
 
+  console.log("sums", sums)
+
+  let outFile ='./data/accounts/1.'+hre.network.name+'_contract_lp_tokens.json'
+  await fs.writeFileSync(outFile, JSON.stringify(poolLps));
 }
 
 async function calcLiquidity(npm, tokenId, _owner, _position) {
-    // const poolAbi = require("../abi/UniswapV3Pool.json");
-    // const contract = new ethers.Contract(pool, poolAbi.abi, ethers.provider)
-    // let slot0 = await contract.slot0()
-    // console.log('slot0', slot0)
-    // let sqrtPriceCurrent = slot0[0] / (1 << 96)
-    // console.log('sqrtPriceCurrent', sqrtPriceCurrent)
-
     var amount0 = BigNumber.from("0")
     var amount1 = BigNumber.from("0")
 
@@ -553,8 +571,44 @@ async function calcLiquidity(npm, tokenId, _owner, _position) {
       amount0 = BigNumber.from(tx1.amount0).add(BigNumber.from(tx2.amount0));
       amount1 = BigNumber.from(tx1.amount1).add(BigNumber.from(tx2.amount1));
     }
-
     return {amount0, amount1}
+}
+
+
+async function totalAssetsOfUniswapV3Pools() {
+  let readFile ='./data/accounts/2.'+hre.network.name+'_contract_pools.json'
+  var pools
+  if (await fs.existsSync(readFile)) pools = JSON.parse(await fs.readFileSync(readFile));
+
+  let sums = {
+      TON: BigNumber.from("0"),
+      TOS: BigNumber.from("0"),
+      USDC: BigNumber.from("0"),
+      USDT: BigNumber.from("0"),
+      WETH: BigNumber.from("0"),
+  }
+
+  var keys = Object.keys(pools);
+  for (var i=0; i<keys.length; i++) {
+    var key = keys[i];
+    // console.log("key : " + key + ", value : " + pools[key])
+    var obj = pools[key]
+    sums.TON = sums.TON.add(BigNumber.from(obj.TON))
+    sums.TOS = sums.TOS.add(BigNumber.from(obj.TOS))
+    sums.USDC = sums.USDC.add(BigNumber.from(obj.USDC))
+    sums.USDT = sums.USDT.add(BigNumber.from(obj.USDT))
+    sums.WETH = sums.WETH.add(BigNumber.from(obj.WETH))
+  }
+
+  let res = {
+    TON: sums.TON.toString(),
+    TOS: sums.TOS.toString(),
+    USDC: sums.USDC.toString(),
+    USDT: sums.USDT.toString(),
+    WETH: sums.WETH.toString(),
+  }
+  console.log("totalAssetsOfUniswapV3Pools", res)
+  return res
 }
 
 async function main() {
@@ -585,11 +639,16 @@ async function main() {
     // 4. Details of contracts
     // await queryContracts()
 
-    // 5. look for UniswapV3Pool
+    // 5. find out the LP's token amount and owner in UniswapV3 Pool
+    // file: 1.titansepolia_contract_lp_tokens.json
+    // await calaculateAmountOfLps()
+
+    // 6. look for UniswapV3Pool
+    // file: 2.titansepolia_contract_pools.json
+    // file: 3.titansepolia_contract_commons.json
     // await divideUniswapV3PoolContracts()
 
-    // 6. find out the LP's token amount and owner in UniswapV3 Pool
-    await calaculateAmountOfLps()
+    await totalAssetsOfUniswapV3Pools()
 
     // 7. gathering the EOA's balances
     // await gatheringEOA()
