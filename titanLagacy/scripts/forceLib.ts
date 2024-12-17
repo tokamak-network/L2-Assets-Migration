@@ -53,7 +53,7 @@ const SEPOLIA_CONTRACTS: OEContractsLike = {
  * UNCONFIRMED_L1_TO_L2_MESSAGE = 0, FAILED_L1_TO_L2_MESSAGE = 1,STATE_ROOT_NOT_PUBLISHED = 2, IN_CHALLENGE_PERIOD = 3,
  * READY_FOR_RELAY = 4, RELAYED = 5, RELAYED_FAILED = 6
  * @returns {boolean} - true : claimed, false : unclaimed
- * 
+ *
  */
 const isClaimed = (state: MessageStatus | any) => {
   return state == MessageStatus.RELAYED ? true : false
@@ -101,7 +101,7 @@ export interface Response {
  * @param {boolean} [opts.bedrock=false] - Optional flag to indicate if Bedrock is enabled.
  * @param {boolean} [opts.save=false] - Optional flag to indicate if the result should be saved to a file.
  * @returns {Promise<any>} - Returns a promise that resolves to an array of objects containing transaction hash, state, and claim status.
- * 
+ *
  */
 export const getWithdrawalClaimStatus = async (
   txHashes: string[] | WithdrawClaimed[],
@@ -273,7 +273,7 @@ export const getTotalAddressAll = async (page: number, offest: number, flag?: bo
 
 /**
  * Get all contract addresses deployed on the Titan network. v3 pool addresses are filtered out.
- * 
+ *
  * @param {integer} page - A nonnegative integer that represents the page number to be used for pagination. 'offset' must be provided in conjunction.
  * @param {integer} offset - A nonnegative integer that represents the maximum number of records to return when paginating. 'page' must be provided in conjunction.
  * @param {boolean} flag - 'true' contains the list of tokens held by the contract. Default false
@@ -353,13 +353,13 @@ export const getContractAll = async (page: number, offest: number, flag?: boolea
     }
   } else return convertData;
 
-  
+
   return result
 }
 
 /**
  * .
- * 
+ *
  * @param {integer} page - A nonnegative integer that represents the page number to be used for pagination. 'offset' must be provided in conjunction.
  * @param {integer} offset - A nonnegative integer that represents the maximum number of records to return when paginating. 'page' must be provided in conjunction.
  * @param {any} weth - L2 WETH address, default value ENV L2_WETH_ADDRESS

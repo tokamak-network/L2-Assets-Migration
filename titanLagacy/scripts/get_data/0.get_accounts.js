@@ -1,6 +1,7 @@
 const hre = require("hardhat");
 const { ethers } = hre;
 const fs = require('fs');
+const axios  = require('axios');
 
 /**
  * ETH, TON, TOS, DOC, AURA, USDC, USDT 를 사용한 계정 주소를 집계합니다.
@@ -8,6 +9,7 @@ const fs = require('fs');
 
 
 // titan-sepolia
+const baseUrl = "https://explorer.titan-sepolia.tokamak.network/api?"
 const TON = "0x7c6b91d9be155a6db01f749217d76ff02a7227f2"
 const TOS = "0xd08a2917653d4e460893203471f0000826fb4034"
 const USDC = "0xB79DcFE624D0A69c5c2a206a99F240f1d2Ca1D80"
@@ -15,10 +17,12 @@ const USDT = "0x79E0d92670106c85E9067b56B8F674340dCa0Bbd"
 const DOC = "0x50c5725949a6f0c72e6c4a641f24049a917db0cb"
 const AURA = "0xe7798f023fc62146e8aa1b36da45fb70855a77ea"
 const WETH = "0x4200000000000000000000000000000000000006"
+const NonfungiblePositionManager = "0x0B4695D5EB7C4e207D1b86cfFA9Eb39db56413f2"
 const pauseBlock = 17923 //17923
 const startBlock = 0
 
 // // titan
+// const baseUrl = "https://explorer.titan.tokamak.network/api?"
 // const TON = "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2"
 // const TOS = "0xd08a2917653d4e460893203471f0000826fb4034"
 // const USDC = "0x46BbbC5f20093cB53952127c84F1Fbc9503bD6D9"
@@ -26,6 +30,7 @@ const startBlock = 0
 // const WETH = "0x4200000000000000000000000000000000000006"
 // const DOC = "0x0000000000000000000000000000000000000000"
 // const AURA = "0x0000000000000000000000000000000000000000"
+// const NonfungiblePositionManager = "0xfAFc55Bcdc6e7a74C21DD51531D14e5DD9f29613"
 // const pauseBlock = 6374
 // const startBlock = 0
 
@@ -255,10 +260,109 @@ async function getAccountsUsingTransferEvent(tokenSymbol, tokenAddress) {
     await getAccounts(null, transactionFile, fileMode, appendModeAccount);
 }
 
+async function queryAccounts() {
+  let page = 1
+  let offest = 10000
+  const query = `module=account&action=listaccounts&page=${page}&offset=${offest}`;
+  let i = 0
+
+  let appendMode = true
+
+  let accountFile = "./data/accounts/"+hre.network.name+"_accounts.json"
+  let oldAccounts = [] ;
+
+  if (await fs.existsSync(accountFile)) oldAccounts = JSON.parse(await fs.readFileSync(accountFile));
+  let users = [];
+  if(appendMode) users = oldAccounts
+
+  try {
+    const response = await axios.get(baseUrl + query);
+    // console.log(response)
+
+    if (response.data.status === '1') {
+      let accounts = response.data.result;
+      for (i = 0; i < accounts.length; i++) {
+        // console.log('Accounts:', i, accounts[i], accounts[i].address);
+        let a = accounts[i].address.toLowerCase()
+        if(!users.includes(a)) users.push(a)
+      }
+    } else {
+      console.error('Failed to fetch data:', response.data.message);
+    }
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+
+  console.log('users.length:', users.length);
+  await fs.writeFileSync("./data/accounts/"+hre.network.name+"_accounts.json", JSON.stringify(users));
+
+}
+
+async function queryContracts() {
+
+  let readFile ='./data/accounts/'+hre.network.name+'_accounts_contract.json'
+  let contractAccounts = [] ;
+  if (await fs.existsSync(readFile)) contractAccounts = JSON.parse(await fs.readFileSync(readFile));
+  console.log('contractAccounts.length', contractAccounts.length)
+
+  let balanceTON = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_TON_'+pauseBlock+'.json'));
+  let balanceTOS = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_TOS_'+pauseBlock+'.json'));
+  let balanceUSDC = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_USDC_'+pauseBlock+'.json'));
+  let balanceUSDT = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_USDT_'+pauseBlock+'.json'));
+  let balanceWETH = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_WETH_'+pauseBlock+'.json'));
+
+  let contractDetails = {}
+
+  let info = {
+    type:'',
+    TON: ethers.BigNumber.from("0"),
+    TOS: ethers.BigNumber.from("0"),
+    USDC: ethers.BigNumber.from("0"),
+    USDT: ethers.BigNumber.from("0"),
+    WETH: ethers.BigNumber.from("0"),
+    owner: '',
+    admin:'',
+    deployer: '',
+    name: ''
+  }
+
+  let page = 1
+  let offest = 10000
+  const query = `module=contract&action=listcontracts&page=${page}&offset=${offest}`;
+  let i = 0
+  try {
+    const response = await axios.get(baseUrl + query);
+    // console.log(response)
+
+    if (response.data.status === '1') {
+      let accounts = response.data.result;
+      console.log('Accounts:', accounts);
+      for (i = 0; i < accounts.length; i++) {
+        console.log('Accounts:', i, accounts[i]);
+        accounts[i].ContractName
+
+      }
+    } else {
+      console.error('Failed to fetch data:', response.data.message);
+    }
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+
+
+  // if (contractAccounts.length > 0) {
+  //   for (const contractAccount of contractAccounts) {
+  //     contractDetails[contractAccount] = info
+
+  //   }
+  // }
+
+}
 
 async function main() {
+    // await queryAccounts()
 
-    // get transactions and accounts
+    // 1. get transactions and accounts
     // await getAccountsUsingTransferEvent("TON", TON)
     // await getAccountsUsingTransferEvent("TOS", TOS)
     // await getAccountsUsingTransferEvent("USDC", USDC)
@@ -267,18 +371,24 @@ async function main() {
     // await getAccountsUsingTransferEvent("DOC", DOC)
     // await getAccountsUsingTransferEvent("AURA", AURA)
 
-    // divide the accounst with eoa ans contract
+    // 2. divide the accounst with eoa ans contract
     // await checkContracts()
 
-    // get the balances
-    let fileMode = true
+    // 3. get the balances
+    // let fileMode = true
     // await getBalances ("TON", TON, pauseBlock, null, fileMode)
-    await getBalances ("TOS", TOS, pauseBlock, null, fileMode)
-    await getBalances ("USDC", USDC, pauseBlock, null, fileMode)
-    await getBalances ("USDT", USDT, pauseBlock, null, fileMode)
-    await getBalances ("WETH", WETH, pauseBlock, null, fileMode)
-    await getBalances ("DOC", DOC, pauseBlock, null, fileMode)
-    await getBalances ("AURA", AURA, pauseBlock, null, fileMode)
+    // await getBalances ("TOS", TOS, pauseBlock, null, fileMode)
+    // await getBalances ("USDC", USDC, pauseBlock, null, fileMode)
+    // await getBalances ("USDT", USDT, pauseBlock, null, fileMode)
+    // await getBalances ("WETH", WETH, pauseBlock, null, fileMode)
+    // await getBalances ("DOC", DOC, pauseBlock, null, fileMode)
+    // await getBalances ("AURA", AURA, pauseBlock, null, fileMode)
+
+    // 4. Distributing Liquidity in UniswapV3 Pool
+
+
+    // 5. Distributing of contracts
+    await queryContracts()
 
   }
 
