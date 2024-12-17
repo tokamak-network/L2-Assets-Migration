@@ -1,8 +1,8 @@
 const hre = require("hardhat");
-const { ethers } = hre;
+const { ethers } = require("hardhat");
 const fs = require('fs');
 const axios  = require('axios');
-
+const { BigNumber } = require("ethers")
 /**
  * ETH, TON, TOS, DOC, AURA, USDC, USDT 를 사용한 계정 주소를 집계합니다.
  */
@@ -18,6 +18,7 @@ const DOC = "0x50c5725949a6f0c72e6c4a641f24049a917db0cb"
 const AURA = "0xe7798f023fc62146e8aa1b36da45fb70855a77ea"
 const WETH = "0x4200000000000000000000000000000000000006"
 const NonfungiblePositionManager = "0x0B4695D5EB7C4e207D1b86cfFA9Eb39db56413f2"
+const UniswapV3Factory = "0x31BCECA13c5be57b3677Ec116FB38fEde7Fe1217"
 const pauseBlock = 17923 //17923
 const startBlock = 0
 
@@ -31,6 +32,7 @@ const startBlock = 0
 // const DOC = "0x0000000000000000000000000000000000000000"
 // const AURA = "0x0000000000000000000000000000000000000000"
 // const NonfungiblePositionManager = "0xfAFc55Bcdc6e7a74C21DD51531D14e5DD9f29613"
+// const UniswapV3Factory = "0x755Ba335013C07CE35C9A2dd5746617Ac4c6c799"
 // const pauseBlock = 6374
 // const startBlock = 0
 
@@ -157,52 +159,6 @@ async function getTransferTxs(tokenSymbol, tokenAddress) {
   return {outFile, transactions};
 }
 
-async function getTotalSupply(depositedTxs, tokenAddress) {
-
-  let users = [];
-  const TOS_ABI = require("../abi/TOS.json")
-  const abi = [ "event Transfer(address indexed from, address indexed to, uint256 amount)" ];
-  const iface = new ethers.utils.Interface(abi);
-  const transferId = ethers.utils.id("Transfer(address,address,uint256)")
-
-  let i = 0
-  if (depositedTxs.length > 0) {
-    for (const depositedTx of depositedTxs) {
-      let receipt = await ethers.provider.getTransactionReceipt(depositedTx);
-      console.log(receipt.blockNumber)
-
-      const tokenContract = new ethers.Contract(
-        tokenAddress,
-        TOS_ABI.abi,
-        ethers.provider
-      );
-      let totalSupply = await tokenContract.totalSupply.call({blockNumber: receipt.blockNumber})
-      console.log('totalSupply --- ', receipt.blockNumber, totalSupply )
-
-      // const { logs } = await ethers.provider.getTransactionReceipt(depositedTx);
-      // const foundLog = logs.find(el => el && el.topics && el.topics.includes(transferId));
-      // if (!foundLog) continue;
-      // const parsedlog = iface.parseLog(foundLog);
-      // const { from, to, amount } = parsedlog["args"];
-
-      // let fromAddress = from.toLowerCase()
-      // let toAddress = to.toLowerCase()
-
-      // if(!users.includes(fromAddress)) users.push(fromAddress)
-      // if(!users.includes(toAddress)) users.push(toAddress)
-      // i++
-      // if(i % 200 == 0) {
-      //   console.log('i --- ', i )
-      //   // await fs.writeFileSync("./data/depositors.json", JSON.stringify(depositors));
-      // }
-    }
-  }
-
-  // console.log( users )
-  // await fs.writeFileSync("./data/depositors.json", JSON.stringify(depositors));
-  return users
-}
-
 async function getAccounts(depositedTxs, readFile, readBool, appendMode ) {
 
   let accountFile = "./data/accounts/"+hre.network.name+"_accounts.json"
@@ -300,6 +256,35 @@ async function queryAccounts() {
 
 async function queryContracts() {
 
+  const abi = [
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "admin",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+  ]
+
   let readFile ='./data/accounts/'+hre.network.name+'_accounts_contract.json'
   let contractAccounts = [] ;
   if (await fs.existsSync(readFile)) contractAccounts = JSON.parse(await fs.readFileSync(readFile));
@@ -310,37 +295,94 @@ async function queryContracts() {
   let balanceUSDC = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_USDC_'+pauseBlock+'.json'));
   let balanceUSDT = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_USDT_'+pauseBlock+'.json'));
   let balanceWETH = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_WETH_'+pauseBlock+'.json'));
+  let creators = JSON.parse(await fs.readFileSync('data/contracts_creator/'+hre.network.name+'.json'));
 
   let contractDetails = {}
-
-  let info = {
-    type:'',
-    TON: ethers.BigNumber.from("0"),
-    TOS: ethers.BigNumber.from("0"),
-    USDC: ethers.BigNumber.from("0"),
-    USDT: ethers.BigNumber.from("0"),
-    WETH: ethers.BigNumber.from("0"),
-    owner: '',
-    admin:'',
-    deployer: '',
-    name: ''
-  }
-
+  let contractNonZero = {}
+  let contractToDevelopers = []
   let page = 1
   let offest = 10000
   const query = `module=contract&action=listcontracts&page=${page}&offset=${offest}`;
   let i = 0
+  let contractNonZeroCount = 0
+  let contractDetailsCount = 0
+
   try {
     const response = await axios.get(baseUrl + query);
     // console.log(response)
-
     if (response.data.status === '1') {
       let accounts = response.data.result;
-      console.log('Accounts:', accounts);
+      // console.log('Accounts:', accounts);
       for (i = 0; i < accounts.length; i++) {
-        console.log('Accounts:', i, accounts[i]);
-        accounts[i].ContractName
+        // console.log('Accounts:', i, accounts[i]);
+        let a = accounts[i].Address.toLowerCase()
 
+        contractDetails[a] = {
+          name: "",
+          type: "",
+          TON: "0",
+          TOS: "0",
+          USDC: "0",
+          USDT: "0",
+          WETH: "0",
+          owner: "",
+          admin: "",
+          deployer: "",
+        }
+        contractDetailsCount ++
+
+        if (accounts[i].ContractName != undefined ) contractDetails[a].name = accounts[i].ContractName
+
+        // console.log('Accounts', i, a, accounts[i].ContractName )
+        let balanceBool = false
+        if(balanceTON[a] != "undefined" && balanceTON[a] != "0") {
+          contractDetails[a].TON = balanceTON[a]
+          balanceBool = true
+        }
+        if(balanceTOS[a] != "undefined" &&  balanceTOS[a] != "0") {
+          contractDetails[a].TOS = balanceTOS[a]
+          balanceBool = true
+        }
+
+        if(balanceUSDC[a] != "undefined" &&  balanceUSDC[a] != "0")  {
+          contractDetails[a].USDC = balanceUSDC[a]
+          balanceBool = true
+        }
+        if(balanceUSDT[a] != "undefined" &&  balanceUSDT[a] != "0") {
+          contractDetails[a].USDT = balanceUSDT[a]
+          balanceBool = true
+        }
+        if(balanceWETH[a] != "undefined" &&  balanceWETH[a] != "0")  {
+          contractDetails[a].WETH = balanceWETH[a]
+          balanceBool = true
+        }
+
+        if(balanceBool) {
+          const contract = new ethers.Contract(a, abi, ethers.provider);
+          try {
+            let owner = await contract.owner()
+            let code = await ethers.provider.getCode(owner)
+            if(code == '0x') contractDetails[a].owner = owner.toLowerCase()
+            else console.log("owner is not EOA", a, owner )
+          } catch(e){
+            try {
+              let admin = await contract.admin()
+              let code = await ethers.provider.getCode(owner)
+              if(code == '0x') contractDetails[a].admin = admin.toLowerCase()
+              else console.log("admin is not EOA", a, admin )
+            }catch(e){
+              contractDetails[a].type = "developer"
+              if(creators[a] != undefined && creators[a]!=null)
+                contractDetails[a].deployer = creators[a].toLowerCase()
+              else  {
+                console.log("unknown developer of this contract", a )
+                contractToDevelopers.push(a)
+              }
+            }
+          }
+          contractNonZero[a] = contractDetails[a]
+          contractNonZeroCount++
+        }
       }
     } else {
       console.error('Failed to fetch data:', response.data.message);
@@ -349,14 +391,170 @@ async function queryContracts() {
     console.error('Error fetching data:', error);
   }
 
+  contractNonZero["count"] = contractNonZeroCount
+  contractDetails["count"] = contractDetailsCount
 
-  // if (contractAccounts.length > 0) {
-  //   for (const contractAccount of contractAccounts) {
-  //     contractDetails[contractAccount] = info
+  let outFile1 ='./data/accounts/'+hre.network.name+'_contract_details.json'
+  await fs.writeFileSync(outFile1, JSON.stringify(contractDetails));
 
-  //   }
-  // }
+  let outFile ='./data/accounts/'+hre.network.name+'_contract_nonZeroBalance.json'
+  await fs.writeFileSync(outFile, JSON.stringify(contractNonZero));
 
+  console.log("contractNonZero", contractNonZero)
+  console.log("contractNonZeroBalance Count", contractNonZeroCount)
+  console.log("unknown developer", contractToDevelopers)
+
+}
+
+async function divideUniswapV3PoolContracts() {
+
+  let readFile ='./data/accounts/'+hre.network.name+'_contract_nonZeroBalance.json'
+  let pools = {}
+  let common = {}
+  let json ;
+  if (await fs.existsSync(readFile)) json = JSON.parse(await fs.readFileSync(readFile));
+  // console.log(json.count)
+
+  var keys = Object.keys(json);
+  for (var i=0; i<keys.length; i++) {
+    var key = keys[i];
+    // console.log("key : " + key + ", value : " + json[key])
+    var obj = json[key]
+    if (obj.name == "UniswapV3Pool") {
+      pools[key] = obj
+    } else if(key != "count") {
+      common[key] = obj
+    }
+  }
+
+  let outFile1 ='./data/accounts/1.'+hre.network.name+'_contract_pools.json'
+  await fs.writeFileSync(outFile1, JSON.stringify(pools));
+
+  let outFile ='./data/accounts/2.'+hre.network.name+'_contract_commons.json'
+  await fs.writeFileSync(outFile, JSON.stringify(common));
+
+}
+
+async function calaculateAmountOfLps() {
+
+  let readFile ='./data/accounts/1.'+hre.network.name+'_contract_pools.json'
+  let poolLps = {}
+  if (await fs.existsSync(readFile)) pools = JSON.parse(await fs.readFileSync(readFile));
+  const L2PROVIDER = new ethers.providers.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L2 || ""); // L2 RPC URL
+
+  const npmAbi = require("../abi/NonfungiblePositionManager.json");
+  const factoryAbi = require("../abi/UniswapV3Factory.json");
+
+  const npm = new ethers.Contract(NonfungiblePositionManager, npmAbi.abi, L2PROVIDER)
+  const factory = new ethers.Contract(UniswapV3Factory, factoryAbi.abi, ethers.provider)
+
+  let totalSupply = await npm.totalSupply()
+  console.log('totalSupply', totalSupply)
+
+  // for (let i=1 ; i <= 2; i++ ){
+  for (let i=1 ;i <= totalSupply; i++ ){
+    let ownerOf = await npm.ownerOf(i)
+    let positions = await npm.positions(i)
+
+    let lp = {
+      tokenid: i,
+      owner: ownerOf.toLowerCase(),
+      positions: {
+        nonce: positions.nonce.toString() ,
+        operator: positions.operator,
+        token0: positions.token0.toLowerCase(),
+        token1: positions.token1.toLowerCase(),
+        fee: positions.fee,
+        tickLower: positions.tickLower,
+        tickUpper: positions.tickUpper,
+        liquidity: positions.liquidity.toString(),
+        feeGrowthInside0LastX128: positions.feeGrowthInside0LastX128.toString(),
+        feeGrowthInside1LastX128: positions.feeGrowthInside1LastX128.toString(),
+        tokensOwed0: positions.tokensOwed0.toString(),
+        tokensOwed1: positions.tokensOwed1.toString()
+      },
+      TON: "0",
+      TOS: "0",
+      USDC: "0",
+      USDT: "0",
+      WETH: "0",
+    }
+
+    let poolAddress = await factory.getPool(lp.positions.token0, lp.positions.token1, lp.positions.fee)
+    poolAddress = poolAddress.toLowerCase()
+    if (poolLps[poolAddress] == undefined) poolLps[poolAddress] = []
+
+    const calcAmount = await calcLiquidity(npm, i, lp.owner, lp.positions)
+    // console.log('calcAmount', calcAmount)
+
+    let poolLp = {
+      tokenid:  lp.tokenid,
+      owner: lp.owner,
+      token0: lp.positions.token0,
+      token1: lp.positions.token1,
+      amount0: calcAmount.amount0.toString(),
+      amount1: calcAmount.amount1.toString(),
+      TON: "0",
+      TOS: "0",
+      USDC: "0",
+      USDT: "0",
+      WETH: "0",
+    }
+
+    if (poolLp.token0 == TON.toLowerCase()) poolLp.TON = poolLp.amount0
+    else if(poolLp.token0 == TOS.toLowerCase()) poolLp.TOS = poolLp.amount0
+    else if(poolLp.token0 == USDC.toLowerCase()) poolLp.USDC = poolLp.amount0
+    else if(poolLp.token0 == USDT.toLowerCase()) poolLp.USDT = poolLp.amount0
+    else if(poolLp.token0 == WETH.toLowerCase()) poolLp.WETH = poolLp.amount0
+
+    if (poolLp.token1 == TON.toLowerCase()) poolLp.TON = poolLp.amount1
+    else if(poolLp.token1 == TOS.toLowerCase()) poolLp.TOS = poolLp.amount1
+    else if(poolLp.token1 == USDC.toLowerCase()) poolLp.USDC = poolLp.amount1
+    else if(poolLp.token1 == USDT.toLowerCase()) poolLp.USDT = poolLp.amount1
+    else if(poolLp.token1 == WETH.toLowerCase()) poolLp.WETH = poolLp.amount1
+
+    poolLps[poolAddress].push(poolLp)
+  }
+
+  // console.log(poolLps)
+  let outFile ='./data/accounts/2-1.'+hre.network.name+'_contract_lp_tokens.json'
+  await fs.writeFileSync(outFile, JSON.stringify(poolLps));
+
+}
+
+async function calcLiquidity(npm, tokenId, _owner, _position) {
+    // const poolAbi = require("../abi/UniswapV3Pool.json");
+    // const contract = new ethers.Contract(pool, poolAbi.abi, ethers.provider)
+    // let slot0 = await contract.slot0()
+    // console.log('slot0', slot0)
+    // let sqrtPriceCurrent = slot0[0] / (1 << 96)
+    // console.log('sqrtPriceCurrent', sqrtPriceCurrent)
+
+    var amount0 = BigNumber.from("0")
+    var amount1 = BigNumber.from("0")
+
+    // check pool
+    if (_position.liquidity != 0x00) {
+      const DEAD_MAX = Math.floor(Date.now() / 1000) + 1200
+      const tx1 = await npm.callStatic.decreaseLiquidity({
+        tokenId: tokenId,
+        liquidity: _position.liquidity,
+        amount0Min: 0,
+        amount1Min: 0,
+        deadline: DEAD_MAX,
+      })
+
+      const tx2 = await npm.callStatic.collect({
+        tokenId: tokenId,
+        recipient: _owner,
+        amount0Max: 2n ** 128n - 1n,
+        amount1Max: 2n ** 128n - 1n,
+      });
+      amount0 = BigNumber.from(tx1.amount0).add(BigNumber.from(tx2.amount0));
+      amount1 = BigNumber.from(tx1.amount1).add(BigNumber.from(tx2.amount1));
+    }
+
+    return {amount0, amount1}
 }
 
 async function main() {
@@ -384,11 +582,18 @@ async function main() {
     // await getBalances ("DOC", DOC, pauseBlock, null, fileMode)
     // await getBalances ("AURA", AURA, pauseBlock, null, fileMode)
 
-    // 4. Distributing Liquidity in UniswapV3 Pool
+    // 4. Details of contracts
+    // await queryContracts()
 
+    // 5. look for UniswapV3Pool
+    // await divideUniswapV3PoolContracts()
 
-    // 5. Distributing of contracts
-    await queryContracts()
+    // 6. find out the LP's token amount and owner in UniswapV3 Pool
+    await calaculateAmountOfLps()
+
+    // 7. gathering the EOA's balances
+    // await gatheringEOA()
+
 
   }
 

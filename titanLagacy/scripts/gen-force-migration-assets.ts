@@ -6,18 +6,18 @@ import { NonfungibleTokenPositionManager, L2Interface, ERC20, L1Interface, Pool,
 import { red, green, white, blue, } from 'console-log-colors';
 import { getWithdrawalClaimStatus, getCollectWETH, getTotalAddressAll, getContractAll, bigNumberAbs } from "./forceLib";
 
-/* 
+/*
 // Before collecting a collection, you need to do some preliminary work.
-// 1. Forking target : L2 RpcUrl   
+// 1. Forking target : L2 RpcUrl
 // 2. Env Set : L1rpc, L2rpc, L1bridgeAddress, L2bridgeAddress
-// 3. Optinal Arg : startblock, endblock 
+// 3. Optinal Arg : startblock, endblock
 // * (Caution): In order to accurately count withdrawals, you must at least check the withdrawal request list in the OP SDK.
 
 // * The asset collection protocol is divided into three steps.
 // * The first is to collect EOA wallet and contract addresses and assets
 // * The second is to separate and collect assets in the UniswapV3 Pool.
 // * Finally, the process is completed by collecting the above two and removing duplicates.
-// * The files created vary depending on each step. For tasks that take a long time, 
+// * The files created vary depending on each step. For tasks that take a long time,
 // * it is possible to respond to failures through IO operations.
 */
 const L1PROVIDER = new ethers.providers.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L1 || ""); // L1 RPC URL
@@ -32,8 +32,8 @@ let out: Closed; // export assets data
 const dirPath = "data"
 const outPool: any[] = [];
 const verifyL2Balance = new Map<any, any>(); // L2 token address : totalSupply
-let L1TokenContracts: any = []; // L1 tokens contracts address 
-let tokenMapper: any // L1 -> L2 token address mapping 
+let L1TokenContracts: any = []; // L1 tokens contracts address
+let tokenMapper: any // L1 -> L2 token address mapping
 let etheoa_str: any[];
 let ethpool: any[];
 let ethca: any[];
@@ -94,9 +94,9 @@ const main = async () => {
   etheoa_str = results[3]
   console.log('\n')
   contractAllInToken = await getContractAll(1, 10000, true)
-  
+
   const withdrawClaimed: WithdrawClaimed[] = [];
-  // get L2 initWithdrawalclaim data 
+  // get L2 initWithdrawalclaim data
   let l2WithdrawClaimed: any = [];
   try {
     l2WithdrawClaimed = JSON.parse(fs.readFileSync(path.join(dirPath, 'generate-WithdrawalClaim.json'), "utf-8"))
@@ -120,8 +120,8 @@ const main = async () => {
         )
       }
     }
-  
-    l2WithdrawClaimed = await getWithdrawalClaimStatus(withdrawClaimed, { 
+
+    l2WithdrawClaimed = await getWithdrawalClaimStatus(withdrawClaimed, {
       l1ChainId: process.env.L1_CHAINID as any || 0,
       l2ChainId: process.env.L2_CHAINID as any || 0,
       save: true,
@@ -140,7 +140,7 @@ const main = async () => {
   })
 
 
-  // get deposited evnets 
+  // get deposited evnets
   let eventName = l2BridgeContracts.filters.DepositFinalized();
 
   const events: any = await l2BridgeContracts.queryFilter(eventName, L2STBLOCK, L2ENDBLOCK);
@@ -178,9 +178,9 @@ const main = async () => {
   for (const contract of L1TokenContracts) {
     // L1 deposit
     let v: BigNumber
-    if (contract === ethers.constants.AddressZero) { // ETH  
-      v = await L1PROVIDER.getBalance(L1BRIDGE) // 이거 문제있다.. 그냥 전송한 물량일수도있자나 .. ㅠ 
-    } else  // other ERC20        
+    if (contract === ethers.constants.AddressZero) { // ETH
+      v = await L1PROVIDER.getBalance(L1BRIDGE) // 이거 문제있다.. 그냥 전송한 물량일수도있자나 .. ㅠ
+    } else  // other ERC20
       v = await l1BridgeContracts.deposits(contract, tokenMapper.get(contract))
 
     // L2 totalSupply()
@@ -198,7 +198,7 @@ const main = async () => {
     verifyL2Balance.set(tokenMapper.get(contract), l2Balance)
   }
 
-  
+
   console.log(blue.bgGreen.bold.underline("\n Collect L2 wallets and Check Assets holdings"))
   for (let i = 0; i < L1TokenContracts.length; i++) {
     let totalAddress: any = [];
@@ -239,7 +239,7 @@ const main = async () => {
         outPool.push({
           claimer: address,
           amount: amount.toString(),
-          type: i,  // outPool array index 
+          type: i,  // outPool array index
           l2Token: tokenMapper.get(L1TokenContracts[i])
         })
       }
@@ -249,7 +249,7 @@ const main = async () => {
 
     if (verifyL2Balance.get(tokenMapper.get(L1TokenContracts[i])).toString() == totalBalance.toString()) {
       console.log('Withdrawal L2 Balance    : ', verifyL2Balance.get(tokenMapper.get(L1TokenContracts[i])).toString(), ' Collected L2 Balance: ', totalBalance.toString(), blue(' MATCH ✅ \n'))
-    } else if (L1TokenContracts[i] === ethers.constants.AddressZero) { // case1. ether 
+    } else if (L1TokenContracts[i] === ethers.constants.AddressZero) { // case1. ether
       let otherCaETH: BigNumber = BigNumber.from(0);
       let count = 0;
       ethca.map((item: any) => {
@@ -344,8 +344,8 @@ const collectPool = async () => {
     let total1 = BigNumber.from(0);
     // CheckPoint: Check if you can withdraw less than the amount the pool has.
     console.log("💧 Pool Info Address: ", p.claimer, " Pair: ", token0Name, '/', token1Name, 'Pool Fee: ', poolFee)
-    // Check all NFT positions, script delay points 
-    // todo : Searched positions should be managed as a 'Map' to avoid duplicates 
+    // Check all NFT positions, script delay points
+    // todo : Searched positions should be managed as a 'Map' to avoid duplicates
     for (let i = 1; i <= maxIndex; i++) {
       const _position = await nonFungibleContract.positions(i)
 
@@ -380,7 +380,7 @@ const collectPool = async () => {
         total0 = total0.add(amount0)
         total1 = total1.add(amount1)
 
-        // set data 
+        // set data
         Number(amount0) > 0 ? outToken0.push({
           claimer: _owner,
           amount: amount0.toString()
@@ -396,7 +396,7 @@ const collectPool = async () => {
     console.log('Pool Amount token1: ', ethers.utils.formatUnits(await (await token1Contract.balanceOf(p.claimer)), await token1Contract.decimals()), ' Pool State: ', (await token1Contract.balanceOf(p.claimer)) >= total1 ? green('MATCH ✅') : red('MISMATCH ❌'))
     console.log('Withdraw Available Total Token1: ', ethers.utils.formatUnits(total1.toString(), await token1Contract.decimals()), '\n')
 
-    // Collected WETH 
+    // Collected WETH
     const _outToken0 = _outPool.get(token0Address);
     const _outToken1 = _outPool.get(token1Address);
     outToken0.length > 0 ? _outPool.set(token0Address, _outToken0 ? _outToken0.concat(outToken0) : outToken0) : ""
@@ -406,7 +406,7 @@ const collectPool = async () => {
 
 
   // Sum and pack the collected pool data.
-  // WETH asset colleting 
+  // WETH asset colleting
   const packPool: any = [];
   for (const l1Token of L1TokenContracts) {
 
@@ -452,7 +452,7 @@ const collectPool = async () => {
       out.data[i].data = out.data[i].data.concat(wethEOA)
   }
 
-  // finals deduplicates 
+  // finals deduplicates
   for (let i = 0; i < out.data.length; i++) {
     const data = out.data[i].data.reduce((acc: any, cur: any) => {
       const isFound = acc.find((item: any, index: any, array: any) => {
@@ -462,7 +462,7 @@ const collectPool = async () => {
         }
       });
 
-      if (!isFound) { // new data 
+      if (!isFound) { // new data
         acc.push(cur)
       }
       return acc;
@@ -470,7 +470,7 @@ const collectPool = async () => {
     out.data[i].data = data;
   }
 
-  //contractAllInToken setup 
+  //contractAllInToken setup
   const caAllInToken = new Map<any, BigNumber>();
   contractAllInToken.forEach((Info: any) => {
     Info.tokens.forEach((token: any) => {
@@ -488,7 +488,7 @@ const collectPool = async () => {
 
   const removedETH = BigNumber.from(await L2PROVIDER.getBalance(WETH))
 
-  // CheckPoint: Finally, compare the totals 
+  // CheckPoint: Finally, compare the totals
   console.log(white.bgGreen.bold("\n Finally, Compare the Total Amounts"))
   for (const info of out.data) {
     const l2total: any = info.data.reduce((acc: any, cur: any) => {
