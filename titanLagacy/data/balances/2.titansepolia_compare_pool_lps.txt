@@ -1,0 +1,27 @@
+=================================================
+===  Compare Pool Balance and Lp Total Assets ===
+=================================================
+
+TON (Pool Balance):272679308775138719416238
+TON (Sum of LPS  ):272679308775138719415668
+ Diff             : 570
+
+
+TOS (Pool Balance):177410772142119360874526
+TOS (Sum of LPS  ):177410772142119360874057
+ Diff             : 469
+
+
+USDC (Pool Balance):4000000
+USDC (Sum of LPS  ):3999998
+ Diff             : 2
+
+
+USDT (Pool Balance):10342550529
+USDT (Sum of LPS  ):10342550233
+ Diff             : 296
+
+
+WETH (Pool Balance):1848860432697481677
+WETH (Sum of LPS  ):1848860432697481204
+ Diff             : 473

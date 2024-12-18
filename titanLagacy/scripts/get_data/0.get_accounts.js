@@ -574,8 +574,7 @@ async function calcLiquidity(npm, tokenId, _owner, _position) {
     return {amount0, amount1}
 }
 
-
-async function totalAssetsOfUniswapV3Pools() {
+async function compareLpsAndPoolsBalance() {
   let readFile ='./data/accounts/2.'+hre.network.name+'_contract_pools.json'
   var pools
   if (await fs.existsSync(readFile)) pools = JSON.parse(await fs.readFileSync(readFile));
@@ -591,8 +590,9 @@ async function totalAssetsOfUniswapV3Pools() {
   var keys = Object.keys(pools);
   for (var i=0; i<keys.length; i++) {
     var key = keys[i];
-    // console.log("key : " + key + ", value : " + pools[key])
     var obj = pools[key]
+     // console.log("key : " + key + ", value : " + pools[key])
+
     sums.TON = sums.TON.add(BigNumber.from(obj.TON))
     sums.TOS = sums.TOS.add(BigNumber.from(obj.TOS))
     sums.USDC = sums.USDC.add(BigNumber.from(obj.USDC))
@@ -600,15 +600,132 @@ async function totalAssetsOfUniswapV3Pools() {
     sums.WETH = sums.WETH.add(BigNumber.from(obj.WETH))
   }
 
-  let res = {
-    TON: sums.TON.toString(),
-    TOS: sums.TOS.toString(),
-    USDC: sums.USDC.toString(),
-    USDT: sums.USDT.toString(),
-    WETH: sums.WETH.toString(),
+  // let poolSum = {
+  //   TON: sums.TON.toString(),
+  //   TOS: sums.TOS.toString(),
+  //   USDC: sums.USDC.toString(),
+  //   USDT: sums.USDT.toString(),
+  //   WETH: sums.WETH.toString(),
+  // }
+  // console.log("pools.length", keys.length)
+  // console.log("poolSum", poolSum)
+
+  //=====
+  var contents = ""
+  contents += "==============================" +"\n"
+  contents += "==== Sum of LPs by Pool ======" +"\n"
+  let readFile1 ='./data/accounts/1.'+hre.network.name+'_contract_lp_tokens.json'
+  var lps
+  if (await fs.existsSync(readFile1)) lps = JSON.parse(await fs.readFileSync(readFile1));
+
+  var keyPooOfLp = Object.keys(lps);
+  var poolOfLp = {}
+
+  contents += "\n"+ "pools length" +keyPooOfLp.length + "\n"
+  let lpSum = {
+    TON: BigNumber.from("0"),
+    TOS: BigNumber.from("0"),
+    USDC: BigNumber.from("0"),
+    USDT: BigNumber.from("0"),
+    WETH: BigNumber.from("0"),
   }
-  console.log("totalAssetsOfUniswapV3Pools", res)
-  return res
+  if (keyPooOfLp.length != keys.length)
+    contents += "\n"+ "Check!! The number of pools counted by LP and the number of pool contracts are different"+ "\n\n"
+
+  for (var i=0; i < keyPooOfLp.length; i++) {
+    var key = keyPooOfLp[i];
+    var obj = lps[key]
+     // console.log("key : " + key + ", value : " + pools[key])
+    var sum = {
+      TON: BigNumber.from("0"),
+      TOS: BigNumber.from("0"),
+      USDC: BigNumber.from("0"),
+      USDT: BigNumber.from("0"),
+      WETH: BigNumber.from("0")
+    }
+    // console.log(key, obj.length)
+
+    for (var j=0; j<obj.length; j++) {
+      sum.TON = sum.TON.add(BigNumber.from(obj[j].TON))
+      sum.TOS = sum.TOS.add(BigNumber.from(obj[j].TOS))
+      sum.USDC = sum.USDC.add(BigNumber.from(obj[j].USDC))
+      sum.USDT = sum.USDT.add(BigNumber.from(obj[j].USDT))
+      sum.WETH = sum.WETH.add(BigNumber.from(obj[j].WETH))
+    }
+    // console.log(key, sum)
+
+    poolOfLp[key] = sum
+    contents += "\n\n"+ i +" Pool  == "+key +" =============="+ "\n\n"
+    let a = BigNumber.from(pools[key].TON)
+    contents += "TON (Pool       ) :" + pools[key].TON+ "\n"
+    contents += "TON (LPS of Pool) :" + poolOfLp[key].TON.toString()+ "\n"
+    contents += " Diff             : "+ a.sub(poolOfLp[key].TON).toString()+ "\n"
+
+    a = BigNumber.from(pools[key].TOS)
+    contents += "TOS (Pool       ) :" + pools[key].TOS+ "\n"
+    contents += "TOS (LPS of Pool) :" + poolOfLp[key].TOS.toString()+ "\n"
+    contents += " Diff             : " + a.sub(poolOfLp[key].TOS).toString()+ "\n"
+
+    a = BigNumber.from(pools[key].USDC)
+    contents += "USDC (Pool       ) :" + pools[key].USDC+ "\n"
+    contents += "USDC (LPS of Pool) :" + poolOfLp[key].USDC.toString()+ "\n"
+    contents += " Diff             : " + a.sub(poolOfLp[key].USDC).toString()+ "\n"
+
+    a = BigNumber.from(pools[key].USDT)
+    contents += "USDT (Pool       ) :" + pools[key].USDT+ "\n"
+    contents += "USDT (LPS of Pool) :" + poolOfLp[key].USDT.toString()+ "\n"
+    contents += " Diff             : " + a.sub(poolOfLp[key].USDT).toString()+ "\n"
+
+    a = BigNumber.from(pools[key].WETH)
+    contents += "WETH (Pool       ) :" + pools[key].WETH+ "\n"
+    contents += "WETH (LPS of Pool) :" + poolOfLp[key].WETH.toString()+ "\n"
+    contents += " Diff             : " + a.sub(poolOfLp[key].WETH).toString()+ "\n"
+
+    lpSum.TON = lpSum.TON.add(sum.TON)
+    lpSum.TOS = lpSum.TOS.add(sum.TOS)
+    lpSum.USDC = lpSum.USDC.add(sum.USDC)
+    lpSum.USDT = lpSum.USDT.add(sum.USDT)
+    lpSum.WETH = lpSum.WETH.add(sum.WETH)
+  }
+
+  let outFile1 ='./data/balances/1.'+hre.network.name+'_sum_of_lps_by_pool.txt'
+  await fs.writeFileSync(outFile1, contents);
+
+  //=====
+  var contents2 = ""
+
+  contents2 += "================================================="+"\n"
+  contents2 += "===  Compare Pool Balance and Lp Total Assets ==="+ "\n"
+  contents2 += "================================================="+"\n"
+
+  contents2 += "\nTON (Pool Balance):" + sums.TON.toString()+ "\n"
+  contents2 += "TON (Sum of LPS  ):" + lpSum.TON.toString()+ "\n"
+  contents2 += " Diff             : " + sums.TON.sub(lpSum.TON).toString()+ "\n"+ "\n"
+
+  contents2 += "\nTOS (Pool Balance):" + sums.TOS.toString()+ "\n"
+  contents2 += "TOS (Sum of LPS  ):" + lpSum.TOS.toString()+ "\n"
+  contents2 += " Diff             : " + sums.TOS.sub(lpSum.TOS).toString()+ "\n"+ "\n"
+
+  contents2 += "\nUSDC (Pool Balance):" + sums.USDC.toString()+ "\n"
+  contents2 += "USDC (Sum of LPS  ):" + lpSum.USDC.toString()+ "\n"
+  contents2 += " Diff             : " + sums.USDC.sub(lpSum.USDC).toString()+ "\n"+ "\n"
+
+  contents2 += "\nUSDT (Pool Balance):" + sums.USDT.toString()+ "\n"
+  contents2 += "USDT (Sum of LPS  ):" + lpSum.USDT.toString()+ "\n"
+  contents2 += " Diff             : " + sums.USDT.sub(lpSum.USDT).toString()+ "\n"+ "\n"
+
+  contents2 += "\nWETH (Pool Balance):" + sums.WETH.toString()+ "\n"
+  contents2 += "WETH (Sum of LPS  ):" + lpSum.WETH.toString()+ "\n"
+  contents2 += " Diff             : " + sums.WETH.sub(lpSum.WETH).toString()+ "\n"
+
+
+  //======================
+
+  let outFile2 ='./data/balances/2.'+hre.network.name+'_compare_pool_lps.txt'
+  await fs.writeFileSync(outFile2, contents2);
+
+
+  return {sums, lpSum}
 }
 
 async function main() {
@@ -648,7 +765,7 @@ async function main() {
     // file: 3.titansepolia_contract_commons.json
     // await divideUniswapV3PoolContracts()
 
-    await totalAssetsOfUniswapV3Pools()
+    await compareLpsAndPoolsBalance()
 
     // 7. gathering the EOA's balances
     // await gatheringEOA()

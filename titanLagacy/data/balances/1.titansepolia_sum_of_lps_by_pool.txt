@@ -1,0 +1,365 @@
+==============================
+==== Sum of LPs by Pool ======
+
+pools length19
+
+
+0 Pool  == 0x5d17f27e058f3178f87289897e35cf224021e24b ==============
+
+TON (Pool       ) :270736142017425170816666
+TON (LPS of Pool) :270736142017425170816619
+ Diff             : 47
+TOS (Pool       ) :175474080086578375533723
+TOS (LPS of Pool) :175474080086578375533665
+ Diff             : 58
+USDC (Pool       ) :0
+USDC (LPS of Pool) :0
+ Diff             : 0
+USDT (Pool       ) :0
+USDT (LPS of Pool) :0
+ Diff             : 0
+WETH (Pool       ) :0
+WETH (LPS of Pool) :0
+ Diff             : 0
+
+
+1 Pool  == 0x0c5aa0d617f7d88e6b594bf449920aac6ab241ca ==============
+
+TON (Pool       ) :0
+TON (LPS of Pool) :0
+ Diff             : 0
+TOS (Pool       ) :1908312833353108484382
+TOS (LPS of Pool) :1908312833353108484318
+ Diff             : 64
+USDC (Pool       ) :0
+USDC (LPS of Pool) :0
+ Diff             : 0
+USDT (Pool       ) :0
+USDT (LPS of Pool) :0
+ Diff             : 0
+WETH (Pool       ) :5868769707493701
+WETH (LPS of Pool) :5868769707493669
+ Diff             : 32
+
+
+2 Pool  == 0xb8e4ccf9ba7cb88ac4d0efd18c3d218545a12e64 ==============
+
+TON (Pool       ) :1246386019698841883808
+TON (LPS of Pool) :1246386019698841883676
+ Diff             : 132
+TOS (Pool       ) :0
+TOS (LPS of Pool) :0
+ Diff             : 0
+USDC (Pool       ) :0
+USDC (LPS of Pool) :0
+ Diff             : 0
+USDT (Pool       ) :0
+USDT (LPS of Pool) :0
+ Diff             : 0
+WETH (Pool       ) :31396263067033621
+WETH (LPS of Pool) :31396263067033490
+ Diff             : 131
+
+
+3 Pool  == 0x898cbf6aa5a7867c0301469c4e0f8dab4d023e35 ==============
+
+TON (Pool       ) :0
+TON (LPS of Pool) :0
+ Diff             : 0
+TOS (Pool       ) :0
+TOS (LPS of Pool) :0
+ Diff             : 0
+USDC (Pool       ) :0
+USDC (LPS of Pool) :0
+ Diff             : 0
+USDT (Pool       ) :0
+USDT (LPS of Pool) :0
+ Diff             : 0
+WETH (Pool       ) :801994153428685148
+WETH (LPS of Pool) :801994153428685143
+ Diff             : 5
+
+
+4 Pool  == 0xb045a7ee4e4ebac5431ea13ca27a54dd750e9253 ==============
+
+TON (Pool       ) :0
+TON (LPS of Pool) :0
+ Diff             : 0
+TOS (Pool       ) :0
+TOS (LPS of Pool) :0
+ Diff             : 0
+USDC (Pool       ) :0
+USDC (LPS of Pool) :0
+ Diff             : 0
+USDT (Pool       ) :168766442
+USDT (LPS of Pool) :168766423
+ Diff             : 19
+WETH (Pool       ) :723583885896386185
+WETH (LPS of Pool) :723583885896386165
+ Diff             : 20
+
+
+5 Pool  == 0x29dafef687e0a9102435e7ae23f7e77653a10bae ==============
+
+TON (Pool       ) :38986196536980455353
+TON (LPS of Pool) :38986196536980455256
+ Diff             : 97
+TOS (Pool       ) :26735686161982862965
+TOS (LPS of Pool) :26735686161982862868
+ Diff             : 97
+USDC (Pool       ) :0
+USDC (LPS of Pool) :0
+ Diff             : 0
+USDT (Pool       ) :0
+USDT (LPS of Pool) :0
+ Diff             : 0
+WETH (Pool       ) :0
+WETH (LPS of Pool) :0
+ Diff             : 0
+
+
+6 Pool  == 0xe8bb5c3149c8b70de1a973d546e359164de19de7 ==============
+
+TON (Pool       ) :0
+TON (LPS of Pool) :0
+ Diff             : 0
+TOS (Pool       ) :0
+TOS (LPS of Pool) :0
+ Diff             : 0
+USDC (Pool       ) :0
+USDC (LPS of Pool) :0
+ Diff             : 0
+USDT (Pool       ) :9986489196
+USDT (LPS of Pool) :9986489193
+ Diff             : 3
+WETH (Pool       ) :0
+WETH (LPS of Pool) :0
+ Diff             : 0
+
+
+7 Pool  == 0x205f0b56ff36fd68536135cdc04c6dce2affce4e ==============
+
+TON (Pool       ) :26691252331754346150
+TON (LPS of Pool) :26691252331754346146
+ Diff             : 4
+TOS (Pool       ) :0
+TOS (LPS of Pool) :0
+ Diff             : 0
+USDC (Pool       ) :0
+USDC (LPS of Pool) :0
+ Diff             : 0
+USDT (Pool       ) :12503
+USDT (LPS of Pool) :12499
+ Diff             : 4
+WETH (Pool       ) :0
+WETH (LPS of Pool) :0
+ Diff             : 0
+
+
+8 Pool  == 0xe3136da8af4a3ee7dc92dedd9bd4daa2a7e447e7 ==============
+
+TON (Pool       ) :388085672296065995335
+TON (LPS of Pool) :388085672296065995076
+ Diff             : 259
+TOS (Pool       ) :0
+TOS (LPS of Pool) :0
+ Diff             : 0
+USDC (Pool       ) :0
+USDC (LPS of Pool) :0
+ Diff             : 0
+USDT (Pool       ) :186838077
+USDT (LPS of Pool) :186837808
+ Diff             : 269
+WETH (Pool       ) :0
+WETH (LPS of Pool) :0
+ Diff             : 0
+
+
+9 Pool  == 0x36ef528de0b8ab551553e5b5a615f9aaac158964 ==============
+
+TON (Pool       ) :179599490062582091839
+TON (LPS of Pool) :179599490062582091828
+ Diff             : 11
+TOS (Pool       ) :0
+TOS (LPS of Pool) :0
+ Diff             : 0
+USDC (Pool       ) :0
+USDC (LPS of Pool) :0
+ Diff             : 0
+USDT (Pool       ) :0
+USDT (LPS of Pool) :0
+ Diff             : 0
+WETH (Pool       ) :0
+WETH (LPS of Pool) :0
+ Diff             : 0
+
+
+10 Pool  == 0x3ee835cfbdc36a5236ca959af45e1a07125fe28f ==============
+
+TON (Pool       ) :0
+TON (LPS of Pool) :0
+ Diff             : 0
+TOS (Pool       ) :0
+TOS (LPS of Pool) :0
+ Diff             : 0
+USDC (Pool       ) :0
+USDC (LPS of Pool) :0
+ Diff             : 0
+USDT (Pool       ) :444311
+USDT (LPS of Pool) :444310
+ Diff             : 1
+WETH (Pool       ) :0
+WETH (LPS of Pool) :0
+ Diff             : 0
+
+
+11 Pool  == 0x8e84d8e6ee404377d797051cb297540dd559abd1 ==============
+
+TON (Pool       ) :52584979456004555270
+TON (LPS of Pool) :52584979456004555258
+ Diff             : 12
+TOS (Pool       ) :0
+TOS (LPS of Pool) :0
+ Diff             : 0
+USDC (Pool       ) :0
+USDC (LPS of Pool) :0
+ Diff             : 0
+USDT (Pool       ) :0
+USDT (LPS of Pool) :0
+ Diff             : 0
+WETH (Pool       ) :4139243752761753
+WETH (LPS of Pool) :4139243752761742
+ Diff             : 11
+
+
+12 Pool  == 0xb20c3d5ce51567cdcde8ebdf201be91536e0c188 ==============
+
+TON (Pool       ) :0
+TON (LPS of Pool) :0
+ Diff             : 0
+TOS (Pool       ) :947955328684418485
+TOS (LPS of Pool) :947955328684418287
+ Diff             : 198
+USDC (Pool       ) :0
+USDC (LPS of Pool) :0
+ Diff             : 0
+USDT (Pool       ) :0
+USDT (LPS of Pool) :0
+ Diff             : 0
+WETH (Pool       ) :515718014311700
+WETH (LPS of Pool) :515718014311489
+ Diff             : 211
+
+
+13 Pool  == 0x3c4311308862524934d8991fa8254522164d4bb6 ==============
+
+TON (Pool       ) :0
+TON (LPS of Pool) :0
+ Diff             : 0
+TOS (Pool       ) :44325111492469822
+TOS (LPS of Pool) :44325111492469777
+ Diff             : 45
+USDC (Pool       ) :0
+USDC (LPS of Pool) :0
+ Diff             : 0
+USDT (Pool       ) :0
+USDT (LPS of Pool) :0
+ Diff             : 0
+WETH (Pool       ) :46789415655992
+WETH (LPS of Pool) :46789415655940
+ Diff             : 52
+
+
+14 Pool  == 0x1ac621f99a441c65a31439aa14c6d19e263253d9 ==============
+
+TON (Pool       ) :0
+TON (LPS of Pool) :0
+ Diff             : 0
+TOS (Pool       ) :0
+TOS (LPS of Pool) :0
+ Diff             : 0
+USDC (Pool       ) :0
+USDC (LPS of Pool) :0
+ Diff             : 0
+USDT (Pool       ) :0
+USDT (LPS of Pool) :0
+ Diff             : 0
+WETH (Pool       ) :265392597582457
+WETH (LPS of Pool) :265392597582454
+ Diff             : 3
+
+
+15 Pool  == 0x01341c55130b6d5512d51a24fc02ca9b36054ea4 ==============
+
+TON (Pool       ) :202025218393219854
+TON (LPS of Pool) :202025218393219852
+ Diff             : 2
+TOS (Pool       ) :0
+TOS (LPS of Pool) :0
+ Diff             : 0
+USDC (Pool       ) :0
+USDC (LPS of Pool) :0
+ Diff             : 0
+USDT (Pool       ) :0
+USDT (LPS of Pool) :0
+ Diff             : 0
+WETH (Pool       ) :1
+WETH (LPS of Pool) :0
+ Diff             : 1
+
+
+16 Pool  == 0x119acd8f49f5b629d29f2828c52dfa0c2274e0e8 ==============
+
+TON (Pool       ) :5636739445563100283
+TON (LPS of Pool) :5636739445563100279
+ Diff             : 4
+TOS (Pool       ) :651255585717105149
+TOS (LPS of Pool) :651255585717105142
+ Diff             : 7
+USDC (Pool       ) :0
+USDC (LPS of Pool) :0
+ Diff             : 0
+USDT (Pool       ) :0
+USDT (LPS of Pool) :0
+ Diff             : 0
+WETH (Pool       ) :0
+WETH (LPS of Pool) :0
+ Diff             : 0
+
+
+17 Pool  == 0x97c765583e28a5c1d453e8b3f5e6ab0737e75ad3 ==============
+
+TON (Pool       ) :4994382667362951680
+TON (LPS of Pool) :4994382667362951678
+ Diff             : 2
+TOS (Pool       ) :0
+TOS (LPS of Pool) :0
+ Diff             : 0
+USDC (Pool       ) :0
+USDC (LPS of Pool) :0
+ Diff             : 0
+USDT (Pool       ) :0
+USDT (LPS of Pool) :0
+ Diff             : 0
+WETH (Pool       ) :211383550158855115
+WETH (LPS of Pool) :211383550158855110
+ Diff             : 5
+
+
+18 Pool  == 0x3cddc27ac76848e45f74da37a36dd15058a3cb60 ==============
+
+TON (Pool       ) :0
+TON (LPS of Pool) :0
+ Diff             : 0
+TOS (Pool       ) :0
+TOS (LPS of Pool) :0
+ Diff             : 0
+USDC (Pool       ) :4000000
+USDC (LPS of Pool) :3999998
+ Diff             : 2
+USDT (Pool       ) :0
+USDT (LPS of Pool) :0
+ Diff             : 0
+WETH (Pool       ) :69666666658716004
+WETH (LPS of Pool) :69666666658716002
+ Diff             : 2
