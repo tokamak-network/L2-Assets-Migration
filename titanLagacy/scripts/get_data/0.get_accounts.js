@@ -62,10 +62,12 @@ async function getBalances(tokenSymbol, tokenAddress, blockNumber, accounts, rea
         balances[account] =  balance.toString()
     }
     // console.log(balances)
-    console.log("sum", ethers.utils.formatUnits(sum, 18) )
+    var decimals = 18
+    if(tokenSymbol == "USDC" || tokenSymbol == "USDT" ) decimals = 6
+    console.log("sum", ethers.utils.formatUnits(sum, decimals) )
     let totalSupply = await tokenContract.totalSupply()
-    console.log("totalSupply", ethers.utils.formatUnits( totalSupply, 18))
-    console.log("totalSupply.sub(sum)", ethers.utils.formatUnits(totalSupply.sub(sum), 18) )
+    console.log("totalSupply", ethers.utils.formatUnits( totalSupply, decimals))
+    console.log("totalSupply.sub(sum)", ethers.utils.formatUnits(totalSupply.sub(sum), decimals) )
 
     let outFile = "./data/balances/"+networkName+"_"+tokenSymbol+"_"+blockNumber+".json"
     await fs.writeFileSync(outFile, JSON.stringify(balances));
@@ -872,20 +874,27 @@ async function assetsContractsbyOwner() {
 }
 
 async function assetsAggregationByEOA() {
-  let readFile1 ='./data/accounts/1.'+hre.network.name+'_accounts_eoa.json'
-  let readFile2 ='./data/accounts/1.'+hre.network.name+'_asset_lps_owner.json'
-  let readFile3 ='./data/accounts/1.'+hre.network.name+'_contract_commons.json'
+  let readFile1 ='./data/accounts/'+hre.network.name+'_accounts_eoa.json'
+  let readFile2 ='./data/balances/3.'+hre.network.name+'_asset_lps_owner.json'
+  let readFile3 ='./data/balances/4.'+hre.network.name+'_asset_contracts_owner.json'
   var accounts, lps, commonContracts
   if (await fs.existsSync(readFile1)) accounts = JSON.parse(await fs.readFileSync(readFile1));
   if (await fs.existsSync(readFile2)) lps = JSON.parse(await fs.readFileSync(readFile2));
   if (await fs.existsSync(readFile3)) commonContracts = JSON.parse(await fs.readFileSync(readFile3));
-
 
   let balanceTON = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_TON_'+pauseBlock+'.json'));
   let balanceTOS = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_TOS_'+pauseBlock+'.json'));
   let balanceUSDC = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_USDC_'+pauseBlock+'.json'));
   let balanceUSDT = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_USDT_'+pauseBlock+'.json'));
   let balanceWETH = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_WETH_'+pauseBlock+'.json'));
+
+  let sums = {
+    TON: BigNumber.from("0"),
+    TOS: BigNumber.from("0"),
+    USDC: BigNumber.from("0"),
+    USDT: BigNumber.from("0"),
+    WETH: BigNumber.from("0"),
+  }
 
   var assetAggregation = {}
   var len = accounts.length
@@ -908,31 +917,43 @@ async function assetsAggregationByEOA() {
       WETH: lps[account]!=undefined? lps[account].WETH: "0",
     }
     var contract = {
-      TON: commonContracts[account]!=undefined? lps[account].TON: "0",
-      TOS: lps[account]!=undefined? lps[account].TOS: "0",
-      USDC: lps[account]!=undefined? lps[account].USDC: "0",
-      USDT: lps[account]!=undefined? lps[account].USDT: "0",
-      WETH: lps[account]!=undefined? lps[account].WETH: "0",
+      TON: commonContracts[account]!=undefined? commonContracts[account].TON: "0",
+      TOS: commonContracts[account]!=undefined? commonContracts[account].TOS: "0",
+      USDC: commonContracts[account]!=undefined? commonContracts[account].USDC: "0",
+      USDT: commonContracts[account]!=undefined? commonContracts[account].USDT: "0",
+      WETH: commonContracts[account]!=undefined? commonContracts[account].WETH: "0",
     }
     assetAggregation[account] = {
       total : {
-        TON: "0",
-        TOS: "0",
-        USDC: "0",
-        USDT: "0",
-        WETH: "0",
+        TON: BigNumber.from(balances.TON).add(BigNumber.from(uniswap.TON)).add(BigNumber.from(contract.TON)).toString(),
+        TOS: BigNumber.from(balances.TOS).add(BigNumber.from(uniswap.TOS)).add(BigNumber.from(contract.TOS)).toString(),
+        USDC: BigNumber.from(balances.USDC).add(BigNumber.from(uniswap.USDC)).add(BigNumber.from(contract.USDC)).toString(),
+        USDT: BigNumber.from(balances.USDT).add(BigNumber.from(uniswap.USDT)).add(BigNumber.from(contract.USDT)).toString(),
+        WETH: BigNumber.from(balances.WETH).add(BigNumber.from(uniswap.WETH)).add(BigNumber.from(contract.WETH)).toString(),
       },
       balances: balances,
       uniswap: uniswap,
-      contract: {
-        TON: "0",
-        TOS: "0",
-        USDC: "0",
-        USDT: "0",
-        WETH: "0",
-      }
+      contract: contract
     }
+
+    sums.TON = sums.TON.add(BigNumber.from(assetAggregation[account].total.TON))
+    sums.TOS = sums.TOS.add(BigNumber.from(assetAggregation[account].total.TOS))
+    sums.USDC = sums.USDC.add(BigNumber.from(assetAggregation[account].total.USDC))
+    sums.USDT = sums.USDT.add(BigNumber.from(assetAggregation[account].total.USDT))
+    sums.WETH = sums.WETH.add(BigNumber.from(assetAggregation[account].total.WETH))
   }
+
+  console.log("\n assetsAggregationByEOA: SUM"  )
+  console.log("TON", ethers.utils.formatUnits(sums.TON, 18) )
+  console.log("TOS", ethers.utils.formatUnits(sums.TOS, 18) )
+  console.log("USDC", ethers.utils.formatUnits(sums.USDC, 6) )
+  console.log("USDT", ethers.utils.formatUnits(sums.USDT, 6) )
+  console.log("WETH", ethers.utils.formatUnits(sums.WETH, 18) )
+
+  let outFile ='./data/balances/5.'+hre.network.name+'_asset_eoa.json'
+  await fs.writeFileSync(outFile, JSON.stringify(assetAggregation));
+
+  return {balances, uniswap, contract, assetAggregation, sums}
 
 }
 
@@ -981,10 +1002,10 @@ async function main() {
     // await assetsLpsbyOwner()
 
     // file: /balances/4.titansepolia_asset_contracts_owner.json
-    await assetsContractsbyOwner()
+    // await assetsContractsbyOwner()
 
     // file: /balances/4.titansepolia_assets_eoa.json
-    // await assetsAggregationByEOA()
+    await assetsAggregationByEOA()
 
 
   }
