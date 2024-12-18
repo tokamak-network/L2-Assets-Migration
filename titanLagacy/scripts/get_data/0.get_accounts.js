@@ -39,7 +39,7 @@ const startBlock = 0
 async function getBalances(tokenSymbol, tokenAddress, blockNumber, accounts, readFileBool) {
     const networkName = hre.network.name
     const curBlock = blockNumber
-    console.log("--- getBalances : ", tokenSymbol)
+    console.log("\n--- getBalances : ", tokenSymbol)
 
     if (readFileBool) {
       let readFile = "./data/accounts/"+hre.network.name+"_accounts.json"
@@ -943,7 +943,7 @@ async function assetsAggregationByEOA() {
     sums.WETH = sums.WETH.add(BigNumber.from(assetAggregation[account].total.WETH))
   }
 
-  console.log("\n assetsAggregationByEOA: SUM"  )
+  console.log("\n ---- assetsAggregationByEOA: SUM ---- \n"  )
   console.log("TON", ethers.utils.formatUnits(sums.TON, 18) )
   console.log("TOS", ethers.utils.formatUnits(sums.TOS, 18) )
   console.log("USDC", ethers.utils.formatUnits(sums.USDC, 6) )
@@ -973,14 +973,14 @@ async function main() {
     // await checkContracts()
 
     // 3. get the balances
-    // let fileMode = true
-    // await getBalances ("TON", TON, pauseBlock, null, fileMode)
-    // await getBalances ("TOS", TOS, pauseBlock, null, fileMode)
-    // await getBalances ("USDC", USDC, pauseBlock, null, fileMode)
-    // await getBalances ("USDT", USDT, pauseBlock, null, fileMode)
-    // await getBalances ("WETH", WETH, pauseBlock, null, fileMode)
-    // await getBalances ("DOC", DOC, pauseBlock, null, fileMode)
-    // await getBalances ("AURA", AURA, pauseBlock, null, fileMode)
+    let fileMode = true
+    await getBalances ("TON", TON, pauseBlock, null, fileMode)
+    await getBalances ("TOS", TOS, pauseBlock, null, fileMode)
+    await getBalances ("USDC", USDC, pauseBlock, null, fileMode)
+    await getBalances ("USDT", USDT, pauseBlock, null, fileMode)
+    await getBalances ("WETH", WETH, pauseBlock, null, fileMode)
+    await getBalances ("DOC", DOC, pauseBlock, null, fileMode)
+    await getBalances ("AURA", AURA, pauseBlock, null, fileMode)
 
     // 4. Details of contracts
     // await queryContracts()
@@ -1005,7 +1005,7 @@ async function main() {
     // await assetsContractsbyOwner()
 
     // file: /balances/4.titansepolia_assets_eoa.json
-    await assetsAggregationByEOA()
+    // await assetsAggregationByEOA()
 
 
   }
