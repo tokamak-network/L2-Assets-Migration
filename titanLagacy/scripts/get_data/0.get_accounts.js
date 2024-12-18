@@ -591,7 +591,6 @@ async function compareLpsAndPoolsBalance() {
   for (var i=0; i<keys.length; i++) {
     var key = keys[i];
     var obj = pools[key]
-     // console.log("key : " + key + ", value : " + pools[key])
 
     sums.TON = sums.TON.add(BigNumber.from(obj.TON))
     sums.TOS = sums.TOS.add(BigNumber.from(obj.TOS))
@@ -599,16 +598,6 @@ async function compareLpsAndPoolsBalance() {
     sums.USDT = sums.USDT.add(BigNumber.from(obj.USDT))
     sums.WETH = sums.WETH.add(BigNumber.from(obj.WETH))
   }
-
-  // let poolSum = {
-  //   TON: sums.TON.toString(),
-  //   TOS: sums.TOS.toString(),
-  //   USDC: sums.USDC.toString(),
-  //   USDT: sums.USDT.toString(),
-  //   WETH: sums.WETH.toString(),
-  // }
-  // console.log("pools.length", keys.length)
-  // console.log("poolSum", poolSum)
 
   //=====
   var contents = ""
@@ -718,7 +707,6 @@ async function compareLpsAndPoolsBalance() {
   contents2 += "WETH (Sum of LPS  ):" + lpSum.WETH.toString()+ "\n"
   contents2 += " Diff             : " + sums.WETH.sub(lpSum.WETH).toString()+ "\n"
 
-
   //======================
 
   let outFile2 ='./data/balances/2.'+hre.network.name+'_compare_pool_lps.txt'
@@ -727,6 +715,82 @@ async function compareLpsAndPoolsBalance() {
 
   return {sums, lpSum}
 }
+
+
+async function assetsLpsbyOwner() {
+  let readFile1 ='./data/accounts/1.'+hre.network.name+'_contract_lp_tokens.json'
+  var lps
+  if (await fs.existsSync(readFile1)) lps = JSON.parse(await fs.readFileSync(readFile1));
+
+  var ownerAssetsOfLps = {}
+  let sums = {
+    TON: BigNumber.from("0"),
+    TOS: BigNumber.from("0"),
+    USDC: BigNumber.from("0"),
+    USDT: BigNumber.from("0"),
+    WETH: BigNumber.from("0"),
+  }
+
+  var keyPooOfLp = Object.keys(lps);
+  for (var i=0; i < keyPooOfLp.length; i++) {
+    var key = keyPooOfLp[i];
+    var obj = lps[key]
+
+    for (var j=0; j < obj.length ; j++) {
+      var a = obj[j].owner
+      if (ownerAssetsOfLps[a] == undefined)
+        ownerAssetsOfLps[a] = {
+          TON: BigNumber.from("0"),
+          TOS: BigNumber.from("0"),
+          USDC: BigNumber.from("0"),
+          USDT: BigNumber.from("0"),
+          WETH: BigNumber.from("0")
+        }
+      ownerAssetsOfLps[a].TON = ownerAssetsOfLps[a].TON.add(BigNumber.from(obj[j].TON))
+      ownerAssetsOfLps[a].TOS = ownerAssetsOfLps[a].TOS.add(BigNumber.from(obj[j].TOS))
+      ownerAssetsOfLps[a].USDC = ownerAssetsOfLps[a].USDC.add(BigNumber.from(obj[j].USDC))
+      ownerAssetsOfLps[a].USDT = ownerAssetsOfLps[a].USDT.add(BigNumber.from(obj[j].USDT))
+      ownerAssetsOfLps[a].WETH = ownerAssetsOfLps[a].WETH.add(BigNumber.from(obj[j].WETH))
+
+    }
+  }
+  // console.log('===========')
+  // console.log(ownerAssetsOfLps)
+
+  var accountAmount = {}
+  var keys = Object.keys(ownerAssetsOfLps);
+  for (var k=0; k < keys.length; k++) {
+    var key = keys[k];
+    // console.log(key)
+    sums.TON = sums.TON.add(ownerAssetsOfLps[key].TON)
+    sums.TOS = sums.TOS.add(ownerAssetsOfLps[key].TOS)
+    sums.USDC = sums.USDC.add(ownerAssetsOfLps[key].USDC)
+    sums.USDT = sums.USDT.add(ownerAssetsOfLps[key].USDT)
+    sums.WETH = sums.WETH.add(ownerAssetsOfLps[key].WETH)
+
+    accountAmount[key] = {
+      TON: ownerAssetsOfLps[key].TON.toString(),
+      TOS: ownerAssetsOfLps[key].TOS.toString(),
+      USDC: ownerAssetsOfLps[key].USDC.toString(),
+      USDT: ownerAssetsOfLps[key].USDT.toString(),
+      WETH: ownerAssetsOfLps[key].WETH.toString()
+    }
+  }
+
+  accountAmount["sum"] = {
+    TON: sums.TON.toString(),
+    TOS: sums.TOS.toString(),
+    USDC: sums.USDC.toString(),
+    USDT: sums.USDT.toString(),
+    WETH: sums.WETH.toString()
+  }
+
+  let outFile ='./data/balances/3.'+hre.network.name+'_asset_lps_owner.json'
+  await fs.writeFileSync(outFile, JSON.stringify(accountAmount));
+
+  return {ownerAssetsOfLps, sums}
+}
+
 
 async function main() {
     // await queryAccounts()
@@ -765,7 +829,13 @@ async function main() {
     // file: 3.titansepolia_contract_commons.json
     // await divideUniswapV3PoolContracts()
 
-    await compareLpsAndPoolsBalance()
+    // file: /balances/1.titansepolia_sum_of_lps_by_pool.txt
+    // file: /balances/2.titansepolia_compare_pool_lps.txt
+    // await compareLpsAndPoolsBalance()
+
+    // file: /balances/3.titansepolia_asset_lps_owner.json
+    await assetsLpsbyOwner()
+
 
     // 7. gathering the EOA's balances
     // await gatheringEOA()
