@@ -792,6 +792,150 @@ async function assetsLpsbyOwner() {
 }
 
 
+async function assetsContractsbyOwner() {
+  let readFile1 ='./data/accounts/3.'+hre.network.name+'_contract_commons.json'
+  var contracts
+  if (await fs.existsSync(readFile1)) contracts = JSON.parse(await fs.readFileSync(readFile1));
+
+  var ownerAssetsOfContracts = {}
+  let sums = {
+    TON: BigNumber.from("0"),
+    TOS: BigNumber.from("0"),
+    USDC: BigNumber.from("0"),
+    USDT: BigNumber.from("0"),
+    WETH: BigNumber.from("0"),
+  }
+
+  var keyPooOfContracts = Object.keys(contracts);
+  for (var i=0; i < keyPooOfContracts.length; i++) {
+    var key = keyPooOfContracts[i];
+    var obj = contracts[key]
+
+    var a = ""
+    if (obj.owner != "") a = obj.owner
+    else if(obj.admin != "") a = obj.admin
+    else if(obj.deployer != "") a = obj.deployer
+
+    if (a == "") {
+      console.log("Error! no receiving account : ",  key)
+    } else {
+
+      if (ownerAssetsOfContracts[a] == undefined) {
+        ownerAssetsOfContracts[a] = {
+          TON: BigNumber.from("0"),
+          TOS: BigNumber.from("0"),
+          USDC: BigNumber.from("0"),
+          USDT: BigNumber.from("0"),
+          WETH: BigNumber.from("0")
+        }
+      }
+      ownerAssetsOfContracts[a].TON = ownerAssetsOfContracts[a].TON.add(BigNumber.from(obj.TON))
+      ownerAssetsOfContracts[a].TOS = ownerAssetsOfContracts[a].TOS.add(BigNumber.from(obj.TOS))
+      ownerAssetsOfContracts[a].USDC = ownerAssetsOfContracts[a].USDC.add(BigNumber.from(obj.USDC))
+      ownerAssetsOfContracts[a].USDT = ownerAssetsOfContracts[a].USDT.add(BigNumber.from(obj.USDT))
+      ownerAssetsOfContracts[a].WETH = ownerAssetsOfContracts[a].WETH.add(BigNumber.from(obj.WETH))
+
+    }
+  }
+
+  var accountAmount = {}
+  var keys = Object.keys(ownerAssetsOfContracts);
+  for (var k=0; k < keys.length; k++) {
+    var key = keys[k];
+    sums.TON = sums.TON.add(ownerAssetsOfContracts[key].TON)
+    sums.TOS = sums.TOS.add(ownerAssetsOfContracts[key].TOS)
+    sums.USDC = sums.USDC.add(ownerAssetsOfContracts[key].USDC)
+    sums.USDT = sums.USDT.add(ownerAssetsOfContracts[key].USDT)
+    sums.WETH = sums.WETH.add(ownerAssetsOfContracts[key].WETH)
+
+    accountAmount[key] = {
+      TON: ownerAssetsOfContracts[key].TON.toString(),
+      TOS: ownerAssetsOfContracts[key].TOS.toString(),
+      USDC: ownerAssetsOfContracts[key].USDC.toString(),
+      USDT: ownerAssetsOfContracts[key].USDT.toString(),
+      WETH: ownerAssetsOfContracts[key].WETH.toString()
+    }
+  }
+
+  accountAmount["sum"] = {
+    TON: sums.TON.toString(),
+    TOS: sums.TOS.toString(),
+    USDC: sums.USDC.toString(),
+    USDT: sums.USDT.toString(),
+    WETH: sums.WETH.toString()
+  }
+
+  let outFile ='./data/balances/4.'+hre.network.name+'_asset_contracts_owner.json'
+  await fs.writeFileSync(outFile, JSON.stringify(accountAmount));
+
+  return {ownerAssetsOfContracts, accountAmount}
+}
+
+async function assetsAggregationByEOA() {
+  let readFile1 ='./data/accounts/1.'+hre.network.name+'_accounts_eoa.json'
+  let readFile2 ='./data/accounts/1.'+hre.network.name+'_asset_lps_owner.json'
+  let readFile3 ='./data/accounts/1.'+hre.network.name+'_contract_commons.json'
+  var accounts, lps, commonContracts
+  if (await fs.existsSync(readFile1)) accounts = JSON.parse(await fs.readFileSync(readFile1));
+  if (await fs.existsSync(readFile2)) lps = JSON.parse(await fs.readFileSync(readFile2));
+  if (await fs.existsSync(readFile3)) commonContracts = JSON.parse(await fs.readFileSync(readFile3));
+
+
+  let balanceTON = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_TON_'+pauseBlock+'.json'));
+  let balanceTOS = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_TOS_'+pauseBlock+'.json'));
+  let balanceUSDC = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_USDC_'+pauseBlock+'.json'));
+  let balanceUSDT = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_USDT_'+pauseBlock+'.json'));
+  let balanceWETH = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_WETH_'+pauseBlock+'.json'));
+
+  var assetAggregation = {}
+  var len = accounts.length
+
+  for (var i = 0; i< len; i++) {
+    var account = accounts[i]
+    var balances = {
+      TON: balanceTON[account]!=undefined? balanceTON[account]: "0",
+      TOS: balanceTOS[account]!=undefined? balanceTOS[account]: "0",
+      USDC: balanceUSDC[account]!=undefined? balanceUSDC[account]: "0",
+      USDT: balanceUSDT[account]!=undefined? balanceUSDT[account]: "0",
+      WETH: balanceWETH[account]!=undefined? balanceWETH[account]: "0"
+    }
+
+    var uniswap = {
+      TON: lps[account]!=undefined? lps[account].TON: "0",
+      TOS: lps[account]!=undefined? lps[account].TOS: "0",
+      USDC: lps[account]!=undefined? lps[account].USDC: "0",
+      USDT: lps[account]!=undefined? lps[account].USDT: "0",
+      WETH: lps[account]!=undefined? lps[account].WETH: "0",
+    }
+    var contract = {
+      TON: commonContracts[account]!=undefined? lps[account].TON: "0",
+      TOS: lps[account]!=undefined? lps[account].TOS: "0",
+      USDC: lps[account]!=undefined? lps[account].USDC: "0",
+      USDT: lps[account]!=undefined? lps[account].USDT: "0",
+      WETH: lps[account]!=undefined? lps[account].WETH: "0",
+    }
+    assetAggregation[account] = {
+      total : {
+        TON: "0",
+        TOS: "0",
+        USDC: "0",
+        USDT: "0",
+        WETH: "0",
+      },
+      balances: balances,
+      uniswap: uniswap,
+      contract: {
+        TON: "0",
+        TOS: "0",
+        USDC: "0",
+        USDT: "0",
+        WETH: "0",
+      }
+    }
+  }
+
+}
+
 async function main() {
     // await queryAccounts()
 
@@ -834,11 +978,13 @@ async function main() {
     // await compareLpsAndPoolsBalance()
 
     // file: /balances/3.titansepolia_asset_lps_owner.json
-    await assetsLpsbyOwner()
+    // await assetsLpsbyOwner()
 
+    // file: /balances/4.titansepolia_asset_contracts_owner.json
+    await assetsContractsbyOwner()
 
-    // 7. gathering the EOA's balances
-    // await gatheringEOA()
+    // file: /balances/4.titansepolia_assets_eoa.json
+    // await assetsAggregationByEOA()
 
 
   }
