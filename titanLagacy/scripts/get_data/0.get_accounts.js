@@ -1355,6 +1355,82 @@ const decodeMessage = (message, target) => {
   return details
 }
 
+async function totalPendingAsset() {
+
+  let readFile1 ='./data/withdrawals/2.'+hre.network.name+"_l1_cross_pending_relayMessage.json"
+  var pendingTransactions
+  if (await fs.existsSync(readFile1)) pendingTransactions = JSON.parse(await fs.readFileSync(readFile1));
+
+  var sums ={
+    TON: BigNumber.from("0"),
+    TOS: BigNumber.from("0"),
+    USDC: BigNumber.from("0"),
+    USDT: BigNumber.from("0"),
+    ETH: BigNumber.from("0"),
+  }
+  var keyHash = Object.keys(pendingTransactions);
+  var L1_TON = L1TON.toLowerCase()
+  var L1_TOS = L1TOS.toLowerCase()
+  var L1_USDC = L1USDC.toLowerCase()
+  var L1_USDT = L1USDT.toLowerCase()
+
+  for (var i=0; i < keyHash.length; i++) {
+
+      var key = keyHash[i]
+      var obj = pendingTransactions[key]
+
+      if (obj != undefined && obj.decode != undefined) {
+        var deposit = obj.decode
+        if (deposit.targetContract == "L1StandardBridge") {
+          if (deposit.functionName == "finalizeETHWithdrawal") {
+            sums.ETH = sums.ETH.add(BigNumber.from(deposit.decodedArgs._amount))
+
+          } else if(deposit.functionName == "finalizeERC20Withdrawal") {
+
+            let _l1Token = deposit.decodedArgs._l1Token.toLowerCase()
+            switch(_l1Token) {
+              case L1_TON:
+                sums.TON = sums.TON.add(BigNumber.from(deposit.decodedArgs._amount))
+                break;
+              case L1_TOS:
+                sums.TOS = sums.TOS.add(BigNumber.from(deposit.decodedArgs._amount))
+                break;
+              case L1_USDC:
+                sums.USDC = sums.USDC.add(BigNumber.from(deposit.decodedArgs._amount))
+                break;
+              case L1_USDT:
+                sums.USDT = sums.USDT.add(BigNumber.from(deposit.decodedArgs._amount))
+                break;
+              default:
+                console.log("Unknown Asset ", _l1Token)
+            }
+          }
+        }
+      }
+    }
+
+    console.log("\n ---- totalPendingAsset  ---- \n"  )
+    console.log("TON", ethers.utils.formatUnits(sums.TON, 18) )
+    console.log("TOS", ethers.utils.formatUnits(sums.TOS, 18) )
+    console.log("USDC", ethers.utils.formatUnits(sums.USDC, 6) )
+    console.log("USDT", ethers.utils.formatUnits(sums.USDT, 6) )
+    console.log("ETH", ethers.utils.formatUnits(sums.ETH, 18) )
+
+    let totalPendingAmount = {
+      TON: sums.TON.toString(),
+      TOS: sums.TOS.toString(),
+      USDC: sums.USDC.toString(),
+      USDT: sums.USDT.toString(),
+      ETH: sums.ETH.toString()
+    }
+
+    let outFile ='./data/balances/6.'+hre.network.name+'_total_pending_asset.json'
+    await fs.writeFileSync(outFile, JSON.stringify(totalPendingAmount));
+
+    return totalPendingAmount
+}
+
+
 async function main() {
     // await queryAccounts()
 
@@ -1417,9 +1493,9 @@ async function main() {
     // await getSendMessageTxs(SEPOLIA_L2_CONTRACT_ADDRESSES.L2CrossDomainMessenger)
 
     // file: /withdrawals/1.titansepolia_l1_cross_check_relayMessage_all.json
-    // file: /withdrawals/2.titansepolia_l1_cross_false_relayMessage.json
-    await getPendingWithdrawals()
-
+    // file: /withdrawals/2.titansepolia_l1_cross_pending_relayMessage.json
+    // await getPendingWithdrawals()
+    await totalPendingAsset()
   }
 
   main()
