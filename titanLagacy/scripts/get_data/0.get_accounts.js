@@ -4,6 +4,14 @@ const fs = require('fs');
 const axios  = require('axios');
 const { BigNumber } = require("ethers")
 
+// const {
+//   toBN,
+//   toWei,
+//   fromWei,
+//   keccak256,
+//   soliditySha3,
+//   solidityKeccak256,
+// } = require("web3-utils");
 const { BatchCrossChainMessenger, MessageStatus, OEL2ContractsLike, OEContractsLike } = require("@tokamak-network/titan-sdk")
 
 /**
@@ -1127,12 +1135,12 @@ async function getBalanceL1Bridge() {
     USDC: BigNumber.from("0"),
     USDT: BigNumber.from("0"),
     ETH: BigNumber.from("0"),
-}
+  }
 
-depositsOfL1Bridge.TON = await bridge.deposits(L1TON, TON)
-depositsOfL1Bridge.TOS = await bridge.deposits(L1TOS, TOS)
-depositsOfL1Bridge.USDC = await bridge.deposits(L1USDC, USDC)
-depositsOfL1Bridge.USDT = await bridge.deposits(L1USDT, USDT)
+  depositsOfL1Bridge.TON = await bridge.deposits(L1TON, TON)
+  depositsOfL1Bridge.TOS = await bridge.deposits(L1TOS, TOS)
+  depositsOfL1Bridge.USDC = await bridge.deposits(L1USDC, USDC)
+  depositsOfL1Bridge.USDT = await bridge.deposits(L1USDT, USDT)
 
   console.log('\n==================================')
   console.log('=== deposits Of L1 Bridge ==========')
@@ -1149,40 +1157,69 @@ depositsOfL1Bridge.USDT = await bridge.deposits(L1USDT, USDT)
 }
 
 async function getPendingWithdrawals() {
-  let readFile1 ='./data/transactions/'+hre.network.name+"_l2_send_message_"+pauseBlock+".json"
-  var transactions
-  if (await fs.existsSync(readFile1)) transactions = JSON.parse(await fs.readFileSync(readFile1));
+
+  let readFile2 ='./data/transactions/'+hre.network.name+"_l2_send_message_data_"+pauseBlock+".json"
+  var events
+  if (await fs.existsSync(readFile2)) events = JSON.parse(await fs.readFileSync(readFile2));
+
+  var resultSuccessfulMessages = {}
+  var falseSuccessfulMessages = {}
+
+  const L1CrossDomainMessengerAbi = require("../abi/L1CrossDomainMessenger.json");
+  const L2CrossDomainMessengerAbi = require("../abi/L2CrossDomainMessenger.json");
 
   const l2Provider = new ethers.providers.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L2);
-  const l2wallet = new ethers.Wallet(addHexPrefix(process.env.PERSONAL_ACCOUNT) || "", l2Provider);
   const l1Provider = new ethers.providers.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L1);
-  const l1wallet = new ethers.Wallet(addHexPrefix(process.env.PERSONAL_ACCOUNT) || "", l1Provider);
 
-  let crossDomainMessenger = new BatchCrossChainMessenger({
-    l1SignerOrProvider: l1wallet,
-    l2SignerOrProvider: l2wallet,
-    l1ChainId: 11155111,
-    l2ChainId: 55007,
-    contracts: SEPOLIA_CONTRACTS,
-    bedrock: false
-  })
+  const crossDomainMessengerL1 = new ethers.Contract(SEPOLIA_CONTRACTS.l1.L1CrossDomainMessenger, L1CrossDomainMessengerAbi.abi, l1Provider);
 
-  // 또는 L2CrossDomainMessenger `SentMessage` events
-  for (const tx of transactions) {
-    if (typeof tx === 'string') {
-      const state = await crossDomainMessenger.getMessageStatus(tx);
-      console.log('state',state)
-      const pending = await crossDomainMessenger.GetPendingWithdrawals(tx);
-      console.log("pending", pending)
+  let ifaceCrossDomainMessengerL2 = new ethers.utils.Interface(L2CrossDomainMessengerAbi.abi);
 
-    } else if (typeof tx === 'object') {
-      const state = await crossDomainMessenger.getMessageStatus(tx.txHash);
-      console.log('state',state)
-      const pending = await crossDomainMessenger.GetPendingWithdrawals(tx.txHash);
-      console.log("pending", pending)
+  var keyHash = Object.keys(events);
 
-    }
+  for (var i=0; i < keyHash.length; i++) {
+
+      var key = keyHash[i]
+      var obj = events[key]
+
+      var xDomainCalldata = ifaceCrossDomainMessengerL2.encodeFunctionData(
+        "relayMessage",
+        [
+          obj.target,
+          obj.sender,
+          obj.message,
+          BigNumber.from(obj.messageNonce)
+        ]
+      )
+
+      var xDomainCalldataHash = ethers.utils.keccak256(xDomainCalldata);
+      let successfulMessages = await crossDomainMessengerL1.successfulMessages(xDomainCalldataHash)
+
+      resultSuccessfulMessages[key] = {
+        target: obj.target,
+        sender: obj.sender,
+        message: obj.message,
+        messageNonce: obj.messageNonce,
+        xDomainCalldataHash: xDomainCalldataHash,
+        decode: decodeMessage(obj.message, obj.target),
+        successfulMessages: successfulMessages
+      }
+
+      if(!successfulMessages) {
+        falseSuccessfulMessages[key] = resultSuccessfulMessages[key]
+        // console.log(key, falseSuccessfulMessages[key])
+      }
+      // console.log(i, key, resultSuccessfulMessages[key])
   }
+
+  let outFile1 ='./data/withdrawals/1.'+hre.network.name+'_l1_cross_check_relayMessage_all.json'
+  await fs.writeFileSync(outFile1, JSON.stringify(resultSuccessfulMessages));
+
+  let outFile2 ='./data/withdrawals/2.'+hre.network.name+'_l1_cross_false_relayMessage.json'
+  await fs.writeFileSync(outFile2, JSON.stringify(falseSuccessfulMessages));
+
+  return {falseSuccessfulMessages, resultSuccessfulMessages}
+
 }
 
 async function getSendMessageTxs(contractAddress) {
@@ -1270,6 +1307,48 @@ const addHexPrefix = (privateKey) => {
   return privateKey
 }
 
+const decodeMessage = (message, target) => {
+
+  const L1StandardBridgeAbi = require("../abi/L1StandardBridge.json")
+  let ifaceL1StandardBridge = new ethers.utils.Interface(L1StandardBridgeAbi.abi);
+  const finalizeETHWithdrawalId = ethers.utils.id("finalizeETHWithdrawal(address,address,uint256,bytes)").substring(0, 10).toLowerCase()
+  const finalizeERC20WithdrawalId = ethers.utils.id("finalizeERC20Withdrawal(address,address,address,address,uint256,bytes)").substring(0, 10).toLowerCase()
+
+  let details = {
+    targetContract : '',
+    functionName: '',
+    decodedArgs: ''
+  }
+
+  if (target.toLowerCase() == SEPOLIA_CONTRACTS.l1.L1StandardBridge.toLowerCase()){
+    details.targetContract = 'L1StandardBridge'
+    let decodedArgs = ifaceL1StandardBridge.decodeFunctionData(message.slice(0,10), message)
+
+    if (message.substring(0, 10).toLowerCase() == finalizeETHWithdrawalId) {
+       details.functionName = 'finalizeETHWithdrawal'
+       details.decodedArgs = {
+        _from: decodedArgs._from,
+        _to: decodedArgs._to,
+        _amount: decodedArgs._amount.toString(),
+        _data: decodedArgs._data
+       }
+    } else if(message.substring(0, 10).toLowerCase() == finalizeERC20WithdrawalId) {
+      details.functionName = 'finalizeERC20Withdrawal'
+      details.decodedArgs = {
+        _l1Token: decodedArgs._l1Token,
+        _l2Token: decodedArgs._l2Token,
+        _from: decodedArgs._from,
+        _to: decodedArgs._to,
+        _amount: decodedArgs._amount.toString(),
+        _data: decodedArgs._data
+       }
+
+    } else {
+      details.decodedArgs = decodedArgs
+    }
+  }
+  return details
+}
 
 async function main() {
     // await queryAccounts()
@@ -1329,10 +1408,12 @@ async function main() {
 
     //====== Peding Withdrawals
     // file: /transactions/titansepolia_l2_send_message_17923.json
-    // file: /transactions/titansepolia_l2_send_message_17923.json
-    await getSendMessageTxs(SEPOLIA_L2_CONTRACT_ADDRESSES.L2CrossDomainMessenger)
+    // file: /transactions/titansepolia_l2_send_message_data_17923.json
+    // await getSendMessageTxs(SEPOLIA_L2_CONTRACT_ADDRESSES.L2CrossDomainMessenger)
 
-    // await getPendingWithdrawals()
+    // file: /withdrawals/1.titansepolia_l1_cross_check_relayMessage_all.json
+    // file: /withdrawals/2.titansepolia_l1_cross_false_relayMessage.json
+    await getPendingWithdrawals()
 
   }
 
