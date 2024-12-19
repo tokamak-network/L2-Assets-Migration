@@ -3,6 +3,9 @@ const { ethers } = require("hardhat");
 const fs = require('fs');
 const axios  = require('axios');
 const { BigNumber } = require("ethers")
+
+const { BatchCrossChainMessenger, MessageStatus, OEL2ContractsLike, OEContractsLike } = require("@tokamak-network/titan-sdk")
+
 /**
  * ETH, TON, TOS, DOC, AURA, USDC, USDT 를 사용한 계정 주소를 집계합니다.
  */
@@ -31,6 +34,38 @@ const L1AURA = "0xf8474c2a90b9035e0b431e1789fe76f54d4ce708"
 const L1ETH = ""
 const pauseBlock = 17923 //17923
 const startBlock = 0
+
+
+const SEPOLIA_L2_CONTRACT_ADDRESSES = {
+  L2CrossDomainMessenger: '0x4200000000000000000000000000000000000007',
+  L2ToL1MessagePasser: '0x4200000000000000000000000000000000000000',
+  L2StandardBridge: '0x4200000000000000000000000000000000000010',
+  OVM_L1BlockNumber: '0x4200000000000000000000000000000000000013',
+  OVM_L2ToL1MessagePasser: '0x4200000000000000000000000000000000000000',
+  OVM_DeployerWhitelist: '0x4200000000000000000000000000000000000002',
+  OVM_ETH: '0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000',
+  OVM_GasPriceOracle: '0x420000000000000000000000000000000000000F',
+  OVM_SequencerFeeVault: '0x4200000000000000000000000000000000000011',
+  WETH: '0x4200000000000000000000000000000000000006',
+  BedrockMessagePasser: '0x4200000000000000000000000000000000000000',
+}
+
+const SEPOLIA_CONTRACTS = {
+  l1: {
+    AddressManager: '0x79a53E72e9CcfAe63B0fB9A4edb66C7563d74Dc3',
+    L1CrossDomainMessenger:
+      '0xc123047238e8f4bFB7Ad849cA4364b721B5ABD8A',
+    L1StandardBridge: '0x1F032B938125f9bE411801fb127785430E7b3971',
+    StateCommitmentChain:
+      '0x89b6164E9e09f023D26A9A14fcC09100C843d59a',
+    CanonicalTransactionChain:
+      '0xca60b60be6eeB69A390D6f906065130476F70C4d',
+    BondManager: '0x6650CdF583a21a2B10aC4b7986881d4527Dd5C7F',
+    OptimismPortal: '0x0000000000000000000000000000000000000000',
+    L2OutputOracle: '0x0000000000000000000000000000000000000000',
+  },
+  l2: SEPOLIA_L2_CONTRACT_ADDRESSES,
+}
 
 // // titan
 // const baseUrl = "https://explorer.titan.tokamak.network/api?"
@@ -1113,6 +1148,113 @@ depositsOfL1Bridge.USDT = await bridge.deposits(L1USDT, USDT)
 
 }
 
+
+async function getPendingWithdrawals() {
+
+  let res = await getSendMessageTxs(SEPOLIA_L2_CONTRACT_ADDRESSES.L2CrossDomainMessenger)
+
+  console.log(res)
+
+  // const l2Provider = new ethers.providers.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L2);
+  // const l2wallet = new ethers.Wallet(addHexPrefix(process.env.PERSONAL_ACCOUNT) || "", l2Provider);
+  // const l1Provider = new ethers.providers.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L1);
+  // const l1wallet = new ethers.Wallet(addHexPrefix(process.env.PERSONAL_ACCOUNT) || "", l1Provider);
+
+  // let crossDomainMessenger = new BatchCrossChainMessenger({
+  //   l1SignerOrProvider: l1wallet,
+  //   l2SignerOrProvider: l2wallet,
+  //   l1ChainId: 11155111,
+  //   l2ChainId: 55007,
+  //   contracts: SEPOLIA_CONTRACTS,
+  //   bedrock: false
+  // })
+
+  // 또는 L2CrossDomainMessenger `SentMessage` events
+  // logs, sub, err := _L1CrossDomainMessenger.contract.FilterLogs(opts, "SentMessage", targetRule)
+  // 트랜재션을 기록한다. 이 트랜잭션이 L1에서 어떻게 되었는지 확인해야 한다.
+
+}
+
+async function checkPendingWithdrawals(crossDomainMessenger, txHashes) {
+  for (const tx of txHashes) {
+    if (typeof tx === 'string') {
+      const state = await crossDomainMessenger.getMessageStatus(tx);
+      console.log('state',state)
+      const pending = await crossDomainMessenger.GetPendingWithdrawals(tx);
+      console.log("pending", pending)
+
+    } else if (typeof tx === 'object') {
+      const state = await crossDomainMessenger.getMessageStatus(tx.txHash);
+      console.log('state',state)
+      const pending = await crossDomainMessenger.GetPendingWithdrawals(tx.txHash);
+      console.log("pending", pending)
+
+    }
+  }
+
+}
+
+
+async function getSendMessageTxs(contractAddress) {
+
+  const networkName = hre.network.name
+  let block = await ethers.provider.getBlock('latest');
+  let start = 0;
+  // let end = block.number;
+  let end = pauseBlock
+  console.log('end', end)
+  let blockNumber = pauseBlock
+  const abi = [ "event SentMessage(address indexed target, address sender, bytes message, uint256 messageNonce, uint256 gasLimit)" ];
+  const iface = new ethers.utils.Interface(abi);
+  const functionId = ethers.utils.id("SentMessage(address,address,bytes,uint256,uint256)")
+
+  // let unit = 1000000
+  let unit = 100
+  let boolWhile = false
+  let filter = null;
+
+  let transactions = []
+
+  while (!boolWhile) {
+    let toBlock = start + unit;
+    if(toBlock > end)  {
+      toBlock = end;
+      boolWhile = true;
+    }
+
+    filter = {
+      address: contractAddress,
+      fromBlock: start,
+      toBlock: toBlock,
+      topics: [functionId]
+    };
+    // console.log('filter', filter )
+
+    const txs = await ethers.provider.getLogs(filter);
+
+    for (const tx of txs) {
+      const { transactionHash } = tx;
+      console.log('transactionHash', transactionHash )
+      transactions.push(transactionHash)
+    }
+    start = toBlock;
+    console.log('start --- ', start )
+  }
+
+  let outFile = "./data/transactions/"+networkName+"_l2_send_message_"+blockNumber+".json"
+  await fs.writeFileSync(outFile, JSON.stringify(transactions));
+
+  return {outFile, transactions};
+}
+
+const addHexPrefix = (privateKey) => {
+  if (privateKey.substring(0, 2) !== "0x") {
+    privateKey = "0x" + privateKey
+  }
+  return privateKey
+}
+
+
 async function main() {
     // await queryAccounts()
 
@@ -1168,6 +1310,11 @@ async function main() {
 
     // file: /balances/5.titansepolia_balance_l1_bridge.json
     // await getBalanceL1Bridge()
+
+
+
+    // pending
+    await getPendingWithdrawals()
 
   }
 
