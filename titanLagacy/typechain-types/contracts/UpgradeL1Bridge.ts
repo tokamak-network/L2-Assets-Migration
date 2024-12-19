@@ -57,6 +57,7 @@ export declare namespace UpgradeL1Bridge {
 export interface UpgradeL1BridgeInterface extends utils.Interface {
   functions: {
     "active()": FunctionFragment;
+    "closer()": FunctionFragment;
     "depositERC20(address,address,uint256,uint32,bytes)": FunctionFragment;
     "depositERC20To(address,address,address,uint256,uint32,bytes)": FunctionFragment;
     "depositETH(uint32,bytes)": FunctionFragment;
@@ -77,11 +78,13 @@ export interface UpgradeL1BridgeInterface extends utils.Interface {
     "messenger()": FunctionFragment;
     "position(address)": FunctionFragment;
     "positions(uint256)": FunctionFragment;
+    "setCloser(address)": FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
       | "active"
+      | "closer"
       | "depositERC20"
       | "depositERC20To"
       | "depositETH"
@@ -102,9 +105,11 @@ export interface UpgradeL1BridgeInterface extends utils.Interface {
       | "messenger"
       | "position"
       | "positions"
+      | "setCloser"
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: "active", values?: undefined): string;
+  encodeFunctionData(functionFragment: "closer", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "depositERC20",
     values: [
@@ -213,8 +218,13 @@ export interface UpgradeL1BridgeInterface extends utils.Interface {
     functionFragment: "positions",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
+  encodeFunctionData(
+    functionFragment: "setCloser",
+    values: [PromiseOrValue<string>]
+  ): string;
 
   decodeFunctionResult(functionFragment: "active", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "closer", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "depositERC20",
     data: BytesLike
@@ -271,6 +281,7 @@ export interface UpgradeL1BridgeInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "messenger", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "position", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "positions", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "setCloser", data: BytesLike): Result;
 
   events: {
     "ERC20DepositInitiated(address,address,address,address,uint256,bytes)": EventFragment;
@@ -389,6 +400,8 @@ export interface UpgradeL1Bridge extends BaseContract {
   functions: {
     active(overrides?: CallOverrides): Promise<[boolean]>;
 
+    closer(overrides?: CallOverrides): Promise<[string]>;
+
     depositERC20(
       _l1Token: PromiseOrValue<string>,
       _l2Token: PromiseOrValue<string>,
@@ -483,7 +496,7 @@ export interface UpgradeL1Bridge extends BaseContract {
     ): Promise<[string]>;
 
     getForcePosition(
-      _key: PromiseOrValue<string>,
+      _hash: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[string]>;
 
@@ -506,9 +519,16 @@ export interface UpgradeL1Bridge extends BaseContract {
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[string]>;
+
+    setCloser(
+      _closer: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
   };
 
   active(overrides?: CallOverrides): Promise<boolean>;
+
+  closer(overrides?: CallOverrides): Promise<string>;
 
   depositERC20(
     _l1Token: PromiseOrValue<string>,
@@ -604,7 +624,7 @@ export interface UpgradeL1Bridge extends BaseContract {
   ): Promise<string>;
 
   getForcePosition(
-    _key: PromiseOrValue<string>,
+    _hash: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<string>;
 
@@ -628,8 +648,15 @@ export interface UpgradeL1Bridge extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
+  setCloser(
+    _closer: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   callStatic: {
     active(overrides?: CallOverrides): Promise<boolean>;
+
+    closer(overrides?: CallOverrides): Promise<string>;
 
     depositERC20(
       _l1Token: PromiseOrValue<string>,
@@ -723,7 +750,7 @@ export interface UpgradeL1Bridge extends BaseContract {
     ): Promise<string>;
 
     getForcePosition(
-      _key: PromiseOrValue<string>,
+      _hash: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<string>;
 
@@ -746,6 +773,11 @@ export interface UpgradeL1Bridge extends BaseContract {
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<string>;
+
+    setCloser(
+      _closer: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
   };
 
   filters: {
@@ -826,6 +858,8 @@ export interface UpgradeL1Bridge extends BaseContract {
   estimateGas: {
     active(overrides?: CallOverrides): Promise<BigNumber>;
 
+    closer(overrides?: CallOverrides): Promise<BigNumber>;
+
     depositERC20(
       _l1Token: PromiseOrValue<string>,
       _l2Token: PromiseOrValue<string>,
@@ -920,7 +954,7 @@ export interface UpgradeL1Bridge extends BaseContract {
     ): Promise<BigNumber>;
 
     getForcePosition(
-      _key: PromiseOrValue<string>,
+      _hash: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -943,10 +977,17 @@ export interface UpgradeL1Bridge extends BaseContract {
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    setCloser(
+      _closer: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
     active(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    closer(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     depositERC20(
       _l1Token: PromiseOrValue<string>,
@@ -1042,7 +1083,7 @@ export interface UpgradeL1Bridge extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     getForcePosition(
-      _key: PromiseOrValue<string>,
+      _hash: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1064,6 +1105,11 @@ export interface UpgradeL1Bridge extends BaseContract {
     positions(
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    setCloser(
+      _closer: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };
 }
