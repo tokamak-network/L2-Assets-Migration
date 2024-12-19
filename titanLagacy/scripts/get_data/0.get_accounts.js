@@ -4,6 +4,14 @@ const fs = require('fs');
 const axios  = require('axios');
 const { BigNumber } = require("ethers")
 
+// const {
+//   toBN,
+//   toWei,
+//   fromWei,
+//   keccak256,
+//   soliditySha3,
+//   solidityKeccak256,
+// } = require("web3-utils");
 const { BatchCrossChainMessenger, MessageStatus, OEL2ContractsLike, OEContractsLike } = require("@tokamak-network/titan-sdk")
 
 /**
@@ -198,7 +206,7 @@ async function getTransferTxs(tokenSymbol, tokenAddress) {
   const transferId = ethers.utils.id("Transfer(address,address,uint256)")
 
   // let unit = 1000000
-  let unit = 100
+  let unit = 1000
   let boolWhile = false
   let filter = null;
 
@@ -227,7 +235,7 @@ async function getTransferTxs(tokenSymbol, tokenAddress) {
       transactions.push(transactionHash)
     }
     start = toBlock;
-    console.log('start --- ', start )
+    // console.log('start --- ', start )
   }
 
   let outFile = "./data/transactions/"+networkName+"_"+tokenSymbol+"_"+blockNumber+".json"
@@ -271,8 +279,8 @@ async function getAccounts(depositedTxs, readFile, readBool, appendMode ) {
       if(!users.includes(fromAddress)) users.push(fromAddress)
       if(!users.includes(toAddress)) users.push(toAddress)
       i++
-      if(i % 200 == 0) {
-        console.log('i --- ', i )
+      if(i % 500 == 0) {
+        // console.log('i --- ', i )
         // await fs.writeFileSync("./data/depositors.json", JSON.stringify(depositors));
       }
     }
@@ -1015,6 +1023,7 @@ async function assetsAggregationByEOA() {
     USDT: BigNumber.from("0"),
     WETH: BigNumber.from("0"),
     ETH: BigNumber.from("0"),
+    TETH: BigNumber.from("0"),
   }
 
   var assetAggregation = {}
@@ -1055,11 +1064,13 @@ async function assetsAggregationByEOA() {
         USDT: BigNumber.from(balances.USDT).add(BigNumber.from(uniswap.USDT)).add(BigNumber.from(contract.USDT)).toString(),
         WETH: BigNumber.from(balances.WETH).add(BigNumber.from(uniswap.WETH)).add(BigNumber.from(contract.WETH)).toString(),
         ETH: BigNumber.from(balances.ETH).add(BigNumber.from(uniswap.ETH)).add(BigNumber.from(contract.ETH)).toString(),
+        TETH: BigNumber.from("0"),
       },
       balances: balances,
       uniswap: uniswap,
       contract: contract
     }
+    assetAggregation[account].total.TETH = BigNumber.from(assetAggregation[account].total.WETH).add(BigNumber.from(assetAggregation[account].total.ETH)).toString()
 
     sums.TON = sums.TON.add(BigNumber.from(assetAggregation[account].total.TON))
     sums.TOS = sums.TOS.add(BigNumber.from(assetAggregation[account].total.TOS))
@@ -1068,6 +1079,7 @@ async function assetsAggregationByEOA() {
     sums.WETH = sums.WETH.add(BigNumber.from(assetAggregation[account].total.WETH))
     sums.ETH = sums.ETH.add(BigNumber.from(assetAggregation[account].total.ETH))
   }
+  sums.TETH =  sums.WETH.add(sums.ETH)
 
   console.log("\n ---- assetsAggregationByEOA: SUM ---- \n"  )
   console.log("TON", ethers.utils.formatUnits(sums.TON, 18) )
@@ -1076,11 +1088,26 @@ async function assetsAggregationByEOA() {
   console.log("USDT", ethers.utils.formatUnits(sums.USDT, 6) )
   console.log("WETH", ethers.utils.formatUnits(sums.WETH, 18) )
   console.log("ETH", ethers.utils.formatUnits(sums.ETH, 18) )
+  console.log("TETH", ethers.utils.formatUnits(sums.TETH, 18) )
+
 
   let outFile ='./data/balances/5.'+hre.network.name+'_asset_eoa.json'
   await fs.writeFileSync(outFile, JSON.stringify(assetAggregation));
 
-  return {balances, uniswap, contract, assetAggregation, sums}
+  let totalEoaAmount = {
+    TON: sums.TON.toString(),
+    TOS: sums.TOS.toString(),
+    USDC: sums.USDC.toString(),
+    USDT: sums.USDT.toString(),
+    WETH: sums.WETH.toString(),
+    ETH: sums.ETH.toString(),
+    TETH: sums.TETH.toString()
+  }
+
+  let outFile1 ='./data/balances/7.'+hre.network.name+'_total_eoa_asset.json'
+  await fs.writeFileSync(outFile1, JSON.stringify(totalEoaAmount));
+
+  return {balances, uniswap, contract, assetAggregation, sums, totalEoaAmount}
 
 }
 
@@ -1109,7 +1136,7 @@ async function getBalanceL1Bridge() {
   balanceOfL1Bridge.TOS = await L1TosContract.balanceOf(L1Bridge)
   balanceOfL1Bridge.USDC = await L1UsdcContract.balanceOf(L1Bridge)
   balanceOfL1Bridge.USDT = await L1UsdtContract.balanceOf(L1Bridge)
-  balanceOfL1Bridge.ETH = await ethers.provider.getBalance(L1Bridge)
+  balanceOfL1Bridge.ETH = await L1PROVIDER.getBalance(L1Bridge)
 
   console.log('\n==================================')
   console.log('=== Balance Of L1 Bridge ==========')
@@ -1127,12 +1154,12 @@ async function getBalanceL1Bridge() {
     USDC: BigNumber.from("0"),
     USDT: BigNumber.from("0"),
     ETH: BigNumber.from("0"),
-}
+  }
 
-depositsOfL1Bridge.TON = await bridge.deposits(L1TON, TON)
-depositsOfL1Bridge.TOS = await bridge.deposits(L1TOS, TOS)
-depositsOfL1Bridge.USDC = await bridge.deposits(L1USDC, USDC)
-depositsOfL1Bridge.USDT = await bridge.deposits(L1USDT, USDT)
+  depositsOfL1Bridge.TON = await bridge.deposits(L1TON, TON)
+  depositsOfL1Bridge.TOS = await bridge.deposits(L1TOS, TOS)
+  depositsOfL1Bridge.USDC = await bridge.deposits(L1USDC, USDC)
+  depositsOfL1Bridge.USDT = await bridge.deposits(L1USDT, USDT)
 
   console.log('\n==================================')
   console.log('=== deposits Of L1 Bridge ==========')
@@ -1143,46 +1170,90 @@ depositsOfL1Bridge.USDT = await bridge.deposits(L1USDT, USDT)
   console.log('USDT', ethers.utils.formatUnits(depositsOfL1Bridge.USDT, 6))
   console.log(' ')
 
+  var balanceBridge = {
+    TON: balanceOfL1Bridge.TON.toString(),
+    TOS: balanceOfL1Bridge.TOS.toString(),
+    USDC: balanceOfL1Bridge.USDC.toString(),
+    USDT: balanceOfL1Bridge.USDT.toString(),
+    ETH: balanceOfL1Bridge.ETH.toString(),
+  }
+
+  let outFile1 ='./data/balances/8.'+hre.network.name+'_balance_l1_bridge.json'
+  await fs.writeFileSync(outFile1, JSON.stringify(balanceBridge));
 
   return { balanceOfL1Bridge, depositsOfL1Bridge }
 
 }
 
 async function getPendingWithdrawals() {
-  let readFile1 ='./data/transactions/'+hre.network.name+"_l2_send_message_"+pauseBlock+".json"
-  var transactions
-  if (await fs.existsSync(readFile1)) transactions = JSON.parse(await fs.readFileSync(readFile1));
+
+  let readFile2 ='./data/transactions/'+hre.network.name+"_l2_send_message_data_"+pauseBlock+".json"
+  var events
+  if (await fs.existsSync(readFile2)) events = JSON.parse(await fs.readFileSync(readFile2));
+
+  var resultSuccessfulMessages = {}
+  var pendingSuccessfulMessages = {}
+
+  const L1CrossDomainMessengerAbi = require("../abi/L1CrossDomainMessenger.json");
+  const L2CrossDomainMessengerAbi = require("../abi/L2CrossDomainMessenger.json");
 
   const l2Provider = new ethers.providers.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L2);
-  const l2wallet = new ethers.Wallet(addHexPrefix(process.env.PERSONAL_ACCOUNT) || "", l2Provider);
   const l1Provider = new ethers.providers.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L1);
-  const l1wallet = new ethers.Wallet(addHexPrefix(process.env.PERSONAL_ACCOUNT) || "", l1Provider);
 
-  let crossDomainMessenger = new BatchCrossChainMessenger({
-    l1SignerOrProvider: l1wallet,
-    l2SignerOrProvider: l2wallet,
-    l1ChainId: 11155111,
-    l2ChainId: 55007,
-    contracts: SEPOLIA_CONTRACTS,
-    bedrock: false
-  })
+  const crossDomainMessengerL1 = new ethers.Contract(SEPOLIA_CONTRACTS.l1.L1CrossDomainMessenger, L1CrossDomainMessengerAbi.abi, l1Provider);
 
-  // 또는 L2CrossDomainMessenger `SentMessage` events
-  for (const tx of transactions) {
-    if (typeof tx === 'string') {
-      const state = await crossDomainMessenger.getMessageStatus(tx);
-      console.log('state',state)
-      const pending = await crossDomainMessenger.GetPendingWithdrawals(tx);
-      console.log("pending", pending)
+  let ifaceCrossDomainMessengerL2 = new ethers.utils.Interface(L2CrossDomainMessengerAbi.abi);
 
-    } else if (typeof tx === 'object') {
-      const state = await crossDomainMessenger.getMessageStatus(tx.txHash);
-      console.log('state',state)
-      const pending = await crossDomainMessenger.GetPendingWithdrawals(tx.txHash);
-      console.log("pending", pending)
+  var keyHash = Object.keys(events);
 
-    }
+  for (var i=0; i < keyHash.length; i++) {
+
+      var key = keyHash[i]
+      var obj = events[key]
+
+      var xDomainCalldata = ifaceCrossDomainMessengerL2.encodeFunctionData(
+        "relayMessage",
+        [
+          obj.target,
+          obj.sender,
+          obj.message,
+          BigNumber.from(obj.messageNonce)
+        ]
+      )
+
+      var xDomainCalldataHash = ethers.utils.keccak256(xDomainCalldata);
+      let successfulMessages = await crossDomainMessengerL1.successfulMessages(xDomainCalldataHash)
+      let failedMessages = false
+
+      if(!successfulMessages) failedMessages = await crossDomainMessengerL1.failedMessages(xDomainCalldataHash)
+
+        resultSuccessfulMessages[key] = {
+        target: obj.target,
+        sender: obj.sender,
+        message: obj.message,
+        messageNonce: obj.messageNonce,
+        xDomainCalldata: xDomainCalldata,
+        xDomainCalldataHash: xDomainCalldataHash,
+        decode: decodeMessage(obj.message, obj.target),
+        successfulMessages: successfulMessages,
+        failedMessages: failedMessages
+      }
+
+      if(!successfulMessages && !failedMessages) {
+        pendingSuccessfulMessages[key] = resultSuccessfulMessages[key]
+        // console.log(key, falseSuccessfulMessages[key])
+      }
+      // console.log(i, key, resultSuccessfulMessages[key])
   }
+
+  let outFile1 ='./data/withdrawals/1.'+hre.network.name+'_l1_cross_check_relayMessage_all.json'
+  await fs.writeFileSync(outFile1, JSON.stringify(resultSuccessfulMessages));
+
+  let outFile2 ='./data/withdrawals/2.'+hre.network.name+'_l1_cross_pending_relayMessage.json'
+  await fs.writeFileSync(outFile2, JSON.stringify(pendingSuccessfulMessages));
+
+  return {pendingSuccessfulMessages, resultSuccessfulMessages}
+
 }
 
 async function getSendMessageTxs(contractAddress) {
@@ -1223,11 +1294,11 @@ async function getSendMessageTxs(contractAddress) {
 
     for (const tx of txs) {
       const { transactionHash } = tx;
-      console.log('transactionHash', transactionHash )
+      // console.log('transactionHash', transactionHash )
       transactions.push(transactionHash)
     }
     start = toBlock;
-    console.log('start --- ', start )
+    // console.log('start --- ', start )
   }
 
   let outFile = "./data/transactions/"+networkName+"_l2_send_message_"+blockNumber+".json"
@@ -1251,8 +1322,8 @@ async function getSendMessageTxs(contractAddress) {
         gasLimit: gasLimit.toString()
       }
       i++
-      if(i % 200 == 0) {
-        console.log('i --- ', i )
+      if(i % 500 == 0) {
+        // console.log('i --- ', i )
       }
     }
   }
@@ -1270,69 +1341,259 @@ const addHexPrefix = (privateKey) => {
   return privateKey
 }
 
+const decodeMessage = (message, target) => {
+
+  const L1StandardBridgeAbi = require("../abi/L1StandardBridge.json")
+  let ifaceL1StandardBridge = new ethers.utils.Interface(L1StandardBridgeAbi.abi);
+  const finalizeETHWithdrawalId = ethers.utils.id("finalizeETHWithdrawal(address,address,uint256,bytes)").substring(0, 10).toLowerCase()
+  const finalizeERC20WithdrawalId = ethers.utils.id("finalizeERC20Withdrawal(address,address,address,address,uint256,bytes)").substring(0, 10).toLowerCase()
+
+  let details = {
+    targetContract : '',
+    functionName: '',
+    decodedArgs: ''
+  }
+
+  if (target.toLowerCase() == SEPOLIA_CONTRACTS.l1.L1StandardBridge.toLowerCase()){
+    details.targetContract = 'L1StandardBridge'
+    let decodedArgs = ifaceL1StandardBridge.decodeFunctionData(message.slice(0,10), message)
+
+    if (message.substring(0, 10).toLowerCase() == finalizeETHWithdrawalId) {
+       details.functionName = 'finalizeETHWithdrawal'
+       details.decodedArgs = {
+        _from: decodedArgs._from,
+        _to: decodedArgs._to,
+        _amount: decodedArgs._amount.toString(),
+        _data: decodedArgs._data
+       }
+    } else if(message.substring(0, 10).toLowerCase() == finalizeERC20WithdrawalId) {
+      details.functionName = 'finalizeERC20Withdrawal'
+      details.decodedArgs = {
+        _l1Token: decodedArgs._l1Token,
+        _l2Token: decodedArgs._l2Token,
+        _from: decodedArgs._from,
+        _to: decodedArgs._to,
+        _amount: decodedArgs._amount.toString(),
+        _data: decodedArgs._data
+       }
+
+    } else {
+      details.decodedArgs = decodedArgs
+    }
+  }
+  return details
+}
+
+async function totalPendingAsset() {
+
+  let readFile1 ='./data/withdrawals/2.'+hre.network.name+"_l1_cross_pending_relayMessage.json"
+  var pendingTransactions
+  if (await fs.existsSync(readFile1)) pendingTransactions = JSON.parse(await fs.readFileSync(readFile1));
+
+  var sums ={
+    TON: BigNumber.from("0"),
+    TOS: BigNumber.from("0"),
+    USDC: BigNumber.from("0"),
+    USDT: BigNumber.from("0"),
+    ETH: BigNumber.from("0"),
+  }
+  var keyHash = Object.keys(pendingTransactions);
+  var L1_TON = L1TON.toLowerCase()
+  var L1_TOS = L1TOS.toLowerCase()
+  var L1_USDC = L1USDC.toLowerCase()
+  var L1_USDT = L1USDT.toLowerCase()
+
+  for (var i=0; i < keyHash.length; i++) {
+
+      var key = keyHash[i]
+      var obj = pendingTransactions[key]
+
+      if (obj != undefined && obj.decode != undefined) {
+        var deposit = obj.decode
+        if (deposit.targetContract == "L1StandardBridge") {
+          if (deposit.functionName == "finalizeETHWithdrawal") {
+            sums.ETH = sums.ETH.add(BigNumber.from(deposit.decodedArgs._amount))
+
+          } else if(deposit.functionName == "finalizeERC20Withdrawal") {
+
+            let _l1Token = deposit.decodedArgs._l1Token.toLowerCase()
+            switch(_l1Token) {
+              case L1_TON:
+                sums.TON = sums.TON.add(BigNumber.from(deposit.decodedArgs._amount))
+                break;
+              case L1_TOS:
+                sums.TOS = sums.TOS.add(BigNumber.from(deposit.decodedArgs._amount))
+                break;
+              case L1_USDC:
+                sums.USDC = sums.USDC.add(BigNumber.from(deposit.decodedArgs._amount))
+                break;
+              case L1_USDT:
+                sums.USDT = sums.USDT.add(BigNumber.from(deposit.decodedArgs._amount))
+                break;
+              default:
+                console.log("Unknown Asset ", _l1Token)
+            }
+          }
+        }
+      }
+    }
+
+    console.log("\n ---- totalPendingAsset  ---- \n"  )
+    console.log("TON", ethers.utils.formatUnits(sums.TON, 18) )
+    console.log("TOS", ethers.utils.formatUnits(sums.TOS, 18) )
+    console.log("USDC", ethers.utils.formatUnits(sums.USDC, 6) )
+    console.log("USDT", ethers.utils.formatUnits(sums.USDT, 6) )
+    console.log("ETH", ethers.utils.formatUnits(sums.ETH, 18) )
+
+    let totalPendingAmount = {
+      TON: sums.TON.toString(),
+      TOS: sums.TOS.toString(),
+      USDC: sums.USDC.toString(),
+      USDT: sums.USDT.toString(),
+      ETH: sums.ETH.toString()
+    }
+
+    let outFile ='./data/balances/6.'+hre.network.name+'_total_pending_asset.json'
+    await fs.writeFileSync(outFile, JSON.stringify(totalPendingAmount));
+
+    return totalPendingAmount
+}
+
+async function verifyAssetAmount() {
+  let readFile1 ='./data/balances/6.'+hre.network.name+"_total_pending_asset.json"
+  var pendingAmounts
+  if (await fs.existsSync(readFile1)) pendingAmounts = JSON.parse(await fs.readFileSync(readFile1));
+
+  let readFile2 ='./data/balances/7.'+hre.network.name+"_total_eoa_asset.json"
+  var eoaAmount
+  if (await fs.existsSync(readFile2)) eoaAmount = JSON.parse(await fs.readFileSync(readFile2));
+
+  let readFile3 ='./data/balances/8.'+hre.network.name+"_balance_l1_bridge.json"
+  var bridgeAmount
+  if (await fs.existsSync(readFile3)) bridgeAmount = JSON.parse(await fs.readFileSync(readFile3));
+
+  console.log('pendingAmounts', pendingAmounts)
+  console.log('eoaAmount', eoaAmount)
+  console.log('bridgeAmount', bridgeAmount)
+
+  let ethAmount = BigNumber.from(eoaAmount.TETH).add(BigNumber.from(pendingAmounts.ETH))
+  let tonAmount = BigNumber.from(eoaAmount.TON).add(BigNumber.from(pendingAmounts.TON))
+  let tosAmount = BigNumber.from(eoaAmount.TOS).add(BigNumber.from(pendingAmounts.TOS))
+  let usdcAmount = BigNumber.from(eoaAmount.USDC).add(BigNumber.from(pendingAmounts.USDC))
+  let usdtAmount = BigNumber.from(eoaAmount.USDT).add(BigNumber.from(pendingAmounts.USDT))
+
+
+  if (BigNumber.from(bridgeAmount.ETH).gte(ethAmount)){
+    console.log(" Verify ETH ; TRUE ")
+  } else {
+    console.log(" Verify ETH ; FLASE ")
+  }
+
+  if (BigNumber.from(bridgeAmount.TON).gte(tonAmount)){
+    console.log(" Verify TON ; TRUE ")
+  } else {
+    console.log(" Verify TON ; FLASE ")
+  }
+
+  if (BigNumber.from(bridgeAmount.TOS).gte(tosAmount)){
+    console.log(" Verify TOS ; TRUE ")
+  } else {
+    console.log(" Verify TOS ; FLASE ")
+  }
+
+  if (BigNumber.from(bridgeAmount.USDC).gte(usdcAmount)){
+    console.log(" Verify USDC ; TRUE ")
+  } else {
+    console.log(" Verify USDC ; FLASE ")
+  }
+
+  if (BigNumber.from(bridgeAmount.USDT).gte(usdtAmount)){
+    console.log(" Verify USDT ; TRUE ")
+  } else {
+    console.log(" Verify USDT ; FLASE ")
+  }
+}
 
 async function main() {
+
+    console.log("\n1. ---- queryAccounts ----------------------")
     // await queryAccounts()
 
-    // 1. get transactions and accounts
-    // await getAccountsUsingTransferEvent("TON", TON)
-    // await getAccountsUsingTransferEvent("TOS", TOS)
-    // await getAccountsUsingTransferEvent("USDC", USDC)
-    // await getAccountsUsingTransferEvent("USDT", USDT)
-    // await getAccountsUsingTransferEvent("WETH", WETH)
-    // await getAccountsUsingTransferEvent("DOC", DOC)
-    // await getAccountsUsingTransferEvent("AURA", AURA)
 
-    // 2. divide the accounst with eoa ans contract
-    // await checkContracts()
-    // await checkEoaInL1()
+    console.log("\n2. ---- get transactions and accounts ----------------------")
+    await getAccountsUsingTransferEvent("TON", TON)
+    await getAccountsUsingTransferEvent("TOS", TOS)
+    await getAccountsUsingTransferEvent("USDC", USDC)
+    await getAccountsUsingTransferEvent("USDT", USDT)
+    await getAccountsUsingTransferEvent("WETH", WETH)
+    await getAccountsUsingTransferEvent("DOC", DOC)
+    await getAccountsUsingTransferEvent("AURA", AURA)
 
-    // 3. get the balances
-    // let fileMode = true
-    // await getBalances ("ETH", ETH, pauseBlock, null, fileMode)
-    // await getBalances ("TON", TON, pauseBlock, null, fileMode)
-    // await getBalances ("TOS", TOS, pauseBlock, null, fileMode)
-    // await getBalances ("USDC", USDC, pauseBlock, null, fileMode)
-    // await getBalances ("USDT", USDT, pauseBlock, null, fileMode)
-    // await getBalances ("WETH", WETH, pauseBlock, null, fileMode)
-    // await getBalances ("DOC", DOC, pauseBlock, null, fileMode)
-    // await getBalances ("AURA", AURA, pauseBlock, null, fileMode)
+    console.log("\n3. ---- divide the accounst with eoa and contract ----------------------")
+    await checkContracts()
+    await checkEoaInL1()
 
-    // 4. Details of contracts
-    // await queryContracts()
 
-    // 5. find out the LP's token amount and owner in UniswapV3 Pool
+    console.log("\n4. ----  get the balances ----------------------")
+    let fileMode = true
+    await getBalances ("ETH", ETH, pauseBlock, null, fileMode)
+    await getBalances ("TON", TON, pauseBlock, null, fileMode)
+    await getBalances ("TOS", TOS, pauseBlock, null, fileMode)
+    await getBalances ("USDC", USDC, pauseBlock, null, fileMode)
+    await getBalances ("USDT", USDT, pauseBlock, null, fileMode)
+    await getBalances ("WETH", WETH, pauseBlock, null, fileMode)
+    await getBalances ("DOC", DOC, pauseBlock, null, fileMode)
+    await getBalances ("AURA", AURA, pauseBlock, null, fileMode)
+
+    console.log("\n5. ----  Details of contracts ----------------------")
+    await queryContracts()
+
+    console.log("\n6. ----  find out the LP's token amount and owner in UniswapV3 Pool --")
     // file: 1.titansepolia_contract_lp_tokens.json
-    // await calaculateAmountOfLps()
+    await calaculateAmountOfLps()
 
-    // 6. look for UniswapV3Pool
+    console.log("\n7. ----  look for UniswapV3Pool --")
     // file: 2.titansepolia_contract_pools.json
     // file: 3.titansepolia_contract_commons.json
-    // await divideUniswapV3PoolContracts()
+    await divideUniswapV3PoolContracts()
 
+    console.log("\n8. ---- compareLpsAndPoolsBalance  --")
     // file: /balances/1.titansepolia_sum_of_lps_by_pool.txt
     // file: /balances/2.titansepolia_compare_pool_lps.txt
-    // await compareLpsAndPoolsBalance()
+    await compareLpsAndPoolsBalance()
 
+    console.log("\n9. ---- assetsLpsbyOwner  --")
     // file: /balances/3.titansepolia_asset_lps_owner.json
-    // await assetsLpsbyOwner()
+    await assetsLpsbyOwner()
 
+
+    console.log("\n10. ---- assetsContractsbyOwner  --")
     // file: /balances/4.titansepolia_asset_contracts_owner.json
-    // await assetsContractsbyOwner()
+    await assetsContractsbyOwner()
 
     // file: /balances/4.titansepolia_assets_eoa.json
-    // await assetsAggregationByEOA()
+    await assetsAggregationByEOA()
 
-
+    console.log("\n11. ---- getBalanceL1Bridge  --")
     // file: /balances/5.titansepolia_balance_l1_bridge.json
-    // await getBalanceL1Bridge()
+    await getBalanceL1Bridge()
 
-    //====== Peding Withdrawals
+    console.log("\n12. ---- Pending Withdrawals  --")
+
+    //====== Pending Withdrawals
     // file: /transactions/titansepolia_l2_send_message_17923.json
-    // file: /transactions/titansepolia_l2_send_message_17923.json
+    // file: /transactions/titansepolia_l2_send_message_data_17923.json
     await getSendMessageTxs(SEPOLIA_L2_CONTRACT_ADDRESSES.L2CrossDomainMessenger)
 
-    // await getPendingWithdrawals()
+    // file: /withdrawals/1.titansepolia_l1_cross_check_relayMessage_all.json
+    // file: /withdrawals/2.titansepolia_l1_cross_pending_relayMessage.json
+    await getPendingWithdrawals()
+
+    // file: /data/balances/6.titansepolia_total_pending_asset.json
+    await totalPendingAsset()
+
+    console.log("\n13. ---- Verify  --")
+    await verifyAssetAmount()
 
   }
 

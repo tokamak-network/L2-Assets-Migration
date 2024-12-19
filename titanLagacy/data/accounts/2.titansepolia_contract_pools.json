@@ -7,6 +7,7 @@
         "USDC": "0",
         "USDT": "0",
         "WETH": "0",
+        "ETH": "0",
         "owner": "",
         "admin": "",
         "deployer": "0xb68aa9e398c054da7ebaaa446292f611ca0cd52b"
@@ -19,6 +20,7 @@
         "USDC": "0",
         "USDT": "0",
         "WETH": "5868769707493701",
+        "ETH": "0",
         "owner": "",
         "admin": "",
         "deployer": "0xb68aa9e398c054da7ebaaa446292f611ca0cd52b"
@@ -31,6 +33,7 @@
         "USDC": "0",
         "USDT": "0",
         "WETH": "31396263067033621",
+        "ETH": "0",
         "owner": "",
         "admin": "",
         "deployer": "0xb68aa9e398c054da7ebaaa446292f611ca0cd52b"
@@ -43,6 +46,7 @@
         "USDC": "0",
         "USDT": "0",
         "WETH": "801994153428685148",
+        "ETH": "0",
         "owner": "",
         "admin": "",
         "deployer": "0xb68aa9e398c054da7ebaaa446292f611ca0cd52b"
@@ -55,6 +59,7 @@
         "USDC": "0",
         "USDT": "168766442",
         "WETH": "723583885896386185",
+        "ETH": "0",
         "owner": "",
         "admin": "",
         "deployer": "0xb68aa9e398c054da7ebaaa446292f611ca0cd52b"
@@ -67,6 +72,7 @@
         "USDC": "0",
         "USDT": "0",
         "WETH": "0",
+        "ETH": "0",
         "owner": "",
         "admin": "",
         "deployer": "0xb68aa9e398c054da7ebaaa446292f611ca0cd52b"
@@ -79,6 +85,7 @@
         "USDC": "0",
         "USDT": "9986489196",
         "WETH": "0",
+        "ETH": "0",
         "owner": "",
         "admin": "",
         "deployer": "0xb68aa9e398c054da7ebaaa446292f611ca0cd52b"
@@ -91,6 +98,7 @@
         "USDC": "0",
         "USDT": "12503",
         "WETH": "0",
+        "ETH": "0",
         "owner": "",
         "admin": "",
         "deployer": "0x942d6ac7a6702bb1852676f3f22aee38bd442e4c"
@@ -103,6 +111,7 @@
         "USDC": "0",
         "USDT": "186838077",
         "WETH": "0",
+        "ETH": "0",
         "owner": "",
         "admin": "",
         "deployer": "0x942d6ac7a6702bb1852676f3f22aee38bd442e4c"
@@ -115,6 +124,7 @@
         "USDC": "0",
         "USDT": "0",
         "WETH": "0",
+        "ETH": "0",
         "owner": "",
         "admin": "",
         "deployer": "0x942d6ac7a6702bb1852676f3f22aee38bd442e4c"
@@ -127,6 +137,7 @@
         "USDC": "0",
         "USDT": "444311",
         "WETH": "0",
+        "ETH": "0",
         "owner": "",
         "admin": "",
         "deployer": "0x942d6ac7a6702bb1852676f3f22aee38bd442e4c"
@@ -139,6 +150,7 @@
         "USDC": "0",
         "USDT": "0",
         "WETH": "4139243752761753",
+        "ETH": "0",
         "owner": "",
         "admin": "",
         "deployer": "0x942d6ac7a6702bb1852676f3f22aee38bd442e4c"
@@ -151,6 +163,7 @@
         "USDC": "0",
         "USDT": "0",
         "WETH": "515718014311700",
+        "ETH": "0",
         "owner": "",
         "admin": "",
         "deployer": "0x942d6ac7a6702bb1852676f3f22aee38bd442e4c"
@@ -163,6 +176,7 @@
         "USDC": "0",
         "USDT": "0",
         "WETH": "46789415655992",
+        "ETH": "0",
         "owner": "",
         "admin": "",
         "deployer": "0x942d6ac7a6702bb1852676f3f22aee38bd442e4c"
@@ -175,6 +189,7 @@
         "USDC": "0",
         "USDT": "0",
         "WETH": "265392597582457",
+        "ETH": "0",
         "owner": "",
         "admin": "",
         "deployer": "0x942d6ac7a6702bb1852676f3f22aee38bd442e4c"
@@ -187,6 +202,7 @@
         "USDC": "0",
         "USDT": "0",
         "WETH": "1",
+        "ETH": "0",
         "owner": "",
         "admin": "",
         "deployer": "0x942d6ac7a6702bb1852676f3f22aee38bd442e4c"
@@ -199,6 +215,7 @@
         "USDC": "0",
         "USDT": "0",
         "WETH": "0",
+        "ETH": "0",
         "owner": "",
         "admin": "",
         "deployer": "0x942d6ac7a6702bb1852676f3f22aee38bd442e4c"
@@ -211,6 +228,7 @@
         "USDC": "0",
         "USDT": "0",
         "WETH": "211383550158855115",
+        "ETH": "0",
         "owner": "",
         "admin": "",
         "deployer": "0xc1eba383d94c6021160042491a5dfaf1d82694e6"
@@ -223,6 +241,7 @@
         "USDC": "4000000",
         "USDT": "0",
         "WETH": "69666666658716004",
+        "ETH": "0",
         "owner": "",
         "admin": "",
         "deployer": "0xb68aa9e398c054da7ebaaa446292f611ca0cd52b"
