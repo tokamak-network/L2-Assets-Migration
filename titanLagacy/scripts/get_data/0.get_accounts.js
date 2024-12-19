@@ -1148,35 +1148,27 @@ depositsOfL1Bridge.USDT = await bridge.deposits(L1USDT, USDT)
 
 }
 
-
 async function getPendingWithdrawals() {
+  let readFile1 ='./data/transactions/'+hre.network.name+"_l2_send_message_"+pauseBlock+".json"
+  var transactions
+  if (await fs.existsSync(readFile1)) transactions = JSON.parse(await fs.readFileSync(readFile1));
 
-  let res = await getSendMessageTxs(SEPOLIA_L2_CONTRACT_ADDRESSES.L2CrossDomainMessenger)
+  const l2Provider = new ethers.providers.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L2);
+  const l2wallet = new ethers.Wallet(addHexPrefix(process.env.PERSONAL_ACCOUNT) || "", l2Provider);
+  const l1Provider = new ethers.providers.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L1);
+  const l1wallet = new ethers.Wallet(addHexPrefix(process.env.PERSONAL_ACCOUNT) || "", l1Provider);
 
-  console.log(res)
-
-  // const l2Provider = new ethers.providers.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L2);
-  // const l2wallet = new ethers.Wallet(addHexPrefix(process.env.PERSONAL_ACCOUNT) || "", l2Provider);
-  // const l1Provider = new ethers.providers.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L1);
-  // const l1wallet = new ethers.Wallet(addHexPrefix(process.env.PERSONAL_ACCOUNT) || "", l1Provider);
-
-  // let crossDomainMessenger = new BatchCrossChainMessenger({
-  //   l1SignerOrProvider: l1wallet,
-  //   l2SignerOrProvider: l2wallet,
-  //   l1ChainId: 11155111,
-  //   l2ChainId: 55007,
-  //   contracts: SEPOLIA_CONTRACTS,
-  //   bedrock: false
-  // })
+  let crossDomainMessenger = new BatchCrossChainMessenger({
+    l1SignerOrProvider: l1wallet,
+    l2SignerOrProvider: l2wallet,
+    l1ChainId: 11155111,
+    l2ChainId: 55007,
+    contracts: SEPOLIA_CONTRACTS,
+    bedrock: false
+  })
 
   // 또는 L2CrossDomainMessenger `SentMessage` events
-  // logs, sub, err := _L1CrossDomainMessenger.contract.FilterLogs(opts, "SentMessage", targetRule)
-  // 트랜재션을 기록한다. 이 트랜잭션이 L1에서 어떻게 되었는지 확인해야 한다.
-
-}
-
-async function checkPendingWithdrawals(crossDomainMessenger, txHashes) {
-  for (const tx of txHashes) {
+  for (const tx of transactions) {
     if (typeof tx === 'string') {
       const state = await crossDomainMessenger.getMessageStatus(tx);
       console.log('state',state)
@@ -1191,9 +1183,7 @@ async function checkPendingWithdrawals(crossDomainMessenger, txHashes) {
 
     }
   }
-
 }
-
 
 async function getSendMessageTxs(contractAddress) {
 
@@ -1214,7 +1204,6 @@ async function getSendMessageTxs(contractAddress) {
   let filter = null;
 
   let transactions = []
-
   while (!boolWhile) {
     let toBlock = start + unit;
     if(toBlock > end)  {
@@ -1244,7 +1233,34 @@ async function getSendMessageTxs(contractAddress) {
   let outFile = "./data/transactions/"+networkName+"_l2_send_message_"+blockNumber+".json"
   await fs.writeFileSync(outFile, JSON.stringify(transactions));
 
-  return {outFile, transactions};
+  //===========
+  let sendMessageData = {}
+  let i = 0
+  if (transactions.length > 0) {
+    for (const sendTx of transactions) {
+      const { logs } = await ethers.provider.getTransactionReceipt(sendTx);
+      const foundLog = logs.find(el => el && el.topics && el.topics.includes(functionId));
+      if (!foundLog) continue;
+      const parsedlog = iface.parseLog(foundLog);
+      const {target, sender, message, messageNonce, gasLimit} = parsedlog["args"];
+      sendMessageData[sendTx] = {
+        target: target,
+        sender: sender,
+        message: message,
+        messageNonce: messageNonce.toString(),
+        gasLimit: gasLimit.toString()
+      }
+      i++
+      if(i % 200 == 0) {
+        console.log('i --- ', i )
+      }
+    }
+  }
+
+  let outFile1 = "./data/transactions/"+networkName+"_l2_send_message_data_"+blockNumber+".json"
+  await fs.writeFileSync(outFile1, JSON.stringify(sendMessageData));
+
+  return { transactions, sendMessageData};
 }
 
 const addHexPrefix = (privateKey) => {
@@ -1311,10 +1327,12 @@ async function main() {
     // file: /balances/5.titansepolia_balance_l1_bridge.json
     // await getBalanceL1Bridge()
 
+    //====== Peding Withdrawals
+    // file: /transactions/titansepolia_l2_send_message_17923.json
+    // file: /transactions/titansepolia_l2_send_message_17923.json
+    await getSendMessageTxs(SEPOLIA_L2_CONTRACT_ADDRESSES.L2CrossDomainMessenger)
 
-
-    // pending
-    await getPendingWithdrawals()
+    // await getPendingWithdrawals()
 
   }
 
