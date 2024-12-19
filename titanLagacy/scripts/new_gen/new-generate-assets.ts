@@ -64,7 +64,7 @@ const main = async () => {
     }
 
     // keccak256(abi.encodePacked(_token, _claimer, _amount));
-    for (let i=0; i < 10; i++) {
+    for (let i=0; i < 202; i++) {
         if(assetsData[i].total.TON != 0){
             innerTON.data.push({
                 "claimer": assetsData[i].address.account,
@@ -82,6 +82,7 @@ const main = async () => {
         }
 
         if(assetsData[i].total.USDC != 0){
+            console.log(assetsData[i].total.USDC)
             innerUSDC.data.push({
                 "claimer": assetsData[i].address.account,
                 "amount": assetsData[i].total.USDC,
