@@ -1163,7 +1163,7 @@ async function getPendingWithdrawals() {
   if (await fs.existsSync(readFile2)) events = JSON.parse(await fs.readFileSync(readFile2));
 
   var resultSuccessfulMessages = {}
-  var falseSuccessfulMessages = {}
+  var pendingSuccessfulMessages = {}
 
   const L1CrossDomainMessengerAbi = require("../abi/L1CrossDomainMessenger.json");
   const L2CrossDomainMessengerAbi = require("../abi/L2CrossDomainMessenger.json");
@@ -1194,19 +1194,24 @@ async function getPendingWithdrawals() {
 
       var xDomainCalldataHash = ethers.utils.keccak256(xDomainCalldata);
       let successfulMessages = await crossDomainMessengerL1.successfulMessages(xDomainCalldataHash)
+      let failedMessages = false
 
-      resultSuccessfulMessages[key] = {
+      if(!successfulMessages) failedMessages = await crossDomainMessengerL1.failedMessages(xDomainCalldataHash)
+
+        resultSuccessfulMessages[key] = {
         target: obj.target,
         sender: obj.sender,
         message: obj.message,
         messageNonce: obj.messageNonce,
+        xDomainCalldata: xDomainCalldata,
         xDomainCalldataHash: xDomainCalldataHash,
         decode: decodeMessage(obj.message, obj.target),
-        successfulMessages: successfulMessages
+        successfulMessages: successfulMessages,
+        failedMessages: failedMessages
       }
 
-      if(!successfulMessages) {
-        falseSuccessfulMessages[key] = resultSuccessfulMessages[key]
+      if(!successfulMessages && !failedMessages) {
+        pendingSuccessfulMessages[key] = resultSuccessfulMessages[key]
         // console.log(key, falseSuccessfulMessages[key])
       }
       // console.log(i, key, resultSuccessfulMessages[key])
@@ -1215,10 +1220,10 @@ async function getPendingWithdrawals() {
   let outFile1 ='./data/withdrawals/1.'+hre.network.name+'_l1_cross_check_relayMessage_all.json'
   await fs.writeFileSync(outFile1, JSON.stringify(resultSuccessfulMessages));
 
-  let outFile2 ='./data/withdrawals/2.'+hre.network.name+'_l1_cross_false_relayMessage.json'
-  await fs.writeFileSync(outFile2, JSON.stringify(falseSuccessfulMessages));
+  let outFile2 ='./data/withdrawals/2.'+hre.network.name+'_l1_cross_pending_relayMessage.json'
+  await fs.writeFileSync(outFile2, JSON.stringify(pendingSuccessfulMessages));
 
-  return {falseSuccessfulMessages, resultSuccessfulMessages}
+  return {pendingSuccessfulMessages, resultSuccessfulMessages}
 
 }
 
