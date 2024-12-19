@@ -1017,9 +1017,10 @@ async function assetsAggregationByEOA() {
     ETH: BigNumber.from("0"),
   }
 
-  var assetAggregation = {}
+  var assetAggregation = []
   var len = accounts.length
 
+  console.log("start")
   for (var i = 0; i< len; i++) {
     var account = accounts[i]
     var balances = {
@@ -1028,7 +1029,6 @@ async function assetsAggregationByEOA() {
       USDC: balanceUSDC[account]!=undefined? balanceUSDC[account]: "0",
       USDT: balanceUSDT[account]!=undefined? balanceUSDT[account]: "0",
       WETH: balanceWETH[account]!=undefined? balanceWETH[account]: "0",
-      ETH: balanceETH[account]!=undefined? balanceETH[account]: "0"
     }
 
     var uniswap = {
@@ -1037,7 +1037,6 @@ async function assetsAggregationByEOA() {
       USDC: lps[account]!=undefined? lps[account].USDC: "0",
       USDT: lps[account]!=undefined? lps[account].USDT: "0",
       WETH: lps[account]!=undefined? lps[account].WETH: "0",
-      ETH: lps[account]!=undefined? lps[account].ETH: "0",
     }
     var contract = {
       TON: commonContracts[account]!=undefined? commonContracts[account].TON: "0",
@@ -1045,11 +1044,11 @@ async function assetsAggregationByEOA() {
       USDC: commonContracts[account]!=undefined? commonContracts[account].USDC: "0",
       USDT: commonContracts[account]!=undefined? commonContracts[account].USDT: "0",
       WETH: commonContracts[account]!=undefined? commonContracts[account].WETH: "0",
-      ETH: commonContracts[account]!=undefined? commonContracts[account].ETH: "0",
     }
     var address = {
-      account : assetAggregation[account]
+      account : accounts[i]
     }
+
     assetAggregation[i] = {
       address : address,
       total : {
@@ -1058,19 +1057,18 @@ async function assetsAggregationByEOA() {
         USDC: BigNumber.from(balances.USDC).add(BigNumber.from(uniswap.USDC)).add(BigNumber.from(contract.USDC)).toString(),
         USDT: BigNumber.from(balances.USDT).add(BigNumber.from(uniswap.USDT)).add(BigNumber.from(contract.USDT)).toString(),
         WETH: BigNumber.from(balances.WETH).add(BigNumber.from(uniswap.WETH)).add(BigNumber.from(contract.WETH)).toString(),
-        ETH: BigNumber.from(balances.ETH).add(BigNumber.from(uniswap.ETH)).add(BigNumber.from(contract.ETH)).toString(),
       },
       balances: balances,
       uniswap: uniswap,
       contract: contract
     }
 
-    sums.TON = sums.TON.add(BigNumber.from(assetAggregation[account].total.TON))
-    sums.TOS = sums.TOS.add(BigNumber.from(assetAggregation[account].total.TOS))
-    sums.USDC = sums.USDC.add(BigNumber.from(assetAggregation[account].total.USDC))
-    sums.USDT = sums.USDT.add(BigNumber.from(assetAggregation[account].total.USDT))
-    sums.WETH = sums.WETH.add(BigNumber.from(assetAggregation[account].total.WETH))
-    sums.ETH = sums.ETH.add(BigNumber.from(assetAggregation[account].total.ETH))
+
+    sums.TON = sums.TON.add(BigNumber.from(assetAggregation[i].total.TON))
+    sums.TOS = sums.TOS.add(BigNumber.from(assetAggregation[i].total.TOS))
+    sums.USDC = sums.USDC.add(BigNumber.from(assetAggregation[i].total.USDC))
+    sums.USDT = sums.USDT.add(BigNumber.from(assetAggregation[i].total.USDT))
+    sums.WETH = sums.WETH.add(BigNumber.from(assetAggregation[i].total.WETH))
   }
 
   console.log("\n ---- assetsAggregationByEOA: SUM ---- \n"  )
@@ -1079,7 +1077,6 @@ async function assetsAggregationByEOA() {
   console.log("USDC", ethers.utils.formatUnits(sums.USDC, 6) )
   console.log("USDT", ethers.utils.formatUnits(sums.USDT, 6) )
   console.log("WETH", ethers.utils.formatUnits(sums.WETH, 18) )
-  console.log("ETH", ethers.utils.formatUnits(sums.ETH, 18) )
 
   let outFile ='./data/5.'+hre.network.name+'_asset_eoa.json'
   await fs.writeFileSync(outFile, JSON.stringify(assetAggregation));
@@ -1325,7 +1322,7 @@ async function main() {
     // await assetsContractsbyOwner()
 
     // file: /balances/4.titansepolia_assets_eoa.json
-    // await assetsAggregationByEOA()
+    await assetsAggregationByEOA()
 
 
     // file: /balances/5.titansepolia_balance_l1_bridge.json
@@ -1334,7 +1331,7 @@ async function main() {
     //====== Peding Withdrawals
     // file: /transactions/titansepolia_l2_send_message_17923.json
     // file: /transactions/titansepolia_l2_send_message_17923.json
-    await getSendMessageTxs(SEPOLIA_L2_CONTRACT_ADDRESSES.L2CrossDomainMessenger)
+    // await getSendMessageTxs(SEPOLIA_L2_CONTRACT_ADDRESSES.L2CrossDomainMessenger)
 
     // await getPendingWithdrawals()
 
