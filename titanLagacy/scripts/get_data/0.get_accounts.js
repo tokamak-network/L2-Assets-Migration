@@ -4,21 +4,8 @@ const fs = require('fs');
 const axios  = require('axios');
 const { BigNumber } = require("ethers")
 
-// const {
-//   toBN,
-//   toWei,
-//   fromWei,
-//   keccak256,
-//   soliditySha3,
-//   solidityKeccak256,
-// } = require("web3-utils");
 const { BatchCrossChainMessenger, MessageStatus, OEL2ContractsLike, OEContractsLike } = require("@tokamak-network/titan-sdk")
-
-/**
- * ETH, TON, TOS, DOC, AURA, USDC, USDT 를 사용한 계정 주소를 집계합니다.
- */
-
-
+/*
 // titan-sepolia
 const baseUrl = "https://explorer.titan-sepolia.tokamak.network/api?"
 const TON = "0x7c6b91d9be155a6db01f749217d76ff02a7227f2"
@@ -43,8 +30,19 @@ const L1ETH = ""
 const pauseBlock = 17923 //17923
 const startBlock = 0
 
+// L2에서 L1Bridge주소의 자산을 누가 가져갈것인가.
+const assetTransferAccount = [
+  {
+    from: '0x1f032b938125f9be411801fb127785430e7b3971',
+    to: '0x37212a8F2abbb40000e974DA82D410DdbecFa956'
+  },
+  {
+    from: '0x0cf56abde564c87bdc55a150c972c8430128eac2',
+    to: '0xD4335A175c36c0922F6A368b83f9F6671bf07606'
+  }
+]
 
-const SEPOLIA_L2_CONTRACT_ADDRESSES = {
+const L2_CONTRACT_ADDRESSES = {
   L2CrossDomainMessenger: '0x4200000000000000000000000000000000000007',
   L2ToL1MessagePasser: '0x4200000000000000000000000000000000000000',
   L2StandardBridge: '0x4200000000000000000000000000000000000010',
@@ -58,7 +56,7 @@ const SEPOLIA_L2_CONTRACT_ADDRESSES = {
   BedrockMessagePasser: '0x4200000000000000000000000000000000000000',
 }
 
-const SEPOLIA_CONTRACTS = {
+const CONTRACTS = {
   l1: {
     AddressManager: '0x79a53E72e9CcfAe63B0fB9A4edb66C7563d74Dc3',
     L1CrossDomainMessenger:
@@ -72,28 +70,70 @@ const SEPOLIA_CONTRACTS = {
     OptimismPortal: '0x0000000000000000000000000000000000000000',
     L2OutputOracle: '0x0000000000000000000000000000000000000000',
   },
-  l2: SEPOLIA_L2_CONTRACT_ADDRESSES,
+  l2: L2_CONTRACT_ADDRESSES,
+}
+*/
+
+// titan
+const baseUrl = "https://explorer.titan.tokamak.network/api?"
+const TON = "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2"
+const TOS = "0xd08a2917653d4e460893203471f0000826fb4034"
+const USDC = "0x46BbbC5f20093cB53952127c84F1Fbc9503bD6D9"
+const USDT = "0x2aCC8EFEd68f07DEAaD37f57A189677fB5655B46"
+const WETH = "0x4200000000000000000000000000000000000006"
+const DOC = "0x0000000000000000000000000000000000000000"
+const AURA = "0x0000000000000000000000000000000000000000"
+const ETH = "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000"
+
+const NonfungiblePositionManager = "0xfAFc55Bcdc6e7a74C21DD51531D14e5DD9f29613"
+const UniswapV3Factory = "0x755Ba335013C07CE35C9A2dd5746617Ac4c6c799"
+const L1Bridge = "0x59aa194798Ba87D26Ba6bEF80B85ec465F4bbcfD"
+const L1TON = "0x2be5e8c109e2197d077d13a82daead6a9b3433c5"
+const L1TOS = "0x409c4D8cd5d2924b9bc5509230d16a61289c8153"
+const L1USDC = "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
+const L1USDT = "0xdac17f958d2ee523a2206206994597c13d831ec7"
+const L1DOC = "0x8c4c0fc89382f96e435527d39c9ec69dded34e77"
+const L1AURA = "0xf8474c2a90b9035e0b431e1789fe76f54d4ce708"
+const L1ETH = ""
+const pauseBlock = 6383
+const startBlock = 0
+
+// L2에서 L1Bridge주소의 자산을 누가 가져갈것인가.
+const assetTransferAccount = [
+  {
+    from: '0x59aa194798ba87d26ba6bef80b85ec465f4bbcfd',
+    to: '0xc2fa14904E9f610006958A2bd2614fE52B8D6BC1'
+  },
+]
+
+const L2_CONTRACT_ADDRESSES = {
+  L2CrossDomainMessenger: '0x4200000000000000000000000000000000000007',
+  L2ToL1MessagePasser: '0x4200000000000000000000000000000000000000',
+  L2StandardBridge: '0x4200000000000000000000000000000000000010',
+  OVM_L1BlockNumber: '0x4200000000000000000000000000000000000013',
+  OVM_L2ToL1MessagePasser: '0x4200000000000000000000000000000000000000',
+  OVM_DeployerWhitelist: '0x4200000000000000000000000000000000000002',
+  OVM_ETH: '0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000',
+  OVM_GasPriceOracle: '0x420000000000000000000000000000000000000F',
+  OVM_SequencerFeeVault: '0x4200000000000000000000000000000000000011',
+  WETH: '0x4200000000000000000000000000000000000006',
+  BedrockMessagePasser: '0x4200000000000000000000000000000000000000',
 }
 
-// // titan
-// const baseUrl = "https://explorer.titan.tokamak.network/api?"
-// const TON = "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2"
-// const TOS = "0xd08a2917653d4e460893203471f0000826fb4034"
-// const USDC = "0x46BbbC5f20093cB53952127c84F1Fbc9503bD6D9"
-// const USDT = "0x2aCC8EFEd68f07DEAaD37f57A189677fB5655B46"
-// const WETH = "0x4200000000000000000000000000000000000006"
-// const DOC = "0x0000000000000000000000000000000000000000"
-// const AURA = "0x0000000000000000000000000000000000000000"
-// const NonfungiblePositionManager = "0xfAFc55Bcdc6e7a74C21DD51531D14e5DD9f29613"
-// const UniswapV3Factory = "0x755Ba335013C07CE35C9A2dd5746617Ac4c6c799"
-// const L1Bridge = "0x59aa194798Ba87D26Ba6bEF80B85ec465F4bbcfD"
-// const L1TON = "0x2be5e8c109e2197d077d13a82daead6a9b3433c5"
-// const L1TOS = "0x409c4D8cd5d2924b9bc5509230d16a61289c8153"
-// const L1USDC = "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48"
-// const L1USDT = "0xdac17f958d2ee523a2206206994597c13d831ec7"
-// const L1ETH = ""
-// const pauseBlock = 6374
-// const startBlock = 0
+const CONTRACTS = {
+  l1: {
+    AddressManager: '0xeDf6C92fA72Fa6015B15C9821ada145a16c85571',
+    L1CrossDomainMessenger: '0xfd76ef26315Ea36136dC40Aeafb5D276d37944AE',
+    L1StandardBridge: '0x59aa194798Ba87D26Ba6bEF80B85ec465F4bbcfD',
+    StateCommitmentChain: '0x66b9f45E84A0aD7fE3983c97556798352a8E0a56',
+    CanonicalTransactionChain: '0x4A1941f18874Df01e5CAA1CD3DA4b1803CBD32C2',
+    BondManager: '0xAD4765d7729946cF7c3C7acBE9DC5E220A98e944',
+    OptimismPortal: '0x0000000000000000000000000000000000000000',
+    L2OutputOracle: '0x0000000000000000000000000000000000000000',
+  },
+  l2: L2_CONTRACT_ADDRESSES,
+}
+
 
 async function getBalances(tokenSymbol, tokenAddress, blockNumber, accounts, readFileBool) {
     const networkName = hre.network.name
@@ -1200,7 +1240,7 @@ async function getPendingWithdrawals() {
   const l2Provider = new ethers.providers.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L2);
   const l1Provider = new ethers.providers.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L1);
 
-  const crossDomainMessengerL1 = new ethers.Contract(SEPOLIA_CONTRACTS.l1.L1CrossDomainMessenger, L1CrossDomainMessengerAbi.abi, l1Provider);
+  const crossDomainMessengerL1 = new ethers.Contract(CONTRACTS.l1.L1CrossDomainMessenger, L1CrossDomainMessengerAbi.abi, l1Provider);
 
   let ifaceCrossDomainMessengerL2 = new ethers.utils.Interface(L2CrossDomainMessengerAbi.abi);
 
@@ -1354,7 +1394,7 @@ const decodeMessage = (message, target) => {
     decodedArgs: ''
   }
 
-  if (target.toLowerCase() == SEPOLIA_CONTRACTS.l1.L1StandardBridge.toLowerCase()){
+  if (target.toLowerCase() == CONTRACTS.l1.L1StandardBridge.toLowerCase()){
     details.targetContract = 'L1StandardBridge'
     let decodedArgs = ifaceL1StandardBridge.decodeFunctionData(message.slice(0,10), message)
 
@@ -1514,86 +1554,227 @@ async function verifyAssetAmount() {
   }
 }
 
+async function assetTransfer() {
+
+  let readFile2 ='./data/balances/5.'+hre.network.name+'_asset_eoa.json'
+  var eoaAmount
+  if (await fs.existsSync(readFile2)) eoaAmount = JSON.parse(await fs.readFileSync(readFile2));
+  let outFile1 ='./data/balances/5.'+hre.network.name+'_aseet_eoa_original.json'
+
+  await fs.copyFile(readFile2, outFile1, (err) => {
+    if (err) throw err;
+    console.log('File was copied to destination');
+  });
+
+  if (assetTransferAccount.length > 0) {
+
+    for (var i=0; i< assetTransferAccount.length; i++){
+      let from = assetTransferAccount[i].from.toLowerCase()
+      let to = assetTransferAccount[i].to.toLowerCase()
+
+      var cloneFrom = eoaAmount[from]
+      var cloneTo = eoaAmount[to]
+      if (cloneTo == undefined) {
+        eoaAmount[to] = {
+          total: {
+            TON: "0",
+            TOS: "0",
+            USDC: "0",
+            USDT: "0",
+            WETH: "0",
+            ETH: "0",
+            TETH: "0",
+          },
+          balances: {
+            TON: "0",
+            TOS: "0",
+            USDC: "0",
+            USDT: "0",
+            WETH: "0",
+            ETH: "0",
+          },
+          uniswap: {
+            TON: "0",
+            TOS: "0",
+            USDC: "0",
+            USDT: "0",
+            WETH: "0",
+            ETH: "0",
+          },
+          contract: {
+            TON: "0",
+            TOS: "0",
+            USDC: "0",
+            USDT: "0",
+            WETH: "0",
+            ETH: "0",
+          }
+        }
+        cloneTo = eoaAmount[to]
+      }
+
+      eoaAmount[from] = {
+        total: {
+          TON: "0",
+          TOS: "0",
+          USDC: "0",
+          USDT: "0",
+          WETH: "0",
+          ETH: "0",
+          TETH: "0",
+        },
+        balances: {
+          TON: "0",
+          TOS: "0",
+          USDC: "0",
+          USDT: "0",
+          WETH: "0",
+          ETH: "0",
+        },
+        uniswap: {
+          TON: "0",
+          TOS: "0",
+          USDC: "0",
+          USDT: "0",
+          WETH: "0",
+          ETH: "0",
+        },
+        contract: {
+          TON: "0",
+          TOS: "0",
+          USDC: "0",
+          USDT: "0",
+          WETH: "0",
+          ETH: "0",
+        }
+      }
+
+      eoaAmount[to] = {
+        total: {
+          TON: BigNumber.from(cloneFrom.total.TON).add(BigNumber.from(cloneTo.total.TON)).toString(),
+          TOS: BigNumber.from(cloneFrom.total.TOS).add(BigNumber.from(cloneTo.total.TOS)).toString(),
+          USDC: BigNumber.from(cloneFrom.total.USDC).add(BigNumber.from(cloneTo.total.USDC)).toString(),
+          USDT: BigNumber.from(cloneFrom.total.USDT).add(BigNumber.from(cloneTo.total.USDT)).toString(),
+          WETH: BigNumber.from(cloneFrom.total.WETH).add(BigNumber.from(cloneTo.total.WETH)).toString(),
+          ETH: BigNumber.from(cloneFrom.total.ETH).add(BigNumber.from(cloneTo.total.ETH)).toString(),
+          TETH: BigNumber.from(cloneFrom.total.TETH).add(BigNumber.from(cloneTo.total.TETH)).toString(),
+        },
+        balances: {
+          TON: BigNumber.from(cloneFrom.balances.TON).add(BigNumber.from(cloneTo.balances.TON)).toString(),
+          TOS: BigNumber.from(cloneFrom.balances.TOS).add(BigNumber.from(cloneTo.balances.TOS)).toString(),
+          USDC: BigNumber.from(cloneFrom.balances.USDC).add(BigNumber.from(cloneTo.balances.USDC)).toString(),
+          USDT: BigNumber.from(cloneFrom.balances.USDT).add(BigNumber.from(cloneTo.balances.USDT)).toString(),
+          WETH: BigNumber.from(cloneFrom.balances.WETH).add(BigNumber.from(cloneTo.balances.WETH)).toString(),
+          ETH: BigNumber.from(cloneFrom.balances.ETH).add(BigNumber.from(cloneTo.balances.ETH)).toString(),
+        },
+        uniswap: {
+          TON: BigNumber.from(cloneFrom.uniswap.TON).add(BigNumber.from(cloneTo.uniswap.TON)).toString(),
+          TOS: BigNumber.from(cloneFrom.uniswap.TOS).add(BigNumber.from(cloneTo.uniswap.TOS)).toString(),
+          USDC: BigNumber.from(cloneFrom.uniswap.USDC).add(BigNumber.from(cloneTo.uniswap.USDC)).toString(),
+          USDT: BigNumber.from(cloneFrom.uniswap.USDT).add(BigNumber.from(cloneTo.uniswap.USDT)).toString(),
+          WETH: BigNumber.from(cloneFrom.uniswap.WETH).add(BigNumber.from(cloneTo.uniswap.WETH)).toString(),
+          ETH: BigNumber.from(cloneFrom.uniswap.ETH).add(BigNumber.from(cloneTo.uniswap.ETH)).toString(),
+        },
+        contract: {
+          TON: BigNumber.from(cloneFrom.contract.TON).add(BigNumber.from(cloneTo.contract.TON)).toString(),
+          TOS: BigNumber.from(cloneFrom.contract.TOS).add(BigNumber.from(cloneTo.contract.TOS)).toString(),
+          USDC: BigNumber.from(cloneFrom.contract.USDC).add(BigNumber.from(cloneTo.contract.USDC)).toString(),
+          USDT: BigNumber.from(cloneFrom.contract.USDT).add(BigNumber.from(cloneTo.contract.USDT)).toString(),
+          WETH: BigNumber.from(cloneFrom.contract.WETH).add(BigNumber.from(cloneTo.contract.WETH)).toString(),
+          ETH: BigNumber.from(cloneFrom.contract.ETH).add(BigNumber.from(cloneTo.contract.ETH)).toString(),
+        }
+      }
+    }
+  }
+
+  await fs.writeFileSync(readFile2, JSON.stringify(eoaAmount));
+
+  return eoaAmount
+
+}
+
 async function main() {
 
-    console.log("\n1. ---- queryAccounts ----------------------")
+    // console.log("\n1. ---- queryAccounts ----------------------")
     // await queryAccounts()
 
+    // console.log("\n2. ---- get transactions and accounts ----------------------")
+    // await getAccountsUsingTransferEvent("TON", TON)
+    // await getAccountsUsingTransferEvent("TOS", TOS)
+    // await getAccountsUsingTransferEvent("USDC", USDC)
+    // await getAccountsUsingTransferEvent("USDT", USDT)
+    // await getAccountsUsingTransferEvent("WETH", WETH)
+    // if(DOC != "0x0000000000000000000000000000000000000000") await getAccountsUsingTransferEvent("DOC", DOC)
+    // if(AURA != "0x0000000000000000000000000000000000000000") await getAccountsUsingTransferEvent("AURA", AURA)
 
-    console.log("\n2. ---- get transactions and accounts ----------------------")
-    await getAccountsUsingTransferEvent("TON", TON)
-    await getAccountsUsingTransferEvent("TOS", TOS)
-    await getAccountsUsingTransferEvent("USDC", USDC)
-    await getAccountsUsingTransferEvent("USDT", USDT)
-    await getAccountsUsingTransferEvent("WETH", WETH)
-    await getAccountsUsingTransferEvent("DOC", DOC)
-    await getAccountsUsingTransferEvent("AURA", AURA)
+    // console.log("\n3. ---- divide the accounst with eoa and contract ----------------------")
+    // await checkContracts()
+    // await checkEoaInL1()
 
-    console.log("\n3. ---- divide the accounst with eoa and contract ----------------------")
-    await checkContracts()
-    await checkEoaInL1()
+    // console.log("\n4. ----  get the balances ----------------------")
+    // let fileMode = true
+    // await getBalances ("ETH", ETH, pauseBlock, null, fileMode)
+    // await getBalances ("TON", TON, pauseBlock, null, fileMode)
+    // await getBalances ("TOS", TOS, pauseBlock, null, fileMode)
+    // await getBalances ("USDC", USDC, pauseBlock, null, fileMode)
+    // await getBalances ("USDT", USDT, pauseBlock, null, fileMode)
+    // await getBalances ("WETH", WETH, pauseBlock, null, fileMode)
+    // if(DOC != "0x0000000000000000000000000000000000000000") await getBalances ("DOC", DOC, pauseBlock, null, fileMode)
+    // if(AURA != "0x0000000000000000000000000000000000000000") await getBalances ("AURA", AURA, pauseBlock, null, fileMode)
 
+    // console.log("\n5. ----  Details of contracts ----------------------")
+    // await queryContracts()
 
-    console.log("\n4. ----  get the balances ----------------------")
-    let fileMode = true
-    await getBalances ("ETH", ETH, pauseBlock, null, fileMode)
-    await getBalances ("TON", TON, pauseBlock, null, fileMode)
-    await getBalances ("TOS", TOS, pauseBlock, null, fileMode)
-    await getBalances ("USDC", USDC, pauseBlock, null, fileMode)
-    await getBalances ("USDT", USDT, pauseBlock, null, fileMode)
-    await getBalances ("WETH", WETH, pauseBlock, null, fileMode)
-    await getBalances ("DOC", DOC, pauseBlock, null, fileMode)
-    await getBalances ("AURA", AURA, pauseBlock, null, fileMode)
+    // console.log("\n6. ----  find out the LP's token amount and owner in UniswapV3 Pool --")
+    // // file: 1.titansepolia_contract_lp_tokens.json
+    // await calaculateAmountOfLps()
 
-    console.log("\n5. ----  Details of contracts ----------------------")
-    await queryContracts()
+    // console.log("\n7. ----  look for UniswapV3Pool --")
+    // // file: 2.titansepolia_contract_pools.json
+    // // file: 3.titansepolia_contract_commons.json
+    // await divideUniswapV3PoolContracts()
 
-    console.log("\n6. ----  find out the LP's token amount and owner in UniswapV3 Pool --")
-    // file: 1.titansepolia_contract_lp_tokens.json
-    await calaculateAmountOfLps()
+    // console.log("\n8. ---- compareLpsAndPoolsBalance  --")
+    // // file: /balances/1.titansepolia_sum_of_lps_by_pool.txt
+    // // file: /balances/2.titansepolia_compare_pool_lps.txt
+    // await compareLpsAndPoolsBalance()
 
-    console.log("\n7. ----  look for UniswapV3Pool --")
-    // file: 2.titansepolia_contract_pools.json
-    // file: 3.titansepolia_contract_commons.json
-    await divideUniswapV3PoolContracts()
-
-    console.log("\n8. ---- compareLpsAndPoolsBalance  --")
-    // file: /balances/1.titansepolia_sum_of_lps_by_pool.txt
-    // file: /balances/2.titansepolia_compare_pool_lps.txt
-    await compareLpsAndPoolsBalance()
-
-    console.log("\n9. ---- assetsLpsbyOwner  --")
-    // file: /balances/3.titansepolia_asset_lps_owner.json
-    await assetsLpsbyOwner()
+    // console.log("\n9. ---- assetsLpsbyOwner  --")
+    // // file: /balances/3.titansepolia_asset_lps_owner.json
+    // await assetsLpsbyOwner()
 
 
-    console.log("\n10. ---- assetsContractsbyOwner  --")
-    // file: /balances/4.titansepolia_asset_contracts_owner.json
-    await assetsContractsbyOwner()
+    // console.log("\n10. ---- assetsContractsbyOwner  --")
+    // // file: /balances/4.titansepolia_asset_contracts_owner.json
+    // await assetsContractsbyOwner()
 
-    // file: /balances/4.titansepolia_assets_eoa.json
-    await assetsAggregationByEOA()
+    // // file: /balances/4.titansepolia_assets_eoa.json
+    // await assetsAggregationByEOA()
+    // await assetTransfer()
 
-    console.log("\n11. ---- getBalanceL1Bridge  --")
-    // file: /balances/5.titansepolia_balance_l1_bridge.json
-    await getBalanceL1Bridge()
+    // console.log("\n11. ---- getBalanceL1Bridge  --")
+    // // file: /balances/5.titansepolia_balance_l1_bridge.json
+    // await getBalanceL1Bridge()
 
-    console.log("\n12. ---- Pending Withdrawals  --")
+    // console.log("\n12. ---- Pending Withdrawals  --")
 
-    //====== Pending Withdrawals
-    // file: /transactions/titansepolia_l2_send_message_17923.json
-    // file: /transactions/titansepolia_l2_send_message_data_17923.json
-    await getSendMessageTxs(SEPOLIA_L2_CONTRACT_ADDRESSES.L2CrossDomainMessenger)
+    // //====== Pending Withdrawals
+    // // file: /transactions/titansepolia_l2_send_message_17923.json
+    // // file: /transactions/titansepolia_l2_send_message_data_17923.json
+    // await getSendMessageTxs(L2_CONTRACT_ADDRESSES.L2CrossDomainMessenger)
 
-    // file: /withdrawals/1.titansepolia_l1_cross_check_relayMessage_all.json
-    // file: /withdrawals/2.titansepolia_l1_cross_pending_relayMessage.json
-    await getPendingWithdrawals()
+    // // file: /withdrawals/1.titansepolia_l1_cross_check_relayMessage_all.json
+    // // file: /withdrawals/2.titansepolia_l1_cross_pending_relayMessage.json
+    // await getPendingWithdrawals()
 
-    // file: /data/balances/6.titansepolia_total_pending_asset.json
-    await totalPendingAsset()
+    // // file: /data/balances/6.titansepolia_total_pending_asset.json
+    // await totalPendingAsset()
 
-    console.log("\n13. ---- Verify  --")
-    await verifyAssetAmount()
+    // console.log("\n13. ---- Verify  --")
+    // await verifyAssetAmount()
+
+    // console.log("\n13. ---- assetTransfer  --")
+    // Since the L2 EOA account is a CA in L1, modify it to be sent to the owner or distributor of the CA.
 
   }
 
