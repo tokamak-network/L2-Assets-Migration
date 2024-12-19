@@ -1127,7 +1127,7 @@ async function main() {
 
     // 2. divide the accounst with eoa ans contract
     // await checkContracts()
-    await checkEoaInL1()
+    // await checkEoaInL1()
 
     // 3. get the balances
     // let fileMode = true
