@@ -13,7 +13,7 @@ import axios from 'axios';
 const WETH = process.env.L2_WETH_ADDRESS || ""
 const L2PROVIDER = new ethers.providers.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L2 || ""); // L2 RPC URL
 const L2BRIDGE = process.env.CONTRACTS_L2BRIDGE_ADDRESS || ""; // L2 bridge address
-const baseUrl = "https://explorer.titan-sepolia.tokamak.network/api?"
+const baseUrl = "https://explorer.titan.tokamak.network/api?"
 const dirPath = "data"
 
 const SEPOLIA_L2_CONTRACT_ADDRESSES: OEL2ContractsLike = {
@@ -50,7 +50,7 @@ const SEPOLIA_CONTRACTS: OEContractsLike = {
 /**
  * Returns whether a claim is made and the status of the withdrawal tx.
  *
- * UNCONFIRMED_L1_TO_L2_MESSAGE = 0, FAILED_L1_TO_L2_MESSAGE = 1,STATE_ROOT_NOT_PUBLISHED = 2, IN_CHALLENGE_PERIOD = 3,
+ * UNCONFIRMED_L1_TO_L2_MESSAGE = 0, FAILED_L1_TO_L2_MESSAGE = 1, STATE_ROOT_NOT_PUBLISHED = 2, IN_CHALLENGE_PERIOD = 3,
  * READY_FOR_RELAY = 4, RELAYED = 5, RELAYED_FAILED = 6
  * @returns {boolean} - true : claimed, false : unclaimed
  * 
@@ -356,6 +356,71 @@ export const getContractAll = async (page: number, offest: number, flag?: boolea
   
   return result
 }
+
+
+export const getContractAll2 = async (page: number, offest: number, flag?: boolean) => {
+  const result: any = [];
+  let data: any = [];
+  try {
+    for (let i = 1; i <= page; i++) {
+      const query = `module=contract&action=listcontracts&page=${i}&offset=${offest}`;
+      const response = await axios.get<Response>(baseUrl + query);
+      if (response.data.status === '1') {
+        if (response.data.result === null || response.data.result === undefined || response.data.result.length === 0)
+          break;
+        data.push(...response.data.result);
+      } else {
+        console.error('Failed to fetch data:', response.data.message);
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+  const convertData: any = [];
+  await Promise.all(data.map(async (item: any) => {
+    const poolContract = new ethers.Contract(item.Address, Pool, L2PROVIDER);
+    // todo : Requires non-V3 full contract handling.
+    try {
+      await poolContract.liquidity()
+    } catch (err) {
+      convertData.push(item.Address)
+    }
+  }));
+
+  if (flag) {
+    const total = convertData.length;
+    const bar = new ProgressBar(':bar :current/:total', { width: 50, total: total });
+    console.log(blue.bgBlue.bold("🔍 Retrieving All Contract list (token included)..."))
+    for (const contract of convertData) {
+      await sleep(100)
+      const query = `module=account&action=tokenlist&address=${contract}&page=1&offset=9999`;
+      try {
+        const response = await axios.get<Response>(baseUrl + query);
+        if (response.data.status === '1') {
+          if (response.data.result === null || response.data.result === undefined || response.data.result.length === 0)
+            continue;
+
+          result.push({
+            caAddress: contract,
+            tokens: response.data.result
+          })
+        } else {
+          // console.error('Failed to fetch data:', response.data.message);
+        }
+
+      } catch (error) {
+        // console.error('Error fetching data:', error);
+      }
+      bar.tick();
+    }
+  } else return convertData;
+
+  return result
+}
+
+
+
+
 
 /**
  * .
