@@ -25,3 +25,7 @@ USDT (Sum of LPS  ):10342550233
 WETH (Pool Balance):1848860432697481677
 WETH (Sum of LPS  ):1848860432697481204
  Diff             : 473
+
+ETH (Pool Balance):0
+ETH (Sum of LPS  ):0
+ Diff             : 0

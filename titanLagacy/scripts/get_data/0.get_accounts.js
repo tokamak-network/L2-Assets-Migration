@@ -206,7 +206,7 @@ async function getTransferTxs(tokenSymbol, tokenAddress) {
   const transferId = ethers.utils.id("Transfer(address,address,uint256)")
 
   // let unit = 1000000
-  let unit = 100
+  let unit = 1000
   let boolWhile = false
   let filter = null;
 
@@ -235,7 +235,7 @@ async function getTransferTxs(tokenSymbol, tokenAddress) {
       transactions.push(transactionHash)
     }
     start = toBlock;
-    console.log('start --- ', start )
+    // console.log('start --- ', start )
   }
 
   let outFile = "./data/transactions/"+networkName+"_"+tokenSymbol+"_"+blockNumber+".json"
@@ -1023,6 +1023,7 @@ async function assetsAggregationByEOA() {
     USDT: BigNumber.from("0"),
     WETH: BigNumber.from("0"),
     ETH: BigNumber.from("0"),
+    TETH: BigNumber.from("0"),
   }
 
   var assetAggregation = {}
@@ -1063,11 +1064,13 @@ async function assetsAggregationByEOA() {
         USDT: BigNumber.from(balances.USDT).add(BigNumber.from(uniswap.USDT)).add(BigNumber.from(contract.USDT)).toString(),
         WETH: BigNumber.from(balances.WETH).add(BigNumber.from(uniswap.WETH)).add(BigNumber.from(contract.WETH)).toString(),
         ETH: BigNumber.from(balances.ETH).add(BigNumber.from(uniswap.ETH)).add(BigNumber.from(contract.ETH)).toString(),
+        TETH: BigNumber.from("0"),
       },
       balances: balances,
       uniswap: uniswap,
       contract: contract
     }
+    assetAggregation[account].total.TETH = BigNumber.from(assetAggregation[account].total.WETH).add(BigNumber.from(assetAggregation[account].total.ETH)).toString()
 
     sums.TON = sums.TON.add(BigNumber.from(assetAggregation[account].total.TON))
     sums.TOS = sums.TOS.add(BigNumber.from(assetAggregation[account].total.TOS))
@@ -1076,6 +1079,7 @@ async function assetsAggregationByEOA() {
     sums.WETH = sums.WETH.add(BigNumber.from(assetAggregation[account].total.WETH))
     sums.ETH = sums.ETH.add(BigNumber.from(assetAggregation[account].total.ETH))
   }
+  sums.TETH =  sums.WETH.add(sums.ETH)
 
   console.log("\n ---- assetsAggregationByEOA: SUM ---- \n"  )
   console.log("TON", ethers.utils.formatUnits(sums.TON, 18) )
@@ -1084,11 +1088,25 @@ async function assetsAggregationByEOA() {
   console.log("USDT", ethers.utils.formatUnits(sums.USDT, 6) )
   console.log("WETH", ethers.utils.formatUnits(sums.WETH, 18) )
   console.log("ETH", ethers.utils.formatUnits(sums.ETH, 18) )
+  console.log("TETH", ethers.utils.formatUnits(sums.TETH, 18) )
+
 
   let outFile ='./data/balances/5.'+hre.network.name+'_asset_eoa.json'
   await fs.writeFileSync(outFile, JSON.stringify(assetAggregation));
 
-  return {balances, uniswap, contract, assetAggregation, sums}
+  let totalEoaAmount = {
+    TON: sums.TON.toString(),
+    TOS: sums.TOS.toString(),
+    USDC: sums.USDC.toString(),
+    USDT: sums.USDT.toString(),
+    WETH: sums.WETH.toString(),
+    ETH: sums.ETH.toString(),
+    TETH: sums.TETH.toString()
+  }
+  let outFile1 ='./data/balances/7.'+hre.network.name+'_total_eoa_asset.json'
+  await fs.writeFileSync(outFile1, JSON.stringify(totalEoaAmount));
+
+  return {balances, uniswap, contract, assetAggregation, sums, totalEoaAmount}
 
 }
 
@@ -1265,11 +1283,11 @@ async function getSendMessageTxs(contractAddress) {
 
     for (const tx of txs) {
       const { transactionHash } = tx;
-      console.log('transactionHash', transactionHash )
+      // console.log('transactionHash', transactionHash )
       transactions.push(transactionHash)
     }
     start = toBlock;
-    console.log('start --- ', start )
+    // console.log('start --- ', start )
   }
 
   let outFile = "./data/transactions/"+networkName+"_l2_send_message_"+blockNumber+".json"
@@ -1294,7 +1312,7 @@ async function getSendMessageTxs(contractAddress) {
       }
       i++
       if(i % 200 == 0) {
-        console.log('i --- ', i )
+        // console.log('i --- ', i )
       }
     }
   }
@@ -1430,11 +1448,30 @@ async function totalPendingAsset() {
     return totalPendingAmount
 }
 
+async function verifyAssetAmount() {
+
+  let readFile1 ='./data/balances/6.'+hre.network.name+"_total_pending_asset.json"
+  var pendingAmounts
+  if (await fs.existsSync(readFile1)) pendingAmounts = JSON.parse(await fs.readFileSync(readFile1));
+
+  let readFile2 ='./data/balances/6.'+hre.network.name+"_total_pending_asset.json"
+  var eoaAmount
+  if (await fs.existsSync(readFile2)) eoaAmount = JSON.parse(await fs.readFileSync(readFile2));
+
+
+  let readFile3 ='./data/balances/6.'+hre.network.name+"_total_pending_asset.json"
+  var bridgeAmount
+  if (await fs.existsSync(readFile3)) bridgeAmount = JSON.parse(await fs.readFileSync(readFile3));
+
+}
 
 async function main() {
+
+    console.log("\n1. ---- queryAccounts ----------------------")
     // await queryAccounts()
 
-    // 1. get transactions and accounts
+
+    console.log("\n2. ---- get transactions and accounts ----------------------")
     // await getAccountsUsingTransferEvent("TON", TON)
     // await getAccountsUsingTransferEvent("TOS", TOS)
     // await getAccountsUsingTransferEvent("USDC", USDC)
@@ -1443,11 +1480,13 @@ async function main() {
     // await getAccountsUsingTransferEvent("DOC", DOC)
     // await getAccountsUsingTransferEvent("AURA", AURA)
 
-    // 2. divide the accounst with eoa ans contract
+    console.log("\n3. ---- divide the accounst with eoa ans contract ----------------------")
+
     // await checkContracts()
     // await checkEoaInL1()
 
-    // 3. get the balances
+
+    console.log("\n4. ----  get the balances ----------------------")
     // let fileMode = true
     // await getBalances ("ETH", ETH, pauseBlock, null, fileMode)
     // await getBalances ("TON", TON, pauseBlock, null, fileMode)
@@ -1458,44 +1497,57 @@ async function main() {
     // await getBalances ("DOC", DOC, pauseBlock, null, fileMode)
     // await getBalances ("AURA", AURA, pauseBlock, null, fileMode)
 
-    // 4. Details of contracts
-    // await queryContracts()
+    console.log("\n5. ----  Details of contracts ----------------------")
+    await queryContracts()
 
-    // 5. find out the LP's token amount and owner in UniswapV3 Pool
+
+    console.log("\n6. ----  find out the LP's token amount and owner in UniswapV3 Pool --")
     // file: 1.titansepolia_contract_lp_tokens.json
-    // await calaculateAmountOfLps()
+    await calaculateAmountOfLps()
 
-    // 6. look for UniswapV3Pool
+    console.log("\n7. ----  look for UniswapV3Pool --")
     // file: 2.titansepolia_contract_pools.json
     // file: 3.titansepolia_contract_commons.json
-    // await divideUniswapV3PoolContracts()
+    await divideUniswapV3PoolContracts()
 
+    console.log("\n8. ---- compareLpsAndPoolsBalance  --")
     // file: /balances/1.titansepolia_sum_of_lps_by_pool.txt
     // file: /balances/2.titansepolia_compare_pool_lps.txt
-    // await compareLpsAndPoolsBalance()
+    await compareLpsAndPoolsBalance()
 
+    console.log("\n9. ---- assetsLpsbyOwner  --")
     // file: /balances/3.titansepolia_asset_lps_owner.json
-    // await assetsLpsbyOwner()
+    await assetsLpsbyOwner()
 
+
+    console.log("\n10. ---- assetsContractsbyOwner  --")
     // file: /balances/4.titansepolia_asset_contracts_owner.json
-    // await assetsContractsbyOwner()
+    await assetsContractsbyOwner()
 
     // file: /balances/4.titansepolia_assets_eoa.json
-    // await assetsAggregationByEOA()
+    await assetsAggregationByEOA()
 
-
+    console.log("\n11. ---- getBalanceL1Bridge  --")
     // file: /balances/5.titansepolia_balance_l1_bridge.json
-    // await getBalanceL1Bridge()
+    await getBalanceL1Bridge()
 
-    //====== Peding Withdrawals
+    console.log("\n12. ---- Pending Withdrawals  --")
+
+    //====== Pending Withdrawals
     // file: /transactions/titansepolia_l2_send_message_17923.json
     // file: /transactions/titansepolia_l2_send_message_data_17923.json
-    // await getSendMessageTxs(SEPOLIA_L2_CONTRACT_ADDRESSES.L2CrossDomainMessenger)
+    await getSendMessageTxs(SEPOLIA_L2_CONTRACT_ADDRESSES.L2CrossDomainMessenger)
 
     // file: /withdrawals/1.titansepolia_l1_cross_check_relayMessage_all.json
     // file: /withdrawals/2.titansepolia_l1_cross_pending_relayMessage.json
-    // await getPendingWithdrawals()
+    await getPendingWithdrawals()
+
+    // file: /data/balances/6.titansepolia_total_pending_asset.json
     await totalPendingAsset()
+
+    console.log("\n13. ---- Verify  --")
+    // await verifyAssetAmount()
+
   }
 
   main()
