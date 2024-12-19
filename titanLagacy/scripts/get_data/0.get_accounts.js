@@ -279,8 +279,8 @@ async function getAccounts(depositedTxs, readFile, readBool, appendMode ) {
       if(!users.includes(fromAddress)) users.push(fromAddress)
       if(!users.includes(toAddress)) users.push(toAddress)
       i++
-      if(i % 200 == 0) {
-        console.log('i --- ', i )
+      if(i % 500 == 0) {
+        // console.log('i --- ', i )
         // await fs.writeFileSync("./data/depositors.json", JSON.stringify(depositors));
       }
     }
@@ -1103,6 +1103,7 @@ async function assetsAggregationByEOA() {
     ETH: sums.ETH.toString(),
     TETH: sums.TETH.toString()
   }
+
   let outFile1 ='./data/balances/7.'+hre.network.name+'_total_eoa_asset.json'
   await fs.writeFileSync(outFile1, JSON.stringify(totalEoaAmount));
 
@@ -1135,7 +1136,7 @@ async function getBalanceL1Bridge() {
   balanceOfL1Bridge.TOS = await L1TosContract.balanceOf(L1Bridge)
   balanceOfL1Bridge.USDC = await L1UsdcContract.balanceOf(L1Bridge)
   balanceOfL1Bridge.USDT = await L1UsdtContract.balanceOf(L1Bridge)
-  balanceOfL1Bridge.ETH = await ethers.provider.getBalance(L1Bridge)
+  balanceOfL1Bridge.ETH = await L1PROVIDER.getBalance(L1Bridge)
 
   console.log('\n==================================')
   console.log('=== Balance Of L1 Bridge ==========')
@@ -1169,6 +1170,16 @@ async function getBalanceL1Bridge() {
   console.log('USDT', ethers.utils.formatUnits(depositsOfL1Bridge.USDT, 6))
   console.log(' ')
 
+  var balanceBridge = {
+    TON: balanceOfL1Bridge.TON.toString(),
+    TOS: balanceOfL1Bridge.TOS.toString(),
+    USDC: balanceOfL1Bridge.USDC.toString(),
+    USDT: balanceOfL1Bridge.USDT.toString(),
+    ETH: balanceOfL1Bridge.ETH.toString(),
+  }
+
+  let outFile1 ='./data/balances/8.'+hre.network.name+'_balance_l1_bridge.json'
+  await fs.writeFileSync(outFile1, JSON.stringify(balanceBridge));
 
   return { balanceOfL1Bridge, depositsOfL1Bridge }
 
@@ -1311,7 +1322,7 @@ async function getSendMessageTxs(contractAddress) {
         gasLimit: gasLimit.toString()
       }
       i++
-      if(i % 200 == 0) {
+      if(i % 500 == 0) {
         // console.log('i --- ', i )
       }
     }
@@ -1449,20 +1460,58 @@ async function totalPendingAsset() {
 }
 
 async function verifyAssetAmount() {
-
   let readFile1 ='./data/balances/6.'+hre.network.name+"_total_pending_asset.json"
   var pendingAmounts
   if (await fs.existsSync(readFile1)) pendingAmounts = JSON.parse(await fs.readFileSync(readFile1));
 
-  let readFile2 ='./data/balances/6.'+hre.network.name+"_total_pending_asset.json"
+  let readFile2 ='./data/balances/7.'+hre.network.name+"_total_eoa_asset.json"
   var eoaAmount
   if (await fs.existsSync(readFile2)) eoaAmount = JSON.parse(await fs.readFileSync(readFile2));
 
-
-  let readFile3 ='./data/balances/6.'+hre.network.name+"_total_pending_asset.json"
+  let readFile3 ='./data/balances/8.'+hre.network.name+"_balance_l1_bridge.json"
   var bridgeAmount
   if (await fs.existsSync(readFile3)) bridgeAmount = JSON.parse(await fs.readFileSync(readFile3));
 
+  console.log('pendingAmounts', pendingAmounts)
+  console.log('eoaAmount', eoaAmount)
+  console.log('bridgeAmount', bridgeAmount)
+
+  let ethAmount = BigNumber.from(eoaAmount.TETH).add(BigNumber.from(pendingAmounts.ETH))
+  let tonAmount = BigNumber.from(eoaAmount.TON).add(BigNumber.from(pendingAmounts.TON))
+  let tosAmount = BigNumber.from(eoaAmount.TOS).add(BigNumber.from(pendingAmounts.TOS))
+  let usdcAmount = BigNumber.from(eoaAmount.USDC).add(BigNumber.from(pendingAmounts.USDC))
+  let usdtAmount = BigNumber.from(eoaAmount.USDT).add(BigNumber.from(pendingAmounts.USDT))
+
+
+  if (BigNumber.from(bridgeAmount.ETH).gte(ethAmount)){
+    console.log(" Verify ETH ; TRUE ")
+  } else {
+    console.log(" Verify ETH ; FLASE ")
+  }
+
+  if (BigNumber.from(bridgeAmount.TON).gte(tonAmount)){
+    console.log(" Verify TON ; TRUE ")
+  } else {
+    console.log(" Verify TON ; FLASE ")
+  }
+
+  if (BigNumber.from(bridgeAmount.TOS).gte(tosAmount)){
+    console.log(" Verify TOS ; TRUE ")
+  } else {
+    console.log(" Verify TOS ; FLASE ")
+  }
+
+  if (BigNumber.from(bridgeAmount.USDC).gte(usdcAmount)){
+    console.log(" Verify USDC ; TRUE ")
+  } else {
+    console.log(" Verify USDC ; FLASE ")
+  }
+
+  if (BigNumber.from(bridgeAmount.USDT).gte(usdtAmount)){
+    console.log(" Verify USDT ; TRUE ")
+  } else {
+    console.log(" Verify USDT ; FLASE ")
+  }
 }
 
 async function main() {
@@ -1472,34 +1521,32 @@ async function main() {
 
 
     console.log("\n2. ---- get transactions and accounts ----------------------")
-    // await getAccountsUsingTransferEvent("TON", TON)
-    // await getAccountsUsingTransferEvent("TOS", TOS)
-    // await getAccountsUsingTransferEvent("USDC", USDC)
-    // await getAccountsUsingTransferEvent("USDT", USDT)
-    // await getAccountsUsingTransferEvent("WETH", WETH)
-    // await getAccountsUsingTransferEvent("DOC", DOC)
-    // await getAccountsUsingTransferEvent("AURA", AURA)
+    await getAccountsUsingTransferEvent("TON", TON)
+    await getAccountsUsingTransferEvent("TOS", TOS)
+    await getAccountsUsingTransferEvent("USDC", USDC)
+    await getAccountsUsingTransferEvent("USDT", USDT)
+    await getAccountsUsingTransferEvent("WETH", WETH)
+    await getAccountsUsingTransferEvent("DOC", DOC)
+    await getAccountsUsingTransferEvent("AURA", AURA)
 
-    console.log("\n3. ---- divide the accounst with eoa ans contract ----------------------")
-
-    // await checkContracts()
-    // await checkEoaInL1()
+    console.log("\n3. ---- divide the accounst with eoa and contract ----------------------")
+    await checkContracts()
+    await checkEoaInL1()
 
 
     console.log("\n4. ----  get the balances ----------------------")
-    // let fileMode = true
-    // await getBalances ("ETH", ETH, pauseBlock, null, fileMode)
-    // await getBalances ("TON", TON, pauseBlock, null, fileMode)
-    // await getBalances ("TOS", TOS, pauseBlock, null, fileMode)
-    // await getBalances ("USDC", USDC, pauseBlock, null, fileMode)
-    // await getBalances ("USDT", USDT, pauseBlock, null, fileMode)
-    // await getBalances ("WETH", WETH, pauseBlock, null, fileMode)
-    // await getBalances ("DOC", DOC, pauseBlock, null, fileMode)
-    // await getBalances ("AURA", AURA, pauseBlock, null, fileMode)
+    let fileMode = true
+    await getBalances ("ETH", ETH, pauseBlock, null, fileMode)
+    await getBalances ("TON", TON, pauseBlock, null, fileMode)
+    await getBalances ("TOS", TOS, pauseBlock, null, fileMode)
+    await getBalances ("USDC", USDC, pauseBlock, null, fileMode)
+    await getBalances ("USDT", USDT, pauseBlock, null, fileMode)
+    await getBalances ("WETH", WETH, pauseBlock, null, fileMode)
+    await getBalances ("DOC", DOC, pauseBlock, null, fileMode)
+    await getBalances ("AURA", AURA, pauseBlock, null, fileMode)
 
     console.log("\n5. ----  Details of contracts ----------------------")
     await queryContracts()
-
 
     console.log("\n6. ----  find out the LP's token amount and owner in UniswapV3 Pool --")
     // file: 1.titansepolia_contract_lp_tokens.json
@@ -1546,7 +1593,7 @@ async function main() {
     await totalPendingAsset()
 
     console.log("\n13. ---- Verify  --")
-    // await verifyAssetAmount()
+    await verifyAssetAmount()
 
   }
 
