@@ -1289,22 +1289,26 @@ async function getPendingWithdrawals() {
       if(!successfulMessages) failedMessages = await crossDomainMessengerL1.failedMessages(xDomainCalldataHash)
 
         resultSuccessfulMessages[key] = {
-        target: obj.target,
-        sender: obj.sender,
-        message: obj.message,
-        messageNonce: obj.messageNonce,
-        xDomainCalldata: xDomainCalldata,
-        xDomainCalldataHash: xDomainCalldataHash,
-        decode: decodeMessage(obj.message, obj.target),
-        successfulMessages: successfulMessages,
-        failedMessages: failedMessages
-      }
+          target: obj.target,
+          sender: obj.sender,
+          message: obj.message,
+          messageNonce: obj.messageNonce,
+          minGasLimit: obj.gasLimit,
+          value: obj.value,
+          logIndex: obj.logIndex,
+          blockNumber:  obj.blockNumber,
+          xDomainCalldata: xDomainCalldata,
+          xDomainCalldataHash: xDomainCalldataHash,
+          decode: decodeMessage(obj.message, obj.target),
+          successfulMessages: successfulMessages,
+          failedMessages: failedMessages
+        }
 
-      if(!successfulMessages && !failedMessages) {
-        pendingSuccessfulMessages[key] = resultSuccessfulMessages[key]
-        // console.log(key, falseSuccessfulMessages[key])
-      }
-      // console.log(i, key, resultSuccessfulMessages[key])
+        if(!successfulMessages && !failedMessages) {
+          pendingSuccessfulMessages[key] = resultSuccessfulMessages[key]
+          // console.log(key, falseSuccessfulMessages[key])
+        }
+        // console.log(i, key, resultSuccessfulMessages[key])
   }
 
   let outFile1 = DATA_FLS_PREFIX+'/withdrawals/1.'+hre.network.name+'_l1_cross_check_relayMessage_all.json'
@@ -1326,9 +1330,15 @@ async function getSendMessageTxs(contractAddress) {
   let end = pauseBlock
   console.log('end', end)
   let blockNumber = pauseBlock
-  const abi = [ "event SentMessage(address indexed target, address sender, bytes message, uint256 messageNonce, uint256 gasLimit)" ];
-  const iface = new ethers.utils.Interface(abi);
+  // const abi = [
+  //   "event SentMessage(address indexed target, address sender, bytes message, uint256 messageNonce, uint256 gasLimit)",
+  //   "event SentMessageExtension1(address indexed sender, uint256 value)"
+  // ];
+
+  const abi = require("../abi/L1CrossDomainMessenger.json")
+  const iface = new ethers.utils.Interface(abi.abi);
   const functionId = ethers.utils.id("SentMessage(address,address,bytes,uint256,uint256)")
+  // const sentMessageExtension1Id = ethers.utils.id("SentMessageExtension1(address,uint256)")
 
   // let unit = 1000000
   let unit = 100
@@ -1366,21 +1376,41 @@ async function getSendMessageTxs(contractAddress) {
   await fs.writeFileSync(outFile, JSON.stringify(transactions));
 
   //===========
+
   let sendMessageData = {}
   let i = 0
   if (transactions.length > 0) {
     for (const sendTx of transactions) {
-      const { logs } = await ethers.provider.getTransactionReceipt(sendTx);
+      // let receipt = await ethers.provider.getTransactionReceipt(sendTx);
+      // const logs = receipt.logs
+      const { logs, blockNumber } = await ethers.provider.getTransactionReceipt(sendTx);
+
       const foundLog = logs.find(el => el && el.topics && el.topics.includes(functionId));
       if (!foundLog) continue;
+
       const parsedlog = iface.parseLog(foundLog);
       const {target, sender, message, messageNonce, gasLimit} = parsedlog["args"];
+
+      var value = "0"
+      // const foundLog1 = logs.find(el => el && el.topics && el.topics.includes(sentMessageExtension1Id));
+
+      // if (!foundLog1) {
+      //   const parsedlog1 = iface.parseLog(foundLog1);
+      //   console.log('parsedlog1', parsedlog1)
+
+      //   value = parsedlog1["args"].value;
+      //   console.log('value', value)
+      // }
+
       sendMessageData[sendTx] = {
         target: target,
         sender: sender,
         message: message,
         messageNonce: messageNonce.toString(),
-        gasLimit: gasLimit.toString()
+        value: value,
+        gasLimit: gasLimit.toString(),
+        logIndex: foundLog.logIndex,
+        blockNumber: blockNumber,
       }
       i++
       if(i % 500 == 0) {
@@ -1394,6 +1424,41 @@ async function getSendMessageTxs(contractAddress) {
 
   return { transactions, sendMessageData};
 }
+
+async function getProofByMessage(message) {
+  const l2Provider = new ethers.providers.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L2);
+  const l2wallet = new ethers.Wallet(addHexPrefix(process.env.PERSONAL_ACCOUNT) || "", l2Provider);
+  const l1Provider = new ethers.providers.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L1);
+  const l1wallet = new ethers.Wallet(addHexPrefix(process.env.PERSONAL_ACCOUNT) || "", l1Provider);
+
+  const batchCrossChainMessenger = new BatchCrossChainMessenger({
+    l1SignerOrProvider: l1wallet,
+    l2SignerOrProvider: l2wallet,
+    l1ChainId: 11155111,
+    l2ChainId: 55007,
+    contracts: CONTRACTS,
+    bedrock: false
+  })
+
+  const L1CrossDomainMessengerAbi = require("../abi/L1CrossDomainMessenger.json");
+
+  const crossDomainMessengerL1 = new ethers.Contract(CONTRACTS.l1.L1CrossDomainMessenger, L1CrossDomainMessengerAbi.abi, l1Provider);
+
+  const getMessageProof = await batchCrossChainMessenger.getMessageProof(message)
+  console.log("getMessageProof" , getMessageProof)
+
+
+  let res = await crossDomainMessengerL1.connect(l1wallet).relayMessage(
+    message.target,
+    message.sender,
+    message.message,
+    BigNumber.from(message.messageNonce + ""),
+    getMessageProof
+  )
+
+  console.log("relayMessage", res)
+}
+
 
 const addHexPrefix = (privateKey) => {
   if (privateKey.substring(0, 2) !== "0x") {
@@ -1780,13 +1845,13 @@ async function main() {
 
     console.log("\n12. ---- Pending Withdrawals  --")
 
-    //====== Pending Withdrawals
+    // ====== Pending Withdrawals
     // file: /transactions/titansepolia_l2_send_message_17923.json
     // file: /transactions/titansepolia_l2_send_message_data_17923.json
     await getSendMessageTxs(L2_CONTRACT_ADDRESSES.L2CrossDomainMessenger)
 
-    // file: /withdrawals/1.titansepolia_l1_cross_check_relayMessage_all.json
-    // file: /withdrawals/2.titansepolia_l1_cross_pending_relayMessage.json
+    // // file: /withdrawals/1.titansepolia_l1_cross_check_relayMessage_all.json
+    // // file: /withdrawals/2.titansepolia_l1_cross_pending_relayMessage.json
     await getPendingWithdrawals()
 
     // file: /data/balances/6.titansepolia_total_pending_asset.json
@@ -1795,6 +1860,25 @@ async function main() {
     console.log("\n13. ---- Verify  --")
     await verifyAssetAmount()
 
+
+    // ========= Test Final Withdrawal =====================
+    const message = {
+      direction: 1,
+      target: "0x1F032B938125f9bE411801fb127785430E7b3971",
+      sender:  "0x4200000000000000000000000000000000000010",
+      message: "0xa9f9e675000000000000000000000000a30fe40285b8f5c0457dbc3b7c8a280373c400440000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c1eba383d94c6021160042491a5dfaf1d82694e600000000000000000000000090ffcc7f168dcedbef1cb6c6eb00ca73f922956f0000000000000000000000000000000000000000000000008ac7230489e8000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000023078000000000000000000000000000000000000000000000000000000000000",
+      messageNonce: 100034,
+      value: "0",
+      minGasLimit: "0",
+      logIndex: 0,
+      blockNumber: 3759,
+      transactionHash: '0xc93bcda47a0f28c5966d609a14643887abfc014f53c9f0910e4ef0427a65769c',
+    }
+
+    let a = await getProofByMessage(message)
+    console.log(a)
+
+    //======================================
   }
 
   main()
