@@ -5,7 +5,10 @@ const axios  = require('axios');
 const { BigNumber } = require("ethers")
 
 const { BatchCrossChainMessenger, MessageStatus, OEL2ContractsLike, OEContractsLike } = require("@tokamak-network/titan-sdk")
-/*
+
+let DATA_FLS_PREFIX = "./data/sunset_"+hre.network.name
+
+
 // titan-sepolia
 const baseUrl = "https://explorer.titan-sepolia.tokamak.network/api?"
 const TON = "0x7c6b91d9be155a6db01f749217d76ff02a7227f2"
@@ -27,7 +30,7 @@ const L1USDT = "0x42d3b260c761cD5da022dB56Fe2F89c4A909b04A"
 const L1DOC = "0x8c4c0fc89382f96e435527d39c9ec69dded34e77"
 const L1AURA = "0xf8474c2a90b9035e0b431e1789fe76f54d4ce708"
 const L1ETH = ""
-const pauseBlock = 17923 //17923
+const pauseBlock = 17928
 const startBlock = 0
 
 // L2에서 L1Bridge주소의 자산을 누가 가져갈것인가.
@@ -72,8 +75,8 @@ const CONTRACTS = {
   },
   l2: L2_CONTRACT_ADDRESSES,
 }
-*/
 
+/*
 // titan
 const baseUrl = "https://explorer.titan.tokamak.network/api?"
 const TON = "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2"
@@ -95,7 +98,7 @@ const L1USDT = "0xdac17f958d2ee523a2206206994597c13d831ec7"
 const L1DOC = "0x8c4c0fc89382f96e435527d39c9ec69dded34e77"
 const L1AURA = "0xf8474c2a90b9035e0b431e1789fe76f54d4ce708"
 const L1ETH = ""
-const pauseBlock = 6383
+const pauseBlock = 6391
 const startBlock = 0
 
 // L2에서 L1Bridge주소의 자산을 누가 가져갈것인가.
@@ -133,7 +136,9 @@ const CONTRACTS = {
   },
   l2: L2_CONTRACT_ADDRESSES,
 }
+*/
 
+DATA_FLS_PREFIX = DATA_FLS_PREFIX +"_"+ pauseBlock
 
 async function getBalances(tokenSymbol, tokenAddress, blockNumber, accounts, readFileBool) {
     const networkName = hre.network.name
@@ -141,7 +146,7 @@ async function getBalances(tokenSymbol, tokenAddress, blockNumber, accounts, rea
     console.log("\n--- getBalances : ", tokenSymbol)
 
     if (readFileBool) {
-      let readFile = "./data/accounts/"+hre.network.name+"_accounts.json"
+      let readFile = DATA_FLS_PREFIX+"/accounts/"+hre.network.name+"_accounts.json"
       accounts = JSON.parse(await fs.readFileSync(readFile));
     }
     console.log("accounts.length", accounts.length)
@@ -168,7 +173,7 @@ async function getBalances(tokenSymbol, tokenAddress, blockNumber, accounts, rea
     console.log("totalSupply", ethers.utils.formatUnits( totalSupply, decimals))
     console.log("totalSupply.sub(sum)", ethers.utils.formatUnits(totalSupply.sub(sum), decimals) )
 
-    let outFile = "./data/balances/"+networkName+"_"+tokenSymbol+"_"+blockNumber+".json"
+    let outFile = DATA_FLS_PREFIX+"/balances/"+networkName+"_"+tokenSymbol+"_"+blockNumber+".json"
     await fs.writeFileSync(outFile, JSON.stringify(balances));
 
     return { outFile, balances}
@@ -176,7 +181,7 @@ async function getBalances(tokenSymbol, tokenAddress, blockNumber, accounts, rea
 
 async function checkContracts() {
 
-  let accounts = JSON.parse(await fs.readFileSync("./data/accounts/"+hre.network.name+"_accounts.json"));
+  let accounts = JSON.parse(await fs.readFileSync(DATA_FLS_PREFIX+"/accounts/"+hre.network.name+"_accounts.json"));
   console.log("accounts.length", accounts.length)
 
   let eoas = []
@@ -191,8 +196,8 @@ async function checkContracts() {
   console.log('eoas.length', eoas.length)
   console.log('contracts.length', contracts.length)
 
-  let eoaFile = "./data/accounts/"+hre.network.name+"_accounts_eoa.json"
-  let contractFile = "./data/accounts/"+hre.network.name+"_accounts_contract.json"
+  let eoaFile = DATA_FLS_PREFIX+"/accounts/"+hre.network.name+"_accounts_eoa.json"
+  let contractFile = DATA_FLS_PREFIX+"/accounts/"+hre.network.name+"_accounts_contract.json"
   await fs.writeFileSync(eoaFile, JSON.stringify(eoas));
   await fs.writeFileSync(contractFile, JSON.stringify(contracts));
 
@@ -202,7 +207,7 @@ async function checkContracts() {
 
 
 async function checkEoaInL1() {
-  let eoaFile = "./data/accounts/"+hre.network.name+"_accounts_eoa.json"
+  let eoaFile = DATA_FLS_PREFIX+"/accounts/"+hre.network.name+"_accounts_eoa.json"
   let accounts = JSON.parse(await fs.readFileSync(eoaFile));
   console.log("accounts.length", accounts.length)
 
@@ -217,7 +222,7 @@ async function checkEoaInL1() {
 
   console.log('contractsL1.length', contractsL1.length)
 
-  let eoaNotL1File = "./data/accounts/"+hre.network.name+"_accounts_eoa_not_l1.json"
+  let eoaNotL1File = DATA_FLS_PREFIX+"/accounts/"+hre.network.name+"_accounts_eoa_not_l1.json"
   await fs.writeFileSync(eoaNotL1File, JSON.stringify(contractsL1));
 
   console.log(contractsL1)
@@ -278,7 +283,7 @@ async function getTransferTxs(tokenSymbol, tokenAddress) {
     // console.log('start --- ', start )
   }
 
-  let outFile = "./data/transactions/"+networkName+"_"+tokenSymbol+"_"+blockNumber+".json"
+  let outFile = DATA_FLS_PREFIX+"/transactions/"+networkName+"_"+tokenSymbol+"_"+blockNumber+".json"
   await fs.writeFileSync(outFile, JSON.stringify(transactions));
 
   return {outFile, transactions};
@@ -286,7 +291,7 @@ async function getTransferTxs(tokenSymbol, tokenAddress) {
 
 async function getAccounts(depositedTxs, readFile, readBool, appendMode ) {
 
-  let accountFile = "./data/accounts/"+hre.network.name+"_accounts.json"
+  let accountFile = DATA_FLS_PREFIX+"/accounts/"+hre.network.name+"_accounts.json"
   let oldAccounts = [] ;
 
   if (await fs.existsSync(accountFile)) oldAccounts = JSON.parse(await fs.readFileSync(accountFile));
@@ -321,13 +326,12 @@ async function getAccounts(depositedTxs, readFile, readBool, appendMode ) {
       i++
       if(i % 500 == 0) {
         // console.log('i --- ', i )
-        // await fs.writeFileSync("./data/depositors.json", JSON.stringify(depositors));
       }
     }
   }
 
   // console.log( users )
-  await fs.writeFileSync("./data/accounts/"+hre.network.name+"_accounts.json", JSON.stringify(users));
+  await fs.writeFileSync( DATA_FLS_PREFIX+"/accounts/"+hre.network.name+"_accounts.json", JSON.stringify(users));
   return users
 }
 
@@ -336,7 +340,7 @@ async function getAccountsUsingTransferEvent(tokenSymbol, tokenAddress) {
     let appendModeAccount = true
     let fileMode = true
 
-    let transactionFile ='./data/transactions/'+hre.network.name+'_'+tokenSymbol+'_'+pauseBlock+'.json'
+    let transactionFile = DATA_FLS_PREFIX+'/transactions/'+hre.network.name+'_'+tokenSymbol+'_'+pauseBlock+'.json'
     await getTransferTxs(tokenSymbol, tokenAddress)
     await getAccounts(null, transactionFile, fileMode, appendModeAccount);
 }
@@ -349,7 +353,7 @@ async function queryAccounts() {
 
   let appendMode = true
 
-  let accountFile = "./data/accounts/"+hre.network.name+"_accounts.json"
+  let accountFile = DATA_FLS_PREFIX+"/accounts/"+hre.network.name+"_accounts.json"
   let oldAccounts = [] ;
 
   if (await fs.existsSync(accountFile)) oldAccounts = JSON.parse(await fs.readFileSync(accountFile));
@@ -375,7 +379,7 @@ async function queryAccounts() {
   }
 
   console.log('users.length:', users.length);
-  await fs.writeFileSync("./data/accounts/"+hre.network.name+"_accounts.json", JSON.stringify(users));
+  await fs.writeFileSync(DATA_FLS_PREFIX +"/accounts/"+hre.network.name+"_accounts.json", JSON.stringify(users));
 
 }
 
@@ -408,19 +412,20 @@ async function queryContracts() {
       "stateMutability": "view",
       "type": "function"
     },
-  ]
+    {"type":"function","stateMutability":"view","outputs":[{"type":"address[]","name":"","internalType":"address[]"}],"name":"getOwners","inputs":[]}
+   ]
 
-  let readFile ='./data/accounts/'+hre.network.name+'_accounts_contract.json'
+  let readFile = DATA_FLS_PREFIX+'/accounts/'+hre.network.name+'_accounts_contract.json'
   let contractAccounts = [] ;
   if (await fs.existsSync(readFile)) contractAccounts = JSON.parse(await fs.readFileSync(readFile));
   console.log('contractAccounts.length', contractAccounts.length)
 
-  let balanceTON = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_TON_'+pauseBlock+'.json'));
-  let balanceTOS = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_TOS_'+pauseBlock+'.json'));
-  let balanceUSDC = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_USDC_'+pauseBlock+'.json'));
-  let balanceUSDT = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_USDT_'+pauseBlock+'.json'));
-  let balanceWETH = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_WETH_'+pauseBlock+'.json'));
-  let balanceETH = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_ETH_'+pauseBlock+'.json'));
+  let balanceTON = JSON.parse(await fs.readFileSync(DATA_FLS_PREFIX+'/balances/'+hre.network.name+'_TON_'+pauseBlock+'.json'));
+  let balanceTOS = JSON.parse(await fs.readFileSync(DATA_FLS_PREFIX+'/balances/'+hre.network.name+'_TOS_'+pauseBlock+'.json'));
+  let balanceUSDC = JSON.parse(await fs.readFileSync(DATA_FLS_PREFIX+'/balances/'+hre.network.name+'_USDC_'+pauseBlock+'.json'));
+  let balanceUSDT = JSON.parse(await fs.readFileSync(DATA_FLS_PREFIX+'/balances/'+hre.network.name+'_USDT_'+pauseBlock+'.json'));
+  let balanceWETH = JSON.parse(await fs.readFileSync(DATA_FLS_PREFIX+'/balances/'+hre.network.name+'_WETH_'+pauseBlock+'.json'));
+  let balanceETH = JSON.parse(await fs.readFileSync(DATA_FLS_PREFIX+'/balances/'+hre.network.name+'_ETH_'+pauseBlock+'.json'));
   let creators = JSON.parse(await fs.readFileSync('data/contracts_creator/'+hre.network.name+'.json'));
 
   let contractDetails = {}
@@ -502,18 +507,34 @@ async function queryContracts() {
               if(code == '0x') contractDetails[a].admin = admin.toLowerCase()
               else console.log("admin is not EOA", a, admin )
             }catch(e){
-              contractDetails[a].type = "developer"
-              if(creators[a] != undefined && creators[a]!=null){
 
-                if (creators[a].length > 40 ) {
-                  contractDetails[a].deployer = creators[a].toLowerCase()
+              //  {"type":"function","stateMutability":"view","outputs":[{"type":"address[]","name":"","internalType":"address[]"}],"name":"getOwners","inputs":[]}
+              try {
+                let owners = await contract.getOwners()
+
+                if (owners.length > 0) {
+                  let owner = owners[0]
+                  let code = await ethers.provider.getCode(owner)
+                  if(code == '0x') contractDetails[a].owner = owner.toLowerCase()
+                  else console.log("getOwners[0]: owner is not EOA", a, owner )
                 } else {
-                  contractDetails[a].type = creators[a]
+                  console.log("getOwners is empty", a, owners )
                 }
 
-              } else  {
-                console.log("unknown developer of this contract", a )
-                contractToDevelopers.push(a)
+              } catch(e){
+                contractDetails[a].type = "developer"
+                if(creators[a] != undefined && creators[a]!=null){
+
+                  if (creators[a].length > 40 ) {
+                    contractDetails[a].deployer = creators[a].toLowerCase()
+                  } else {
+                    contractDetails[a].type = creators[a]
+                  }
+
+                } else  {
+                  console.log("unknown developer of this contract", a )
+                  contractToDevelopers.push(a)
+                }
               }
             }
           }
@@ -535,10 +556,10 @@ async function queryContracts() {
   contractNonZero["count"] = contractNonZeroCount
   contractDetails["count"] = contractDetailsCount
 
-  let outFile1 ='./data/accounts/'+hre.network.name+'_contract_details.json'
+  let outFile1 = DATA_FLS_PREFIX+'/accounts/'+hre.network.name+'_contract_details.json'
   await fs.writeFileSync(outFile1, JSON.stringify(contractDetails));
 
-  let outFile ='./data/accounts/'+hre.network.name+'_contract_nonZeroBalance.json'
+  let outFile = DATA_FLS_PREFIX+'/accounts/'+hre.network.name+'_contract_nonZeroBalance.json'
   await fs.writeFileSync(outFile, JSON.stringify(contractNonZero));
 
   // console.log("contractNonZero", contractNonZero)
@@ -549,8 +570,8 @@ async function queryContracts() {
 
 async function divideUniswapV3PoolContracts() {
 
-  let readFile ='./data/accounts/'+hre.network.name+'_contract_nonZeroBalance.json'
-  let readLpFile ='./data/accounts/1.'+hre.network.name+'_contract_lp_tokens.json'
+  let readFile = DATA_FLS_PREFIX+'/accounts/'+hre.network.name+'_contract_nonZeroBalance.json'
+  let readLpFile = DATA_FLS_PREFIX+'/accounts/1.'+hre.network.name+'_contract_lp_tokens.json'
 
   let pools = {}
   let common = {}
@@ -575,16 +596,16 @@ async function divideUniswapV3PoolContracts() {
     }
   }
 
-  let outFile1 ='./data/accounts/2.'+hre.network.name+'_contract_pools.json'
+  let outFile1 = DATA_FLS_PREFIX+'/accounts/2.'+hre.network.name+'_contract_pools.json'
   await fs.writeFileSync(outFile1, JSON.stringify(pools));
 
-  let outFile ='./data/accounts/3.'+hre.network.name+'_contract_commons.json'
+  let outFile = DATA_FLS_PREFIX+'/accounts/3.'+hre.network.name+'_contract_commons.json'
   await fs.writeFileSync(outFile, JSON.stringify(common));
 
 }
 
 async function calaculateAmountOfLps() {
-  // let readFile ='./data/accounts/1.'+hre.network.name+'_contract_pools.json'
+  // let readFile = DATA_FLS_PREFIX+ '/accounts/1.'+hre.network.name+'_contract_pools.json'
   // var pools
   // if (await fs.existsSync(readFile)) pools = JSON.parse(await fs.readFileSync(readFile));
 
@@ -687,7 +708,7 @@ async function calaculateAmountOfLps() {
 
   console.log("sums", sums)
 
-  let outFile ='./data/accounts/1.'+hre.network.name+'_contract_lp_tokens.json'
+  let outFile = DATA_FLS_PREFIX+'/accounts/1.'+hre.network.name+'_contract_lp_tokens.json'
   await fs.writeFileSync(outFile, JSON.stringify(poolLps));
 }
 
@@ -719,7 +740,7 @@ async function calcLiquidity(npm, tokenId, _owner, _position) {
 }
 
 async function compareLpsAndPoolsBalance() {
-  let readFile ='./data/accounts/2.'+hre.network.name+'_contract_pools.json'
+  let readFile = DATA_FLS_PREFIX+'/accounts/2.'+hre.network.name+'_contract_pools.json'
   var pools
   if (await fs.existsSync(readFile)) pools = JSON.parse(await fs.readFileSync(readFile));
 
@@ -749,7 +770,7 @@ async function compareLpsAndPoolsBalance() {
   var contents = ""
   contents += "==============================" +"\n"
   contents += "==== Sum of LPs by Pool ======" +"\n"
-  let readFile1 ='./data/accounts/1.'+hre.network.name+'_contract_lp_tokens.json'
+  let readFile1 = DATA_FLS_PREFIX+'/accounts/1.'+hre.network.name+'_contract_lp_tokens.json'
   var lps
   if (await fs.existsSync(readFile1)) lps = JSON.parse(await fs.readFileSync(readFile1));
 
@@ -832,7 +853,7 @@ async function compareLpsAndPoolsBalance() {
     lpSum.ETH = lpSum.ETH.add(sum.ETH)
   }
 
-  let outFile1 ='./data/balances/1.'+hre.network.name+'_sum_of_lps_by_pool.txt'
+  let outFile1 = DATA_FLS_PREFIX+'/balances/1.'+hre.network.name+'_sum_of_lps_by_pool.txt'
   await fs.writeFileSync(outFile1, contents);
 
   //=====
@@ -868,7 +889,7 @@ async function compareLpsAndPoolsBalance() {
 
   //======================
 
-  let outFile2 ='./data/balances/2.'+hre.network.name+'_compare_pool_lps.txt'
+  let outFile2 = DATA_FLS_PREFIX+'/balances/2.'+hre.network.name+'_compare_pool_lps.txt'
   await fs.writeFileSync(outFile2, contents2);
 
 
@@ -877,7 +898,7 @@ async function compareLpsAndPoolsBalance() {
 
 
 async function assetsLpsbyOwner() {
-  let readFile1 ='./data/accounts/1.'+hre.network.name+'_contract_lp_tokens.json'
+  let readFile1 = DATA_FLS_PREFIX+'/accounts/1.'+hre.network.name+'_contract_lp_tokens.json'
   var lps
   if (await fs.existsSync(readFile1)) lps = JSON.parse(await fs.readFileSync(readFile1));
 
@@ -949,7 +970,7 @@ async function assetsLpsbyOwner() {
     ETH: sums.ETH.toString()
   }
 
-  let outFile ='./data/balances/3.'+hre.network.name+'_asset_lps_owner.json'
+  let outFile = DATA_FLS_PREFIX+'/balances/3.'+hre.network.name+'_asset_lps_owner.json'
   await fs.writeFileSync(outFile, JSON.stringify(accountAmount));
 
   return {ownerAssetsOfLps, sums}
@@ -957,7 +978,7 @@ async function assetsLpsbyOwner() {
 
 
 async function assetsContractsbyOwner() {
-  let readFile1 ='./data/accounts/3.'+hre.network.name+'_contract_commons.json'
+  let readFile1 = DATA_FLS_PREFIX+'/accounts/3.'+hre.network.name+'_contract_commons.json'
   var contracts
   if (await fs.existsSync(readFile1)) contracts = JSON.parse(await fs.readFileSync(readFile1));
 
@@ -1034,27 +1055,27 @@ async function assetsContractsbyOwner() {
     ETH: sums.ETH.toString()
   }
 
-  let outFile ='./data/balances/4.'+hre.network.name+'_asset_contracts_owner.json'
+  let outFile = DATA_FLS_PREFIX+'/balances/4.'+hre.network.name+'_asset_contracts_owner.json'
   await fs.writeFileSync(outFile, JSON.stringify(accountAmount));
 
   return {ownerAssetsOfContracts, accountAmount}
 }
 
 async function assetsAggregationByEOA() {
-  let readFile1 ='./data/accounts/'+hre.network.name+'_accounts_eoa.json'
-  let readFile2 ='./data/balances/3.'+hre.network.name+'_asset_lps_owner.json'
-  let readFile3 ='./data/balances/4.'+hre.network.name+'_asset_contracts_owner.json'
+  let readFile1 = DATA_FLS_PREFIX+ '/accounts/'+hre.network.name+'_accounts_eoa.json'
+  let readFile2 = DATA_FLS_PREFIX+ '/balances/3.'+hre.network.name+'_asset_lps_owner.json'
+  let readFile3 = DATA_FLS_PREFIX+ '/balances/4.'+hre.network.name+'_asset_contracts_owner.json'
   var accounts, lps, commonContracts
   if (await fs.existsSync(readFile1)) accounts = JSON.parse(await fs.readFileSync(readFile1));
   if (await fs.existsSync(readFile2)) lps = JSON.parse(await fs.readFileSync(readFile2));
   if (await fs.existsSync(readFile3)) commonContracts = JSON.parse(await fs.readFileSync(readFile3));
 
-  let balanceTON = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_TON_'+pauseBlock+'.json'));
-  let balanceTOS = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_TOS_'+pauseBlock+'.json'));
-  let balanceUSDC = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_USDC_'+pauseBlock+'.json'));
-  let balanceUSDT = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_USDT_'+pauseBlock+'.json'));
-  let balanceWETH = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_WETH_'+pauseBlock+'.json'));
-  let balanceETH = JSON.parse(await fs.readFileSync('data/balances/'+hre.network.name+'_ETH_'+pauseBlock+'.json'));
+  let balanceTON = JSON.parse(await fs.readFileSync(DATA_FLS_PREFIX+'/balances/'+hre.network.name+'_TON_'+pauseBlock+'.json'));
+  let balanceTOS = JSON.parse(await fs.readFileSync(DATA_FLS_PREFIX+'/balances/'+hre.network.name+'_TOS_'+pauseBlock+'.json'));
+  let balanceUSDC = JSON.parse(await fs.readFileSync(DATA_FLS_PREFIX+'/balances/'+hre.network.name+'_USDC_'+pauseBlock+'.json'));
+  let balanceUSDT = JSON.parse(await fs.readFileSync(DATA_FLS_PREFIX+'/balances/'+hre.network.name+'_USDT_'+pauseBlock+'.json'));
+  let balanceWETH = JSON.parse(await fs.readFileSync(DATA_FLS_PREFIX+'/balances/'+hre.network.name+'_WETH_'+pauseBlock+'.json'));
+  let balanceETH = JSON.parse(await fs.readFileSync(DATA_FLS_PREFIX+'/balances/'+hre.network.name+'_ETH_'+pauseBlock+'.json'));
 
   let sums = {
     TON: BigNumber.from("0"),
@@ -1131,7 +1152,7 @@ async function assetsAggregationByEOA() {
   console.log("TETH", ethers.utils.formatUnits(sums.TETH, 18) )
 
 
-  let outFile ='./data/balances/5.'+hre.network.name+'_asset_eoa.json'
+  let outFile = DATA_FLS_PREFIX+ '/balances/5.'+hre.network.name+'_asset_eoa.json'
   await fs.writeFileSync(outFile, JSON.stringify(assetAggregation));
 
   let totalEoaAmount = {
@@ -1144,7 +1165,7 @@ async function assetsAggregationByEOA() {
     TETH: sums.TETH.toString()
   }
 
-  let outFile1 ='./data/balances/7.'+hre.network.name+'_total_eoa_asset.json'
+  let outFile1 = DATA_FLS_PREFIX+ '/balances/7.'+hre.network.name+'_total_eoa_asset.json'
   await fs.writeFileSync(outFile1, JSON.stringify(totalEoaAmount));
 
   return {balances, uniswap, contract, assetAggregation, sums, totalEoaAmount}
@@ -1218,7 +1239,7 @@ async function getBalanceL1Bridge() {
     ETH: balanceOfL1Bridge.ETH.toString(),
   }
 
-  let outFile1 ='./data/balances/8.'+hre.network.name+'_balance_l1_bridge.json'
+  let outFile1 = DATA_FLS_PREFIX+'/balances/8.'+hre.network.name+'_balance_l1_bridge.json'
   await fs.writeFileSync(outFile1, JSON.stringify(balanceBridge));
 
   return { balanceOfL1Bridge, depositsOfL1Bridge }
@@ -1227,7 +1248,7 @@ async function getBalanceL1Bridge() {
 
 async function getPendingWithdrawals() {
 
-  let readFile2 ='./data/transactions/'+hre.network.name+"_l2_send_message_data_"+pauseBlock+".json"
+  let readFile2 = DATA_FLS_PREFIX+'/transactions/'+hre.network.name+"_l2_send_message_data_"+pauseBlock+".json"
   var events
   if (await fs.existsSync(readFile2)) events = JSON.parse(await fs.readFileSync(readFile2));
 
@@ -1286,10 +1307,10 @@ async function getPendingWithdrawals() {
       // console.log(i, key, resultSuccessfulMessages[key])
   }
 
-  let outFile1 ='./data/withdrawals/1.'+hre.network.name+'_l1_cross_check_relayMessage_all.json'
+  let outFile1 = DATA_FLS_PREFIX+'/withdrawals/1.'+hre.network.name+'_l1_cross_check_relayMessage_all.json'
   await fs.writeFileSync(outFile1, JSON.stringify(resultSuccessfulMessages));
 
-  let outFile2 ='./data/withdrawals/2.'+hre.network.name+'_l1_cross_pending_relayMessage.json'
+  let outFile2 = DATA_FLS_PREFIX+'/withdrawals/2.'+hre.network.name+'_l1_cross_pending_relayMessage.json'
   await fs.writeFileSync(outFile2, JSON.stringify(pendingSuccessfulMessages));
 
   return {pendingSuccessfulMessages, resultSuccessfulMessages}
@@ -1341,7 +1362,7 @@ async function getSendMessageTxs(contractAddress) {
     // console.log('start --- ', start )
   }
 
-  let outFile = "./data/transactions/"+networkName+"_l2_send_message_"+blockNumber+".json"
+  let outFile = DATA_FLS_PREFIX+ "/transactions/"+networkName+"_l2_send_message_"+blockNumber+".json"
   await fs.writeFileSync(outFile, JSON.stringify(transactions));
 
   //===========
@@ -1368,7 +1389,7 @@ async function getSendMessageTxs(contractAddress) {
     }
   }
 
-  let outFile1 = "./data/transactions/"+networkName+"_l2_send_message_data_"+blockNumber+".json"
+  let outFile1 = DATA_FLS_PREFIX+ "/transactions/"+networkName+"_l2_send_message_data_"+blockNumber+".json"
   await fs.writeFileSync(outFile1, JSON.stringify(sendMessageData));
 
   return { transactions, sendMessageData};
@@ -1426,7 +1447,7 @@ const decodeMessage = (message, target) => {
 
 async function totalPendingAsset() {
 
-  let readFile1 ='./data/withdrawals/2.'+hre.network.name+"_l1_cross_pending_relayMessage.json"
+  let readFile1 = DATA_FLS_PREFIX+ '/withdrawals/2.'+hre.network.name+"_l1_cross_pending_relayMessage.json"
   var pendingTransactions
   if (await fs.existsSync(readFile1)) pendingTransactions = JSON.parse(await fs.readFileSync(readFile1));
 
@@ -1493,22 +1514,22 @@ async function totalPendingAsset() {
       ETH: sums.ETH.toString()
     }
 
-    let outFile ='./data/balances/6.'+hre.network.name+'_total_pending_asset.json'
+    let outFile = DATA_FLS_PREFIX+ '/balances/6.'+hre.network.name+'_total_pending_asset.json'
     await fs.writeFileSync(outFile, JSON.stringify(totalPendingAmount));
 
     return totalPendingAmount
 }
 
 async function verifyAssetAmount() {
-  let readFile1 ='./data/balances/6.'+hre.network.name+"_total_pending_asset.json"
+  let readFile1 = DATA_FLS_PREFIX+ '/balances/6.'+hre.network.name+"_total_pending_asset.json"
   var pendingAmounts
   if (await fs.existsSync(readFile1)) pendingAmounts = JSON.parse(await fs.readFileSync(readFile1));
 
-  let readFile2 ='./data/balances/7.'+hre.network.name+"_total_eoa_asset.json"
+  let readFile2 = DATA_FLS_PREFIX+ '/balances/7.'+hre.network.name+"_total_eoa_asset.json"
   var eoaAmount
   if (await fs.existsSync(readFile2)) eoaAmount = JSON.parse(await fs.readFileSync(readFile2));
 
-  let readFile3 ='./data/balances/8.'+hre.network.name+"_balance_l1_bridge.json"
+  let readFile3 = DATA_FLS_PREFIX+ '/balances/8.'+hre.network.name+"_balance_l1_bridge.json"
   var bridgeAmount
   if (await fs.existsSync(readFile3)) bridgeAmount = JSON.parse(await fs.readFileSync(readFile3));
 
@@ -1556,14 +1577,14 @@ async function verifyAssetAmount() {
 
 async function assetTransfer() {
 
-  let readFile2 ='./data/balances/5.'+hre.network.name+'_asset_eoa.json'
+  let readFile2 = DATA_FLS_PREFIX+ '/balances/5.'+hre.network.name+'_asset_eoa.json'
   var eoaAmount
   if (await fs.existsSync(readFile2)) eoaAmount = JSON.parse(await fs.readFileSync(readFile2));
-  let outFile1 ='./data/balances/5.'+hre.network.name+'_aseet_eoa_original.json'
+  let outFile1 = DATA_FLS_PREFIX+ '/balances/5.'+hre.network.name+'_aseet_eoa_original.json'
 
   await fs.copyFile(readFile2, outFile1, (err) => {
     if (err) throw err;
-    console.log('File was copied to destination');
+    // console.log('File was copied to destination');
   });
 
   if (assetTransferAccount.length > 0) {
@@ -1695,86 +1716,84 @@ async function assetTransfer() {
 
 async function main() {
 
-    // console.log("\n1. ---- queryAccounts ----------------------")
-    // await queryAccounts()
+    console.log("\n1. ---- queryAccounts ----------------------")
+    await queryAccounts()
 
-    // console.log("\n2. ---- get transactions and accounts ----------------------")
-    // await getAccountsUsingTransferEvent("TON", TON)
-    // await getAccountsUsingTransferEvent("TOS", TOS)
-    // await getAccountsUsingTransferEvent("USDC", USDC)
-    // await getAccountsUsingTransferEvent("USDT", USDT)
-    // await getAccountsUsingTransferEvent("WETH", WETH)
-    // if(DOC != "0x0000000000000000000000000000000000000000") await getAccountsUsingTransferEvent("DOC", DOC)
-    // if(AURA != "0x0000000000000000000000000000000000000000") await getAccountsUsingTransferEvent("AURA", AURA)
+    console.log("\n2. ---- get transactions and accounts ----------------------")
+    await getAccountsUsingTransferEvent("TON", TON)
+    await getAccountsUsingTransferEvent("TOS", TOS)
+    await getAccountsUsingTransferEvent("USDC", USDC)
+    await getAccountsUsingTransferEvent("USDT", USDT)
+    await getAccountsUsingTransferEvent("WETH", WETH)
+    if(DOC != "0x0000000000000000000000000000000000000000") await getAccountsUsingTransferEvent("DOC", DOC)
+    if(AURA != "0x0000000000000000000000000000000000000000") await getAccountsUsingTransferEvent("AURA", AURA)
 
-    // console.log("\n3. ---- divide the accounst with eoa and contract ----------------------")
-    // await checkContracts()
-    // await checkEoaInL1()
+    console.log("\n3. ---- divide the accounst with eoa and contract ----------------------")
+    await checkContracts()
+    await checkEoaInL1()
 
-    // console.log("\n4. ----  get the balances ----------------------")
-    // let fileMode = true
-    // await getBalances ("ETH", ETH, pauseBlock, null, fileMode)
-    // await getBalances ("TON", TON, pauseBlock, null, fileMode)
-    // await getBalances ("TOS", TOS, pauseBlock, null, fileMode)
-    // await getBalances ("USDC", USDC, pauseBlock, null, fileMode)
-    // await getBalances ("USDT", USDT, pauseBlock, null, fileMode)
-    // await getBalances ("WETH", WETH, pauseBlock, null, fileMode)
-    // if(DOC != "0x0000000000000000000000000000000000000000") await getBalances ("DOC", DOC, pauseBlock, null, fileMode)
-    // if(AURA != "0x0000000000000000000000000000000000000000") await getBalances ("AURA", AURA, pauseBlock, null, fileMode)
+    console.log("\n4. ----  get the balances ----------------------")
+    let fileMode = true
+    await getBalances ("ETH", ETH, pauseBlock, null, fileMode)
+    await getBalances ("TON", TON, pauseBlock, null, fileMode)
+    await getBalances ("TOS", TOS, pauseBlock, null, fileMode)
+    await getBalances ("USDC", USDC, pauseBlock, null, fileMode)
+    await getBalances ("USDT", USDT, pauseBlock, null, fileMode)
+    await getBalances ("WETH", WETH, pauseBlock, null, fileMode)
+    if(DOC != "0x0000000000000000000000000000000000000000") await getBalances ("DOC", DOC, pauseBlock, null, fileMode)
+    if(AURA != "0x0000000000000000000000000000000000000000") await getBalances ("AURA", AURA, pauseBlock, null, fileMode)
 
-    // console.log("\n5. ----  Details of contracts ----------------------")
-    // await queryContracts()
+    console.log("\n5. ----  Details of contracts ----------------------")
+    await queryContracts()
+    console.log("\n5-1. ----  Check Unknown developer  ----------------------")
 
-    // console.log("\n6. ----  find out the LP's token amount and owner in UniswapV3 Pool --")
-    // // file: 1.titansepolia_contract_lp_tokens.json
-    // await calaculateAmountOfLps()
+    console.log("\n6. ----  find out the LP's token amount and owner in UniswapV3 Pool --")
+    // file: 1.titansepolia_contract_lp_tokens.json
+    await calaculateAmountOfLps()
 
-    // console.log("\n7. ----  look for UniswapV3Pool --")
-    // // file: 2.titansepolia_contract_pools.json
-    // // file: 3.titansepolia_contract_commons.json
-    // await divideUniswapV3PoolContracts()
+    console.log("\n7. ----  look for UniswapV3Pool --")
+    // file: 2.titansepolia_contract_pools.json
+    // file: 3.titansepolia_contract_commons.json
+    await divideUniswapV3PoolContracts()
 
-    // console.log("\n8. ---- compareLpsAndPoolsBalance  --")
-    // // file: /balances/1.titansepolia_sum_of_lps_by_pool.txt
-    // // file: /balances/2.titansepolia_compare_pool_lps.txt
-    // await compareLpsAndPoolsBalance()
+    console.log("\n8. ---- compareLpsAndPoolsBalance  --")
+    // file: /balances/1.titansepolia_sum_of_lps_by_pool.txt
+    // file: /balances/2.titansepolia_compare_pool_lps.txt
+    await compareLpsAndPoolsBalance()
 
-    // console.log("\n9. ---- assetsLpsbyOwner  --")
-    // // file: /balances/3.titansepolia_asset_lps_owner.json
-    // await assetsLpsbyOwner()
+    console.log("\n9. ---- assetsLpsbyOwner  --")
+    // file: /balances/3.titansepolia_asset_lps_owner.json
+    await assetsLpsbyOwner()
 
 
-    // console.log("\n10. ---- assetsContractsbyOwner  --")
-    // // file: /balances/4.titansepolia_asset_contracts_owner.json
-    // await assetsContractsbyOwner()
+    console.log("\n10. ---- assetsContractsbyOwner  --")
+    // file: /balances/4.titansepolia_asset_contracts_owner.json
+    await assetsContractsbyOwner()
 
-    // // file: /balances/4.titansepolia_assets_eoa.json
-    // await assetsAggregationByEOA()
-    // await assetTransfer()
+    // file: /balances/4.titansepolia_assets_eoa.json
+    await assetsAggregationByEOA()
+    await assetTransfer()
 
-    // console.log("\n11. ---- getBalanceL1Bridge  --")
-    // // file: /balances/5.titansepolia_balance_l1_bridge.json
-    // await getBalanceL1Bridge()
+    console.log("\n11. ---- getBalanceL1Bridge  --")
+    // file: /balances/5.titansepolia_balance_l1_bridge.json
+    await getBalanceL1Bridge()
 
-    // console.log("\n12. ---- Pending Withdrawals  --")
+    console.log("\n12. ---- Pending Withdrawals  --")
 
-    // //====== Pending Withdrawals
-    // // file: /transactions/titansepolia_l2_send_message_17923.json
-    // // file: /transactions/titansepolia_l2_send_message_data_17923.json
-    // await getSendMessageTxs(L2_CONTRACT_ADDRESSES.L2CrossDomainMessenger)
+    //====== Pending Withdrawals
+    // file: /transactions/titansepolia_l2_send_message_17923.json
+    // file: /transactions/titansepolia_l2_send_message_data_17923.json
+    await getSendMessageTxs(L2_CONTRACT_ADDRESSES.L2CrossDomainMessenger)
 
-    // // file: /withdrawals/1.titansepolia_l1_cross_check_relayMessage_all.json
-    // // file: /withdrawals/2.titansepolia_l1_cross_pending_relayMessage.json
-    // await getPendingWithdrawals()
+    // file: /withdrawals/1.titansepolia_l1_cross_check_relayMessage_all.json
+    // file: /withdrawals/2.titansepolia_l1_cross_pending_relayMessage.json
+    await getPendingWithdrawals()
 
-    // // file: /data/balances/6.titansepolia_total_pending_asset.json
-    // await totalPendingAsset()
+    // file: /data/balances/6.titansepolia_total_pending_asset.json
+    await totalPendingAsset()
 
-    // console.log("\n13. ---- Verify  --")
-    // await verifyAssetAmount()
-
-    // console.log("\n13. ---- assetTransfer  --")
-    // Since the L2 EOA account is a CA in L1, modify it to be sent to the owner or distributor of the CA.
+    console.log("\n13. ---- Verify  --")
+    await verifyAssetAmount()
 
   }
 
