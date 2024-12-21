@@ -36,7 +36,8 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       forking: {
-        url: process.env.ETH_NODE_URI_TITAN_SEPOLIA || "", // sepolia
+        url: process.env.ETH_NODE_URI_SEPOLIA || "", // sepolia
+        blockNumber: 7316900,
         // url: "http://127.0.0.1:8545", // sepolia
         //   // url: process.env.SEPOLIA_TITAN || "", // L2
       }
@@ -46,12 +47,11 @@ const config: HardhatUserConfig = {
       // accounts: [process.env.L1_PORXY_OWNER || "", process.env.L1_FORCE_OWNER || ""]
     },
     sepolia: {
-      url: process.env.CONTRACT_RPC_URL_L1 || "", // L1
+      url: process.env.ETH_NODE_URI_SEPOLIA || "", // L1
       // url: process.env.SEPOLIA_TITAN || "", // L2
       accounts: [
         process.env.PERSONAL_ACCOUNT || "", // Personal account
         process.env.DEPLOYER_ACCOUNT || "", // Deployer account
-
       ],
     },
     titan: {
