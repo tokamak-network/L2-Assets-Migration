@@ -2,6 +2,7 @@
 pragma solidity ^0.8.9;
 
 import { iL1ChugSplashDeployer } from "./interfaces/iL1ChugSplashDeployer.sol";
+import "hardhat/console.sol";
 
 /**
  * @title L1ChugSplashProxy
@@ -14,7 +15,7 @@ import { iL1ChugSplashDeployer } from "./interfaces/iL1ChugSplashDeployer.sol";
  * 'proxyCallIfNotOwner' modifier unless there's some *really* good reason not to have that
  * modifier. And there almost certainly is not a good reason to not have that modifier. Beware!
  */
-contract L1ChugSplashProxy {
+contract L1ChugSplashProxy2 {
     /*************
      * Constants *
      *************/
@@ -131,6 +132,7 @@ contract L1ChugSplashProxy {
 
         // Create the deploycode by appending the magic prefix.
         bytes memory deploycode = abi.encodePacked(DEPLOY_CODE_PREFIX, _code);
+        console.logBytes(deploycode);
 
         // Deploy the code and set the new implementation address.
         address newImplementation;

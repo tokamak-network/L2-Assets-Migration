@@ -1,7 +1,8 @@
 const hre = require("hardhat");
 const { ethers } = hre;
 
-const UpgradeL1Bridge_ABI = require("../../../artifacts/contracts/UpgradeL1Bridge.sol/UpgradeL1Bridge.json")
+const UpgradeL1Bridge_ABI = require("../../artifacts/contracts/UpgradeL1Bridge.sol/UpgradeL1Bridge.json")
+const L1ChugSplashProxy2_ABI = require("../../artifacts/contracts/proxy/L1ChugSplashProxy2.sol/L1ChugSplashProxy2.json")
 const TON_ABI = require("../../abi/TON.json")
 
 describe("SetCdoe Test", function () {
@@ -82,24 +83,50 @@ describe("SetCdoe Test", function () {
   const zeroAddr = '0x'.padEnd(42, '0')
 
   let proxyContract;
+  let tester;
+  let tester2;
   
   before('create fixture loader', async () => {
-    const [deployer] = await ethers.getSigners();
-    console.log("deployer Address : ", deployer.address)
+    const owner = "0xf0B595d10a92A5a9BC3fFeA7e79f5d266b6035Ea"
+    await ethers.provider.send('hardhat_impersonateAccount', [
+            owner
+        ]
+    )
+    await ethers.provider.send('hardhat_setBalance', [
+        owner, 
+        '0x152D02C7E14AF6800000'
+    ]);
 
-  
+    const owner2 = "0xb68aa9e398c054da7ebaaa446292f611ca0cd52b"
+    await ethers.provider.send('hardhat_impersonateAccount', [
+        owner2
+        ]
+    )
+    await ethers.provider.send('hardhat_setBalance', [
+        owner2, 
+        '0x152D02C7E14AF6800000'
+    ]);
+    tester = await ethers.getSigner(owner);
+    console.log("Tester1 :", tester.address);
+    tester2 = await ethers.getSigner(owner2);
+    console.log("Tester2 :", tester2.address);
   })
 
   describe("deploy & SetCode", () => {
     it("Deploy L1ChugSplashProxy", async () => {
-      const ProxyDep = await ethers.getContractFactory("L1ChugSplashProxy")
-      proxyContract = await ProxyDep.deploy(deployer.address);
+      const L1ChugSplashProxyDep = new ethers.ContractFactory(
+        L1ChugSplashProxy2_ABI.abi,
+        L1ChugSplashProxy2_ABI.bytecode,
+        tester
+      )
+
+      proxyContract = await L1ChugSplashProxyDep.deploy(tester.address)
       await proxyContract.deployed();
     })
 
 
     it("SetCode", async () =>{
-      await proxyContract.connect(deployer).setCode(UpgradeL1Bridge_ABI.deployedBytecode);
+      await proxyContract.connect(tester).setCode(UpgradeL1Bridge_ABI.deployedBytecode);
     })
   });
 
