@@ -139,6 +139,27 @@ contract L1ChugSplashProxy2 {
         assembly {
             newImplementation := create(0x0, add(deploycode, 0x20), mload(deploycode))
         }
+        console.log("1");
+        console.log(newImplementation);
+
+        bytes memory deploycode2;
+        assembly {
+            // retrieve the size of the code, this needs assembly
+            let size := extcodesize(newImplementation)
+            // allocate output byte array - this could also be done without assembly
+            // by using code = new bytes(size)
+            deploycode2 := mload(0x40)
+            // new "memory end" including padding
+            mstore(0x40, add(deploycode2, and(add(add(size, 0x20), 0x1f), not(0x1f))))
+            // store length in memory
+            mstore(deploycode2, size)
+            // actually retrieve the code, this needs assembly
+            extcodecopy(newImplementation, add(deploycode2, 0x20), 0, size)
+        }
+        console.log("2");
+        console.logBytes(deploycode2);
+
+
 
         // Check that the code was actually deployed correctly. I'm not sure if you can ever
         // actually fail this check. Should only happen if the contract creation from above runs
