@@ -10,7 +10,9 @@ const dirPath = "data"
 const main = async () => {
     let jsonData = fs.readFileSync(path.join(dirPath, '5.titansepolia_asset_eoa.json'), "utf-8")
     let assetsData = JSON.parse(jsonData)
-    const outContract = [];    
+    const outContract = [];   
+    
+    console.log(assetsData.length)
 
     let l1TON = "0xa30fe40285B8f5c0457DbC3B7C8A280373c40044"
     let l2TON = "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2"
@@ -64,7 +66,7 @@ const main = async () => {
     }
 
     // keccak256(abi.encodePacked(_token, _claimer, _amount));
-    for (let i=0; i < 202; i++) {
+    for (let i=0; i < assetsData.length; i++) {
         if(assetsData[i].total.TON != 0){
             innerTON.data.push({
                 "claimer": assetsData[i].address.account,
@@ -82,7 +84,7 @@ const main = async () => {
         }
 
         if(assetsData[i].total.USDC != 0){
-            console.log(assetsData[i].total.USDC)
+            // console.log(assetsData[i].total.USDC)
             innerUSDC.data.push({
                 "claimer": assetsData[i].address.account,
                 "amount": assetsData[i].total.USDC,
@@ -98,11 +100,20 @@ const main = async () => {
             })
         }
 
+        if(assetsData[i].total.TETH != 0){
+            innerETH.data.push({
+                "claimer": assetsData[i].address.account,
+                "amount": assetsData[i].total.TETH,
+                "hash": ethers.utils.solidityKeccak256(['address', 'address', 'uint256'], [l1ETH, assetsData[i].address.account, assetsData[i].total.TETH])
+            })
+        }
+
     }
     outContract.push(innerTON)
     outContract.push(innerTOS)
     outContract.push(innerUSDC)
     outContract.push(innerUSDT)
+    outContract.push(innerETH)
     fs.writeFile(path.join(dirPath, 'new-generate-assets.json'), JSON.stringify(outContract, null, 1), 'utf-8', (err) => {
         if (err) {
         console.log(err);
