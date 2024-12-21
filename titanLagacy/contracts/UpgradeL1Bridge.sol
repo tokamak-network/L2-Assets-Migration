@@ -4,7 +4,6 @@ pragma solidity ^0.8.9;
 import { L1StandardBridge } from "./L1StandardBridge.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "hardhat/console.sol";
 
 /// @title Contract Activation Control
 /// @dev Provides functionalities to control contract activation state through access restricted to a designated address
@@ -50,8 +49,6 @@ contract UpgradeL1Bridge is L1StandardBridge {
     /// @notice 
     address public closer;
     bytes constant SIG_GETOWNER = abi.encodeWithSignature("getOwner()");
-
-    address constant tester = address(0);
 
     /// @notice Checks if the caller is the authorized 'closer' address
     /// @dev Modifier that allows function execution only by the designated 'closer'
