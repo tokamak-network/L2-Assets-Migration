@@ -36,9 +36,9 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       forking: {
-        // url: process.env.ETH_NODE_URI_SEPOLIA || "", // sepolia
-        blockNumber: 7316900,
-        url: "http://127.0.0.1:8545", // sepolia
+        url: process.env.ETH_NODE_URI_SEPOLIA || "", // sepolia
+        blockNumber: 7316273,
+        // url: "http://127.0.0.1:8545", // sepolia
         //   // url: process.env.SEPOLIA_TITAN || "", // L2
       }
     },
