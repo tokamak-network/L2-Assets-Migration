@@ -4,11 +4,12 @@ import { ethers } from 'hardhat'
 import { BigNumber } from "ethers"
 import { NonfungibleTokenPositionManager, L2Interface, ERC20, L1Interface, Pool, Closed, User, WithdrawClaimed } from '../types';
 import { getWithdrawalClaimStatus, getCollectWETH, getTotalAddressAll, getContractAll, bigNumberAbs } from "../forceLib";
+import hre from "hardhat"
 
 const dirPath = "data"
 
 const main = async () => {
-    let jsonData = fs.readFileSync(path.join(dirPath, '5.titansepolia_asset_eoa.json'), "utf-8")
+    let jsonData = fs.readFileSync(path.join(dirPath, '5.'+hre.network.name+'_asset_eoa.json'), "utf-8")
     let assetsData = JSON.parse(jsonData)
     const outContract = [];   
     
@@ -114,7 +115,7 @@ const main = async () => {
     outContract.push(innerUSDC)
     outContract.push(innerUSDT)
     outContract.push(innerETH)
-    fs.writeFile(path.join(dirPath, 'new-generate-assets.json'), JSON.stringify(outContract, null, 1), 'utf-8', (err) => {
+    fs.writeFile(path.join(dirPath, hre.network.name+'_new-generate-assets.json'), JSON.stringify(outContract, null, 1), 'utf-8', (err) => {
         if (err) {
         console.log(err);
         }
