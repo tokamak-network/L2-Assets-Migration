@@ -105,6 +105,9 @@ async function claimTest() {
         console.log("tokenAddr : ", tokenAddr);
         // console.log(assets[i].data.length);
         for(let j = 0; j < assets[i].data.length; j++) {
+            if(j == 0){
+                console.log("data.length :", assets[i].data.length)
+            }
             Account = assets[i].data[j].claimer
             Amount = ethers.BigNumber.from(assets[i].data[j].amount)
             Hash = assets[i].data[j].hash
@@ -112,9 +115,13 @@ async function claimTest() {
             await ethers.provider.send('hardhat_impersonateAccount', [
                 Account
             ])
+            await ethers.provider.send('hardhat_setBalance', [
+                Account, 
+                '0x152D02C7E14AF6800000'
+            ]);
             getAccount = await ethers.getSigner(Account);
             
-            if(i == 0 && j ==0){
+            if(i == 0 && j == 0){
                 console.log("Account : ", getAccount.address)
                 console.log("Amount : ", Amount)
                 console.log("Hash : ", Hash)
@@ -126,111 +133,31 @@ async function claimTest() {
                 break;
             }
 
-            await UpgradeL1BridgeLogic.connect(getAccount).forceWithdrawClaim(
-                positionAddress,
-                Hash,
-                tokenAddr,
-                Amount
-            )
-
-            getAddress = await UpgradeL1BridgeLogic.connect(getAccount).gb(Hash)
             
-            if(getAddress == Account) {
-                console.log("gb error :", Hash)
-                break;
+            if(Account.toUpperCase() != testZeroAddr.toUpperCase()){
+                let code = await ethers.provider.getCode(Account);
+                if (code !== '0x') {
+                    console.log("j : ", j);
+                    console.log("Account is Contract : ", Account);
+                } else {
+                    await UpgradeL1BridgeLogic.connect(getAccount).forceWithdrawClaim(
+                        positionAddress,
+                        Hash,
+                        tokenAddr,
+                        Amount
+                    )
+
+                    getAddress = await UpgradeL1BridgeLogic.connect(getAccount).gb(Hash)
+                    
+                    if(getAddress.toUpperCase() != Account.toUpperCase()) {
+                        console.log("gb error :", Hash)
+                        break;
+                    }
+                }
             }
+
         }
     }
-
-
-    // let getAddress = await UpgradeL1BridgeLogic.connect(tester).getForcePosition(TONHash)
-    // console.log("TONHash getAddress : ", getAddress);
-
-    // getAddress = await UpgradeL1BridgeLogic.connect(tester).getForcePosition(TOSHash)
-    // console.log("TOSHash getAddress : ", getAddress);
-
-    // getAddress = await UpgradeL1BridgeLogic.connect(tester).getForcePosition(ETHHash)
-    // console.log("ETHHash getAddress : ", getAddress);
-
-    // getAddress = await UpgradeL1BridgeLogic.connect(tester).getForcePosition(USDTHash)
-    // console.log("USDTHash getAddress : ", getAddress);
-
-    // getAddress = await UpgradeL1BridgeLogic.connect(tester).getForcePosition(USDCHash)
-    // console.log("USDCHash getAddress : ", getAddress);
-
-    // getAddress = await UpgradeL1BridgeLogic.connect(tester).getForcePosition(NoHash)
-    // console.log("No Hash getAddress : ", getAddress);
-
-    // let beforeTONAmount = await TON.connect(tester).balanceOf(tester.address)
-    // console.log("beforeTONAmount :", beforeTONAmount);
-    
-    
-    // await UpgradeL1BridgeLogic.connect(tester).forceWithdrawClaim(
-    //     positionAddress,
-    //     TONHash,
-    //     l1TON,
-    //     TONAmount
-    // )
-
-    // let afterTONAmount = await TON.connect(tester).balanceOf(tester.address)
-    // console.log("afterTONAmount :", afterTONAmount);
-
-    // let beforeTOSAmount = await TOS.connect(tester).balanceOf(tester.address)
-    // console.log("beforeTOSAmount :", beforeTOSAmount);
-    
-    
-    // await UpgradeL1BridgeLogic.connect(tester).forceWithdrawClaim(
-    //     positionAddress,
-    //     TOSHash,
-    //     l1TOS,
-    //     TOSAMount
-    // )
-
-    // let afterTOSAmount = await TOS.connect(tester).balanceOf(tester.address)
-    // console.log("afterTOSAmount :", afterTOSAmount);
-
-    // let beforeUSDTAmount = await USDT.connect(tester).balanceOf(tester.address)
-    // console.log("beforeUSDTAmount :", beforeUSDTAmount);
-    
-    
-    // await UpgradeL1BridgeLogic.connect(tester).forceWithdrawClaim(
-    //     positionAddress,
-    //     USDTHash,
-    //     l1USDT,
-    //     USDTAMount
-    // )
-
-    // let afterUSDTAmount = await USDT.connect(tester).balanceOf(tester.address)
-    // console.log("afterUSDTAmount :", afterUSDTAmount);
-
-    // let beforeETHAmount = await tester.getBalance()
-    // console.log("beforeETHAmount :", beforeETHAmount);
-
-    // await UpgradeL1BridgeLogic.connect(tester).forceWithdrawClaim(
-    //     positionAddress,
-    //     ETHHash,
-    //     l1ETH,
-    //     ETHAMount
-    // )
-
-    // let afterETHAmount = await tester.getBalance()
-    // console.log("afterETHAmount :", afterETHAmount);
-
-    // let beforeUSDCAmount = await USDC.connect(tester2).balanceOf(tester2.address)
-    // console.log("beforeUSDCAmount :", beforeUSDCAmount);
-    
-    
-    // await UpgradeL1BridgeLogic.connect(tester2).forceWithdrawClaim(
-    //     positionAddress,
-    //     USDCHash,
-    //     l1USDC,
-    //     USDCAMount
-    // )
-
-    // let afterUSDCAmount = await USDC.connect(tester2).balanceOf(tester2.address)
-    // console.log("afterUSDCAmount :", afterUSDCAmount);
-
-
 
 
 
