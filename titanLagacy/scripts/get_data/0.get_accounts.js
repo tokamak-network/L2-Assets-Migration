@@ -7,8 +7,7 @@ const { BigNumber } = require("ethers")
 const { BatchCrossChainMessenger, MessageStatus, OEL2ContractsLike, OEContractsLike } = require("@tokamak-network/titan-sdk")
 
 let DATA_FLS_PREFIX = "./data/sunset_"+hre.network.name
-
-
+/*
 // titan-sepolia
 const baseUrl = "https://explorer.titan-sepolia.tokamak.network/api?"
 const TON = "0x7c6b91d9be155a6db01f749217d76ff02a7227f2"
@@ -75,8 +74,8 @@ const CONTRACTS = {
   },
   l2: L2_CONTRACT_ADDRESSES,
 }
+*/
 
-/*
 // titan
 const baseUrl = "https://explorer.titan.tokamak.network/api?"
 const TON = "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2"
@@ -136,7 +135,7 @@ const CONTRACTS = {
   },
   l2: L2_CONTRACT_ADDRESSES,
 }
-*/
+
 
 DATA_FLS_PREFIX = DATA_FLS_PREFIX +"_"+ pauseBlock
 
@@ -222,11 +221,50 @@ async function checkEoaInL1() {
 
   console.log('contractsL1.length', contractsL1.length)
 
+  //=====================
   let eoaNotL1File = DATA_FLS_PREFIX+"/accounts/"+hre.network.name+"_accounts_eoa_not_l1.json"
   await fs.writeFileSync(eoaNotL1File, JSON.stringify(contractsL1));
 
   console.log(contractsL1)
+
   return {contractsL1}
+}
+
+
+async function checkEoaInL1HasBalances() {
+
+  let contractsL1File = DATA_FLS_PREFIX+"/accounts/"+hre.network.name+"_accounts_eoa_not_l1.json"
+  let contractsL1 = JSON.parse(await fs.readFileSync(contractsL1File));
+
+  let contractsL1_has_balance = []
+  if (contractsL1.length > 0 ) {
+    let balanceTON = JSON.parse(await fs.readFileSync(DATA_FLS_PREFIX+'/balances/'+hre.network.name+'_TON_'+pauseBlock+'.json'));
+    let balanceTOS = JSON.parse(await fs.readFileSync(DATA_FLS_PREFIX+'/balances/'+hre.network.name+'_TOS_'+pauseBlock+'.json'));
+    let balanceUSDC = JSON.parse(await fs.readFileSync(DATA_FLS_PREFIX+'/balances/'+hre.network.name+'_USDC_'+pauseBlock+'.json'));
+    let balanceUSDT = JSON.parse(await fs.readFileSync(DATA_FLS_PREFIX+'/balances/'+hre.network.name+'_USDT_'+pauseBlock+'.json'));
+    let balanceWETH = JSON.parse(await fs.readFileSync(DATA_FLS_PREFIX+'/balances/'+hre.network.name+'_WETH_'+pauseBlock+'.json'));
+    let balanceETH = JSON.parse(await fs.readFileSync(DATA_FLS_PREFIX+'/balances/'+hre.network.name+'_ETH_'+pauseBlock+'.json'));
+
+    let balanceBool = false
+    for (var i=0; i< contractsL1.length; i++) {
+      if (balanceTON[contractsL1[i]] != "0") balanceBool = true
+      else if (balanceTOS[contractsL1[i]] != "0") balanceBool = true
+      else if (balanceUSDC[contractsL1[i]] != "0") balanceBool = true
+      else if (balanceUSDT[contractsL1[i]] != "0") balanceBool = true
+      else if (balanceWETH[contractsL1[i]] != "0") balanceBool = true
+      else if (balanceETH[contractsL1[i]] != "0") balanceBool = true
+    }
+
+    if(balanceBool) contractsL1_has_balance.push(contractsL1[i])
+  }
+
+  let eoaNotL1HasBalance = DATA_FLS_PREFIX+"/accounts/"+hre.network.name+"_accounts_eoa_not_l1_has_balance.json"
+  await fs.writeFileSync(eoaNotL1HasBalance, JSON.stringify(contractsL1_has_balance));
+
+  console.log('--- Contracts that holds assets ---')
+  console.log(contractsL1_has_balance)
+
+  return {contractsL1_has_balance}
 }
 
 async function getTransferTxs(tokenSymbol, tokenAddress) {
@@ -1289,22 +1327,25 @@ async function getPendingWithdrawals() {
       if(!successfulMessages) failedMessages = await crossDomainMessengerL1.failedMessages(xDomainCalldataHash)
 
         resultSuccessfulMessages[key] = {
-        target: obj.target,
-        sender: obj.sender,
-        message: obj.message,
-        messageNonce: obj.messageNonce,
-        xDomainCalldata: xDomainCalldata,
-        xDomainCalldataHash: xDomainCalldataHash,
-        decode: decodeMessage(obj.message, obj.target),
-        successfulMessages: successfulMessages,
-        failedMessages: failedMessages
-      }
+          target: obj.target,
+          sender: obj.sender,
+          message: obj.message,
+          messageNonce: obj.messageNonce,
+          minGasLimit: obj.gasLimit,
+          logIndex: obj.logIndex,
+          blockNumber:  obj.blockNumber,
+          xDomainCalldata: xDomainCalldata,
+          xDomainCalldataHash: xDomainCalldataHash,
+          decode: decodeMessage(obj.message, obj.target),
+          successfulMessages: successfulMessages,
+          failedMessages: failedMessages
+        }
 
-      if(!successfulMessages && !failedMessages) {
-        pendingSuccessfulMessages[key] = resultSuccessfulMessages[key]
-        // console.log(key, falseSuccessfulMessages[key])
-      }
-      // console.log(i, key, resultSuccessfulMessages[key])
+        if(!successfulMessages && !failedMessages) {
+          pendingSuccessfulMessages[key] = resultSuccessfulMessages[key]
+          // console.log(key, falseSuccessfulMessages[key])
+        }
+        // console.log(i, key, resultSuccessfulMessages[key])
   }
 
   let outFile1 = DATA_FLS_PREFIX+'/withdrawals/1.'+hre.network.name+'_l1_cross_check_relayMessage_all.json'
@@ -1326,9 +1367,15 @@ async function getSendMessageTxs(contractAddress) {
   let end = pauseBlock
   console.log('end', end)
   let blockNumber = pauseBlock
-  const abi = [ "event SentMessage(address indexed target, address sender, bytes message, uint256 messageNonce, uint256 gasLimit)" ];
-  const iface = new ethers.utils.Interface(abi);
+  // const abi = [
+  //   "event SentMessage(address indexed target, address sender, bytes message, uint256 messageNonce, uint256 gasLimit)",
+  //   "event SentMessageExtension1(address indexed sender, uint256 value)"
+  // ];
+
+  const abi = require("../abi/L1CrossDomainMessenger.json")
+  const iface = new ethers.utils.Interface(abi.abi);
   const functionId = ethers.utils.id("SentMessage(address,address,bytes,uint256,uint256)")
+  // const sentMessageExtension1Id = ethers.utils.id("SentMessageExtension1(address,uint256)")
 
   // let unit = 1000000
   let unit = 100
@@ -1366,21 +1413,29 @@ async function getSendMessageTxs(contractAddress) {
   await fs.writeFileSync(outFile, JSON.stringify(transactions));
 
   //===========
+
   let sendMessageData = {}
   let i = 0
   if (transactions.length > 0) {
     for (const sendTx of transactions) {
-      const { logs } = await ethers.provider.getTransactionReceipt(sendTx);
+      // let receipt = await ethers.provider.getTransactionReceipt(sendTx);
+      // const logs = receipt.logs
+      const { logs, blockNumber } = await ethers.provider.getTransactionReceipt(sendTx);
+
       const foundLog = logs.find(el => el && el.topics && el.topics.includes(functionId));
       if (!foundLog) continue;
+
       const parsedlog = iface.parseLog(foundLog);
       const {target, sender, message, messageNonce, gasLimit} = parsedlog["args"];
+
       sendMessageData[sendTx] = {
         target: target,
         sender: sender,
         message: message,
         messageNonce: messageNonce.toString(),
-        gasLimit: gasLimit.toString()
+        gasLimit: gasLimit.toString(),
+        logIndex: foundLog.logIndex,
+        blockNumber: blockNumber,
       }
       i++
       if(i % 500 == 0) {
@@ -1394,6 +1449,41 @@ async function getSendMessageTxs(contractAddress) {
 
   return { transactions, sendMessageData};
 }
+
+async function getProofByMessage(message) {
+  const l2Provider = new ethers.providers.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L2);
+  const l2wallet = new ethers.Wallet(addHexPrefix(process.env.PERSONAL_ACCOUNT) || "", l2Provider);
+  const l1Provider = new ethers.providers.JsonRpcProvider(process.env.CONTRACT_RPC_URL_L1);
+  const l1wallet = new ethers.Wallet(addHexPrefix(process.env.PERSONAL_ACCOUNT) || "", l1Provider);
+
+  const batchCrossChainMessenger = new BatchCrossChainMessenger({
+    l1SignerOrProvider: l1wallet,
+    l2SignerOrProvider: l2wallet,
+    l1ChainId: 11155111,
+    l2ChainId: 55007,
+    contracts: CONTRACTS,
+    bedrock: false
+  })
+
+  const L1CrossDomainMessengerAbi = require("../abi/L1CrossDomainMessenger.json");
+
+  const crossDomainMessengerL1 = new ethers.Contract(CONTRACTS.l1.L1CrossDomainMessenger, L1CrossDomainMessengerAbi.abi, l1Provider);
+
+  const getMessageProof = await batchCrossChainMessenger.getMessageProof(message)
+  console.log("getMessageProof" , getMessageProof)
+
+
+  let res = await crossDomainMessengerL1.connect(l1wallet).relayMessage(
+    message.target,
+    message.sender,
+    message.message,
+    BigNumber.from(message.messageNonce + ""),
+    getMessageProof
+  )
+
+  console.log("relayMessage", res)
+}
+
 
 const addHexPrefix = (privateKey) => {
   if (privateKey.substring(0, 2) !== "0x") {
@@ -1743,6 +1833,9 @@ async function main() {
     if(DOC != "0x0000000000000000000000000000000000000000") await getBalances ("DOC", DOC, pauseBlock, null, fileMode)
     if(AURA != "0x0000000000000000000000000000000000000000") await getBalances ("AURA", AURA, pauseBlock, null, fileMode)
 
+    console.log("\n4-1. ----  Hold on!! Check if there is a contract that holds the asset.  --")
+    await checkEoaInL1HasBalances()
+
     console.log("\n5. ----  Details of contracts ----------------------")
     await queryContracts()
     console.log("\n5-1. ----  Check Unknown developer  ----------------------")
@@ -1765,13 +1858,13 @@ async function main() {
     // file: /balances/3.titansepolia_asset_lps_owner.json
     await assetsLpsbyOwner()
 
-
     console.log("\n10. ---- assetsContractsbyOwner  --")
     // file: /balances/4.titansepolia_asset_contracts_owner.json
     await assetsContractsbyOwner()
 
     // file: /balances/4.titansepolia_assets_eoa.json
     await assetsAggregationByEOA()
+
     await assetTransfer()
 
     console.log("\n11. ---- getBalanceL1Bridge  --")
@@ -1780,13 +1873,13 @@ async function main() {
 
     console.log("\n12. ---- Pending Withdrawals  --")
 
-    //====== Pending Withdrawals
+    // ====== Pending Withdrawals
     // file: /transactions/titansepolia_l2_send_message_17923.json
     // file: /transactions/titansepolia_l2_send_message_data_17923.json
     await getSendMessageTxs(L2_CONTRACT_ADDRESSES.L2CrossDomainMessenger)
 
-    // file: /withdrawals/1.titansepolia_l1_cross_check_relayMessage_all.json
-    // file: /withdrawals/2.titansepolia_l1_cross_pending_relayMessage.json
+    // // file: /withdrawals/1.titansepolia_l1_cross_check_relayMessage_all.json
+    // // file: /withdrawals/2.titansepolia_l1_cross_pending_relayMessage.json
     await getPendingWithdrawals()
 
     // file: /data/balances/6.titansepolia_total_pending_asset.json
@@ -1795,6 +1888,35 @@ async function main() {
     console.log("\n13. ---- Verify  --")
     await verifyAssetAmount()
 
+
+    // ========= Test Final Withdrawal =====================
+    // const message = {
+    //   direction: 1,
+    //   target: "0x1F032B938125f9bE411801fb127785430E7b3971",
+    //   sender:  "0x4200000000000000000000000000000000000010",
+    //   message: "0xa9f9e675000000000000000000000000a30fe40285b8f5c0457dbc3b7c8a280373c400440000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c1eba383d94c6021160042491a5dfaf1d82694e600000000000000000000000090ffcc7f168dcedbef1cb6c6eb00ca73f922956f0000000000000000000000000000000000000000000000008ac7230489e8000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000023078000000000000000000000000000000000000000000000000000000000000",
+    //   messageNonce: 100034,
+    //   minGasLimit: "0",
+    //   logIndex: 0,
+    //   blockNumber: 3759,
+    //   transactionHash: '0xc93bcda47a0f28c5966d609a14643887abfc014f53c9f0910e4ef0427a65769c',
+    // }
+
+    // const message = {
+    //   direction: 1,
+    //   target: "0x1F032B938125f9bE411801fb127785430E7b3971",
+    //   sender:  "0x4200000000000000000000000000000000000010",
+    //   message: "0xa9f9e675000000000000000000000000a30fe40285b8f5c0457dbc3b7c8a280373c400440000000000000000000000007c6b91d9be155a6db01f749217d76ff02a7227f2000000000000000000000000c1eba383d94c6021160042491a5dfaf1d82694e6000000000000000000000000c1eba383d94c6021160042491a5dfaf1d82694e60000000000000000000000000000000000000000000000056bc75e2d6310000000000000000000000000000000000000000000000000000000000000000000c00000000000000000000000000000000000000000000000000000000000000000",
+    //   messageNonce: 100077,
+    //   minGasLimit: "0",
+    //   logIndex: 0,
+    //   blockNumber: 14517,
+    //   transactionHash: '0xbad519f4a0f74c780a161e27b5079b7c01b0a6d3887c08876aa1a773d74ea21b',
+    // }
+    // let a = await getProofByMessage(message)
+    // console.log(a)
+
+    //======================================
   }
 
   main()

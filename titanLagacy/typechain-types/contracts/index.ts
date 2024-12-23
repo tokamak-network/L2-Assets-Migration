@@ -3,6 +3,8 @@
 /* eslint-disable */
 import type * as data from "./data";
 export type { data };
+import type * as data2 from "./data2";
+export type { data2 };
 import type * as sepolia from "./sepolia";
 export type { sepolia };
 export type { L1CrossDomainMessenger } from "./L1CrossDomainMessenger";
