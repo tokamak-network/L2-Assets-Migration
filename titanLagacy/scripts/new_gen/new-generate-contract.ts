@@ -1,6 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
+import hre from "hardhat"
+
 const savePath = "contracts/data2"
 const dirPath = "data"
 const SOL_HEADER =  "// SPDX-License-Identifier: GPL-3.0 \n pragma solidity >=0.7.0 <0.9.0; \n\n";
@@ -10,7 +12,7 @@ const SOL_PREFIX = "bytes32 constant public";
 const MAX_CONTENTS = 335; 
 
 const main = async () => {
-    const jsonData = fs.readFileSync(path.join(dirPath, 'new-generate-assets.json'), "utf-8");
+    const jsonData = fs.readFileSync(path.join(dirPath, hre.network.name+'_new-generate-assets.json'), "utf-8");
     const storageData = JSON.parse(jsonData);
     const out:string[] = [];
 
