@@ -1,0 +1,271 @@
+==============================
+==== Sum of LPs by Pool ======
+
+pools length12
+
+Check!! The number of pools counted by LP and the number of pool contracts are different
+
+
+
+0 Pool  == 0xccd11ebe55c84f0b793a291b209f80aa15a1cffc ==============
+
+TON (Pool       ) :259696380589579735
+TON (LPS of Pool) :259696380589579707
+ Diff             : 28
+TOS (Pool       ) :109830009268402027956
+TOS (LPS of Pool) :109830009268402027919
+ Diff             : 37
+USDC (Pool       ) :0
+USDC (LPS of Pool) :0
+ Diff             : 0
+USDT (Pool       ) :0
+USDT (LPS of Pool) :0
+ Diff             : 0
+WETH (Pool       ) :0
+WETH (LPS of Pool) :0
+ Diff             : 0
+ETH (Pool       ) :0
+ETH (LPS of Pool) :0
+ Diff             : 0
+
+
+1 Pool  == 0xd77bb78091c34aa82cde06b07ed90804cc6db75d ==============
+
+TON (Pool       ) :80809329865372182348
+TON (LPS of Pool) :80809329865372182273
+ Diff             : 75
+TOS (Pool       ) :0
+TOS (LPS of Pool) :0
+ Diff             : 0
+USDC (Pool       ) :0
+USDC (LPS of Pool) :0
+ Diff             : 0
+USDT (Pool       ) :0
+USDT (LPS of Pool) :0
+ Diff             : 0
+WETH (Pool       ) :1220368905462354
+WETH (LPS of Pool) :1220368905462271
+ Diff             : 83
+ETH (Pool       ) :0
+ETH (LPS of Pool) :0
+ Diff             : 0
+
+
+2 Pool  == 0x707cea1b9f775908429175707dafd9f51696e4ca ==============
+
+TON (Pool       ) :0
+TON (LPS of Pool) :0
+ Diff             : 0
+TOS (Pool       ) :81344582768908622143
+TOS (LPS of Pool) :81344582768908622128
+ Diff             : 15
+USDC (Pool       ) :0
+USDC (LPS of Pool) :0
+ Diff             : 0
+USDT (Pool       ) :0
+USDT (LPS of Pool) :0
+ Diff             : 0
+WETH (Pool       ) :174137891441821
+WETH (LPS of Pool) :174137891441805
+ Diff             : 16
+ETH (Pool       ) :0
+ETH (LPS of Pool) :0
+ Diff             : 0
+
+
+3 Pool  == 0xac15355e0fc21bc9718d0d1fb6f0f65f45462811 ==============
+
+TON (Pool       ) :0
+TON (LPS of Pool) :0
+ Diff             : 0
+TOS (Pool       ) :0
+TOS (LPS of Pool) :0
+ Diff             : 0
+USDC (Pool       ) :81080889
+USDC (LPS of Pool) :81080877
+ Diff             : 12
+USDT (Pool       ) :0
+USDT (LPS of Pool) :0
+ Diff             : 0
+WETH (Pool       ) :13011781099920025
+WETH (LPS of Pool) :13011781099920010
+ Diff             : 15
+ETH (Pool       ) :0
+ETH (LPS of Pool) :0
+ Diff             : 0
+
+
+4 Pool  == 0xf2da60eb3b9b25448874f96d0f337d1148403105 ==============
+
+TON (Pool       ) :0
+TON (LPS of Pool) :0
+ Diff             : 0
+TOS (Pool       ) :0
+TOS (LPS of Pool) :0
+ Diff             : 0
+USDC (Pool       ) :0
+USDC (LPS of Pool) :0
+ Diff             : 0
+USDT (Pool       ) :89121360
+USDT (LPS of Pool) :89121347
+ Diff             : 13
+WETH (Pool       ) :9727042773715380
+WETH (LPS of Pool) :9727042773715371
+ Diff             : 9
+ETH (Pool       ) :0
+ETH (LPS of Pool) :0
+ Diff             : 0
+
+
+5 Pool  == 0x887cbdec785589c432a198cfb9f96e7600a41c3f ==============
+
+TON (Pool       ) :4692455535592709
+TON (LPS of Pool) :4692455535592427
+ Diff             : 282
+TOS (Pool       ) :12724034074389221990
+TOS (LPS of Pool) :12724034074389221704
+ Diff             : 286
+USDC (Pool       ) :0
+USDC (LPS of Pool) :0
+ Diff             : 0
+USDT (Pool       ) :0
+USDT (LPS of Pool) :0
+ Diff             : 0
+WETH (Pool       ) :0
+WETH (LPS of Pool) :0
+ Diff             : 0
+ETH (Pool       ) :0
+ETH (LPS of Pool) :0
+ Diff             : 0
+
+
+6 Pool  == 0xae7e78b10c06b975625f8f619ee49641353ca2b5 ==============
+
+TON (Pool       ) :308426676765721446
+TON (LPS of Pool) :308426676765721236
+ Diff             : 210
+TOS (Pool       ) :0
+TOS (LPS of Pool) :0
+ Diff             : 0
+USDC (Pool       ) :392442
+USDC (LPS of Pool) :392255
+ Diff             : 187
+USDT (Pool       ) :0
+USDT (LPS of Pool) :0
+ Diff             : 0
+WETH (Pool       ) :0
+WETH (LPS of Pool) :0
+ Diff             : 0
+ETH (Pool       ) :0
+ETH (LPS of Pool) :0
+ Diff             : 0
+
+
+7 Pool  == 0xcf9619dde0cf67f96a6abcc6d8c0c0ac84a397a5 ==============
+
+TON (Pool       ) :2
+TON (LPS of Pool) :0
+ Diff             : 2
+TOS (Pool       ) :0
+TOS (LPS of Pool) :0
+ Diff             : 0
+USDC (Pool       ) :0
+USDC (LPS of Pool) :0
+ Diff             : 0
+USDT (Pool       ) :0
+USDT (LPS of Pool) :0
+ Diff             : 0
+WETH (Pool       ) :1
+WETH (LPS of Pool) :0
+ Diff             : 1
+ETH (Pool       ) :0
+ETH (LPS of Pool) :0
+ Diff             : 0
+
+
+8 Pool  == 0xd846bc27daa77fa3f9d38cfaec50b696e3f84080 ==============
+
+TON (Pool       ) :2
+TON (LPS of Pool) :0
+ Diff             : 2
+TOS (Pool       ) :0
+TOS (LPS of Pool) :0
+ Diff             : 0
+USDC (Pool       ) :0
+USDC (LPS of Pool) :0
+ Diff             : 0
+USDT (Pool       ) :0
+USDT (LPS of Pool) :0
+ Diff             : 0
+WETH (Pool       ) :1
+WETH (LPS of Pool) :0
+ Diff             : 1
+ETH (Pool       ) :0
+ETH (LPS of Pool) :0
+ Diff             : 0
+
+
+9 Pool  == 0xcc96598cb3c60ae170f95eb54ab6dff469046c0c ==============
+
+TON (Pool       ) :1
+TON (LPS of Pool) :0
+ Diff             : 1
+TOS (Pool       ) :0
+TOS (LPS of Pool) :0
+ Diff             : 0
+USDC (Pool       ) :0
+USDC (LPS of Pool) :0
+ Diff             : 0
+USDT (Pool       ) :0
+USDT (LPS of Pool) :0
+ Diff             : 0
+WETH (Pool       ) :1
+WETH (LPS of Pool) :0
+ Diff             : 1
+ETH (Pool       ) :0
+ETH (LPS of Pool) :0
+ Diff             : 0
+
+
+10 Pool  == 0xb3e02d342dca42ff46f9d8d2adf21442f58637d0 ==============
+
+TON (Pool       ) :16
+TON (LPS of Pool) :0
+ Diff             : 16
+TOS (Pool       ) :0
+TOS (LPS of Pool) :0
+ Diff             : 0
+USDC (Pool       ) :0
+USDC (LPS of Pool) :0
+ Diff             : 0
+USDT (Pool       ) :17
+USDT (LPS of Pool) :0
+ Diff             : 17
+WETH (Pool       ) :0
+WETH (LPS of Pool) :0
+ Diff             : 0
+ETH (Pool       ) :0
+ETH (LPS of Pool) :0
+ Diff             : 0
+
+
+11 Pool  == 0x430ee968f74cf0bd2b7529592f6969ec7199d461 ==============
+
+TON (Pool       ) :0
+TON (LPS of Pool) :0
+ Diff             : 0
+TOS (Pool       ) :0
+TOS (LPS of Pool) :0
+ Diff             : 0
+USDC (Pool       ) :8
+USDC (LPS of Pool) :0
+ Diff             : 8
+USDT (Pool       ) :7
+USDT (LPS of Pool) :0
+ Diff             : 7
+WETH (Pool       ) :0
+WETH (LPS of Pool) :0
+ Diff             : 0
+ETH (Pool       ) :0
+ETH (LPS of Pool) :0
+ Diff             : 0

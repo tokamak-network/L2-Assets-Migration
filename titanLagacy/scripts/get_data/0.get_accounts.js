@@ -8,6 +8,7 @@ const { BatchCrossChainMessenger, MessageStatus, OEL2ContractsLike, OEContractsL
 
 let DATA_FLS_PREFIX = "./data/sunset_"+hre.network.name
 
+/*
 // titan-sepolia
 const baseUrl = "https://explorer.titan-sepolia.tokamak.network/api?"
 const TON = "0x7c6b91d9be155a6db01f749217d76ff02a7227f2"
@@ -78,8 +79,8 @@ const CONTRACTS = {
   },
   l2: L2_CONTRACT_ADDRESSES,
 }
+*/
 
-/*
 // titan
 const baseUrl = "https://explorer.titan.tokamak.network/api?"
 const TON = "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2"
@@ -101,7 +102,7 @@ const L1USDT = "0xdac17f958d2ee523a2206206994597c13d831ec7"
 const L1DOC = "0x8c4c0fc89382f96e435527d39c9ec69dded34e77"
 const L1AURA = "0xf8474c2a90b9035e0b431e1789fe76f54d4ce708"
 const L1ETH = ""
-const pauseBlock = 6391
+const pauseBlock = 6403
 const startBlock = 0
 
 // L2에서 L1Bridge주소의 자산을 누가 가져갈것인가.
@@ -139,7 +140,7 @@ const CONTRACTS = {
   },
   l2: L2_CONTRACT_ADDRESSES,
 }
-*/
+
 
 DATA_FLS_PREFIX = DATA_FLS_PREFIX +"_"+ pauseBlock
 
