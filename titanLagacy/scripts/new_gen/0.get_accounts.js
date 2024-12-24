@@ -1185,14 +1185,15 @@ async function assetsAggregationByEOA() {
       uniswap: uniswap,
       contract: contract
     }
-    assetAggregation[account].total.TETH = BigNumber.from(assetAggregation[account].total.WETH).add(BigNumber.from(assetAggregation[account].total.ETH)).toString()
 
-    sums.TON = sums.TON.add(BigNumber.from(assetAggregation[account].total.TON))
-    sums.TOS = sums.TOS.add(BigNumber.from(assetAggregation[account].total.TOS))
-    sums.USDC = sums.USDC.add(BigNumber.from(assetAggregation[account].total.USDC))
-    sums.USDT = sums.USDT.add(BigNumber.from(assetAggregation[account].total.USDT))
-    sums.WETH = sums.WETH.add(BigNumber.from(assetAggregation[account].total.WETH))
-    sums.ETH = sums.ETH.add(BigNumber.from(assetAggregation[account].total.ETH))
+    assetAggregation[i].total.TETH = BigNumber.from(assetAggregation[i].total.WETH).add(BigNumber.from(assetAggregation[i].total.ETH)).toString()
+
+    sums.TON = sums.TON.add(BigNumber.from(assetAggregation[i].total.TON))
+    sums.TOS = sums.TOS.add(BigNumber.from(assetAggregation[i].total.TOS))
+    sums.USDC = sums.USDC.add(BigNumber.from(assetAggregation[i].total.USDC))
+    sums.USDT = sums.USDT.add(BigNumber.from(assetAggregation[i].total.USDT))
+    sums.WETH = sums.WETH.add(BigNumber.from(assetAggregation[i].total.WETH))
+    sums.ETH = sums.ETH.add(BigNumber.from(assetAggregation[i].total.ETH))
   }
   sums.TETH =  sums.WETH.add(sums.ETH)
 
@@ -1206,7 +1207,7 @@ async function assetsAggregationByEOA() {
   console.log("TETH", ethers.utils.formatUnits(sums.TETH, 18) )
 
 
-  let outFile = DATA_FLS_PREFIX+ '/balances/5.'+hre.network.name+'_asset_eoa.json'
+  let outFile = './data/5.'+hre.network.name+'_asset_eoa.json'
   await fs.writeFileSync(outFile, JSON.stringify(assetAggregation));
 
   let totalEoaAmount = {
@@ -1219,7 +1220,7 @@ async function assetsAggregationByEOA() {
     TETH: sums.TETH.toString()
   }
 
-  let outFile1 = DATA_FLS_PREFIX+ '/balances/7.'+hre.network.name+'_total_eoa_asset.json'
+  let outFile1 = './data/7.'+hre.network.name+'_total_eoa_asset.json'
   await fs.writeFileSync(outFile1, JSON.stringify(totalEoaAmount));
 
   return {balances, uniswap, contract, assetAggregation, sums, totalEoaAmount}
