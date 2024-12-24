@@ -7138,5 +7138,40 @@
             "WETH": "0",
             "ETH": "0"
         }
+    },
+    "0x37212a8f2abbb40000e974da82d410ddbecfa956": {
+        "total": {
+            "TON": "0",
+            "TOS": "0",
+            "USDC": "0",
+            "USDT": "0",
+            "WETH": "0",
+            "ETH": "0",
+            "TETH": "0"
+        },
+        "balances": {
+            "TON": "0",
+            "TOS": "0",
+            "USDC": "0",
+            "USDT": "0",
+            "WETH": "0",
+            "ETH": "0"
+        },
+        "uniswap": {
+            "TON": "0",
+            "TOS": "0",
+            "USDC": "0",
+            "USDT": "0",
+            "WETH": "0",
+            "ETH": "0"
+        },
+        "contract": {
+            "TON": "0",
+            "TOS": "0",
+            "USDC": "0",
+            "USDT": "0",
+            "WETH": "0",
+            "ETH": "0"
+        }
     }
 }
