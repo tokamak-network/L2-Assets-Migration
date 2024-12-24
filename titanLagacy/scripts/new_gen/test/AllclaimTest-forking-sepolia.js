@@ -87,7 +87,7 @@ async function claimTest() {
 
     let positionAddress = "0x1a7dFF905E30d36578b6b2aC46089dEc51531067"
 
-    let readFile1 ='./data/new-generate-assets.json'
+    let readFile1 ='./data/titansepolia_new-generate-assets.json'
     let assets
     if (await fs.existsSync(readFile1)) assets = JSON.parse(await fs.readFileSync(readFile1));
     // console.log(assets)
@@ -129,6 +129,7 @@ async function claimTest() {
             getAddress = await UpgradeL1BridgeLogic.connect(getAccount).getForcePosition(Hash)
             
             if(getAddress == testZeroAddr) {
+                console.log("Account : ", getAccount.address)
                 console.log("error :", Hash)
                 break;
             }
