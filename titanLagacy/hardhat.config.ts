@@ -36,11 +36,15 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       forking: {
-        url: process.env.ETH_NODE_URI_SEPOLIA || "", // sepolia
-        blockNumber: 7316273,
+        // url: process.env.ETH_NODE_URI_SEPOLIA || "", // sepolia
+        // blockNumber: 7316273,
+        url: process.env.ETH_NODE_URI_MAINNET || "", // mainnet
         // url: "http://127.0.0.1:8545", // sepolia
         //   // url: process.env.SEPOLIA_TITAN || "", // L2
       }
+    },
+    local: {
+      url: "http://127.0.0.1:8545"
     },
     main: {
       url: process.env.CONTRACT_RPC_URL_L1 || "",
@@ -67,6 +71,9 @@ const config: HardhatUserConfig = {
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY
+  },
+  mocha: {
+    timeout: 100000000
   },
   solidity: {
     version: "0.8.9",

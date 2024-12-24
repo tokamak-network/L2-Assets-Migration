@@ -7,7 +7,8 @@ const path = require("path")
 
 const dirPath = "data"
 const DATA_FLS_PREFIX = "./data/sunset_"+hre.network.name
-const pauseBlock = 17928
+// const pauseBlock = 17928
+const pauseBlock = 6403
 
 const main = async () => {
     // let readFile1 = DATA_FLS_PREFIX+ '/balances/5.'+hre.network.name+'_accounts_eoa.json'
