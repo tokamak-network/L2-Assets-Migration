@@ -7,7 +7,7 @@ const { BigNumber } = require("ethers")
 const { BatchCrossChainMessenger, MessageStatus, OEL2ContractsLike, OEContractsLike } = require("@tokamak-network/titan-sdk")
 
 let DATA_FLS_PREFIX = "./data/sunset_"+hre.network.name
-/*
+
 // titan-sepolia
 const baseUrl = "https://explorer.titan-sepolia.tokamak.network/api?"
 const TON = "0x7c6b91d9be155a6db01f749217d76ff02a7227f2"
@@ -41,6 +41,10 @@ const assetTransferAccount = [
   {
     from: '0x0cf56abde564c87bdc55a150c972c8430128eac2',
     to: '0xD4335A175c36c0922F6A368b83f9F6671bf07606'
+  },
+  {
+    from: '0x48bd3707805cfdd51252383550c6879dd3ac23b9',
+    to: '0xf0B595d10a92A5a9BC3fFeA7e79f5d266b6035Ea'
   }
 ]
 
@@ -74,8 +78,8 @@ const CONTRACTS = {
   },
   l2: L2_CONTRACT_ADDRESSES,
 }
-*/
 
+/*
 // titan
 const baseUrl = "https://explorer.titan.tokamak.network/api?"
 const TON = "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2"
@@ -135,7 +139,7 @@ const CONTRACTS = {
   },
   l2: L2_CONTRACT_ADDRESSES,
 }
-
+*/
 
 DATA_FLS_PREFIX = DATA_FLS_PREFIX +"_"+ pauseBlock
 
@@ -245,21 +249,27 @@ async function checkEoaInL1HasBalances() {
     let balanceWETH = JSON.parse(await fs.readFileSync(DATA_FLS_PREFIX+'/balances/'+hre.network.name+'_WETH_'+pauseBlock+'.json'));
     let balanceETH = JSON.parse(await fs.readFileSync(DATA_FLS_PREFIX+'/balances/'+hre.network.name+'_ETH_'+pauseBlock+'.json'));
 
-    let balanceBool = false
+
     for (var i=0; i< contractsL1.length; i++) {
+      // console.log('---',contractsL1[i],'---')
+      let balanceBool = false
       if (balanceTON[contractsL1[i]] != "0") balanceBool = true
       else if (balanceTOS[contractsL1[i]] != "0") balanceBool = true
       else if (balanceUSDC[contractsL1[i]] != "0") balanceBool = true
       else if (balanceUSDT[contractsL1[i]] != "0") balanceBool = true
       else if (balanceWETH[contractsL1[i]] != "0") balanceBool = true
-      else if (balanceETH[contractsL1[i]] != "0") balanceBool = true
+      else if (balanceETH[contractsL1[i]] != "0") {
+        balanceBool = true
+        // console.log('ETH',balanceETH[contractsL1[i]])
+      }
+
+      if(balanceBool) contractsL1_has_balance.push(contractsL1[i])
     }
 
-    if(balanceBool) contractsL1_has_balance.push(contractsL1[i])
   }
 
-  let eoaNotL1HasBalance = DATA_FLS_PREFIX+"/accounts/"+hre.network.name+"_accounts_eoa_not_l1_has_balance.json"
-  await fs.writeFileSync(eoaNotL1HasBalance, JSON.stringify(contractsL1_has_balance));
+  // let eoaNotL1HasBalance = DATA_FLS_PREFIX+"/accounts/"+hre.network.name+"_accounts_eoa_not_l1_has_balance.json"
+  // await fs.writeFileSync(eoaNotL1HasBalance, JSON.stringify(contractsL1_has_balance));
 
   console.log('--- Contracts that holds assets ---')
   console.log(contractsL1_has_balance)
