@@ -272,7 +272,9 @@ describe("claim Test - forking mainnet", function () {
         })
 
         it("SetCode", async () =>{
-            await StandardBridgeProxy.connect(BridgeOwner).setCode(UpgradeL1Bridge_ABI.deployedBytecode);
+            await StandardBridgeProxy.connect(BridgeOwner).setCode(
+                UpgradeL1Bridge_ABI.deployedBytecode
+            );
         })
 
         it("Set UpgradeL1BridgeLogic Contract", async () => {
@@ -283,32 +285,80 @@ describe("claim Test - forking mainnet", function () {
             )
             })
 
-        it("Check the storage", async () => {
+        it("UpgradeL1Bridge Check the active storage", async () => {
             execute = true;
             if(execute == false) {
                 let storage = await UpgradeL1BridgeLogic.active()
-                console.log("storage : ", storage)
+                // console.log("storage : ", storage)
                 expect(storage).to.be.equal(false)
             }
         })
 
-        it("UpgradeL1Bridge setCloser", async () => {
-            await UpgradeL1BridgeLogic.connect(BridgeOwner).setCloser(closer.address);
+        it("UpgradeL1Bridge l2TokenBridge && messenger", async () => {
+            let messenger = "0xfd76ef26315Ea36136dC40Aeafb5D276d37944AE"
+            let l2Bridge = "0x4200000000000000000000000000000000000010"
 
-            let closerAddr = await UpgradeL1BridgeLogic.connect(BridgeOwner).closer()
-            // console.log("closerAddr :", closerAddr)
-            expect(closerAddr).to.be.equal(closer.address)
+            let getL2Bridge = await UpgradeL1BridgeLogic.l2TokenBridge()
+            let getMessenger = await UpgradeL1BridgeLogic.messenger()
+            // console.log("getL2Bridge :", getL2Bridge)
+            // console.log("getMessenger :", getMessenger)
+            expect(getL2Bridge.toLowerCase()).to.be.equal(l2Bridge.toLowerCase())
+            expect(getMessenger.toLowerCase()).to.be.equal(messenger.toLowerCase())
+        }) 
+
+        it("UpgradeL1Bridge getProxyOwner()", async () => {
+            let getOwner = await UpgradeL1BridgeLogic.connect(tester).getProxyOwner()
+            // console.log(getOwner)
+            // console.log(BridgeOwner.address)
+            expect(getOwner).to.be.equal(BridgeOwner.address)
         })
 
-        it("set active true", async () => {
-            await UpgradeL1BridgeLogic.connect(closer).forceActive(
-                true
-            )
+        it("UpgradeL1Bridge getProxyImplementation()", async () => {
+            let Implementation = await UpgradeL1BridgeLogic.getProxyImplementation()
+            console.log(Implementation)
+        })
 
+        it("UpgradeL1Bridge setCloserAndActive", async () => {
+            let closerAddr = await UpgradeL1BridgeLogic.connect(BridgeOwner).closer()
             let storage = await UpgradeL1BridgeLogic.active()
+
+            console.log("closerAddr : ", closerAddr)
             console.log("storage : ", storage)
+
+            
+            if(storage == false) {
+                await UpgradeL1BridgeLogic.connect(BridgeOwner).setCloserAndActive(
+                    closer.address,
+                    true
+                );
+
+                closerAddr = await UpgradeL1BridgeLogic.connect(BridgeOwner).closer()
+                storage = await UpgradeL1BridgeLogic.active()
+                console.log("closerAddr : ", closerAddr)
+                console.log("storage : ", storage)
+            }
+            expect(closerAddr).to.be.equal(closer.address)
             expect(storage).to.be.equal(true)
         })
+
+        // it("UpgradeL1Bridge setCloser", async () => {
+        //     await UpgradeL1BridgeLogic.connect(BridgeOwner).setCloser(closer.address);
+
+        //     let closerAddr = await UpgradeL1BridgeLogic.connect(BridgeOwner).closer()
+        //     // console.log("closerAddr :", closerAddr)
+        //     expect(closerAddr).to.be.equal(closer.address)
+        // })
+
+
+        // it("set active true", async () => {
+        //     await UpgradeL1BridgeLogic.connect(closer).forceActive(
+        //         true
+        //     )
+
+        //     let storage = await UpgradeL1BridgeLogic.active()
+        //     // console.log("storage : ", storage)
+        //     expect(storage).to.be.equal(true)
+        // })
 
         it("set forceRegistry", async () => {
             let addr1 = await UpgradeL1BridgeLogic.connect(closer).position(
@@ -353,71 +403,144 @@ describe("claim Test - forking mainnet", function () {
             let getAccount
             let getAddress
             let testZeroAddr = "0x0000000000000000000000000000000000000000";
+            let tokenContract
 
             let positionAddress = GenBridgeStorage1Contract.address
 
             for(let i = 0; i < assets.length; i++) {
                 tokenAddr = assets[i].l1Token
                 console.log("tokenAddr : ", tokenAddr);
-                // console.log(assets[i].data.length);
-                for(let j = 0; j < assets[i].data.length; j++) {
-                    if(j == 0){
-                        console.log("data.length :", assets[i].data.length)
-                    }
-                    Account = assets[i].data[j].claimer
-                    Amount = ethers.BigNumber.from(assets[i].data[j].amount)
-                    Hash = assets[i].data[j].hash
-                    
-                    await ethers.provider.send('hardhat_impersonateAccount', [
-                        Account
-                    ])
-                    await ethers.provider.send('hardhat_setBalance', [
-                        Account, 
-                        '0x152D02C7E14AF6800000'
-                    ]);
-                    getAccount = await ethers.getSigner(Account);
-                    
-                    // if(i == 0 && j == 0){
-                    //     console.log("Account : ", getAccount.address)
-                    //     console.log("Amount : ", Amount)
-                    //     console.log("Hash : ", Hash)
-                    // }
+                if (tokenAddr == l1ETH) {
+                    for(let k = 0; k < assets[i].data.length; k++) {
+                        if(k == 0){
+                            console.log("data.length :", assets[i].data.length)
+                        }
 
-                    getAddress = await UpgradeL1BridgeLogic.connect(getAccount).getForcePosition(Hash)
+                        Account = assets[i].data[k].claimer
+                        Amount = ethers.BigNumber.from(assets[i].data[k].amount)
+                        Hash = assets[i].data[k].hash
+
+                        await ethers.provider.send('hardhat_impersonateAccount', [
+                            Account
+                        ])
+                        await ethers.provider.send('hardhat_setBalance', [
+                            Account, 
+                            '0x152D02C7E14AF6800000'
+                        ]);
+                        getAccount = await ethers.getSigner(Account);
+
+                        getAddress = await UpgradeL1BridgeLogic.connect(getAccount).getForcePosition(Hash)
                     
-                    if(getAddress == testZeroAddr) {
-                        console.log("Account : ", getAccount.address)
-                        console.log("error :", Hash)
-                        break;
-                    }
-        
-                    
-                    if(Account.toUpperCase() != testZeroAddr.toUpperCase()){
-                        let code = await ethers.provider.getCode(Account);
-                        if (code !== '0x') {
-                            console.log("j : ", j);
-                            console.log("Account is Contract : ", Account);
-                        } else {
-                            if(Hash == "0x172665f9d91a10c9051e7851268413e8d5c31a04c6d17956ad464598a8e44969"){
-                                positionAddress = GenBridgeStorage2Contract.address
-                            }
-                            await UpgradeL1BridgeLogic.connect(getAccount).forceWithdrawClaim(
-                                positionAddress,
-                                Hash,
-                                tokenAddr,
-                                Amount
-                            )
-        
-                            getAddress = await UpgradeL1BridgeLogic.connect(getAccount).gb(Hash)
-                            
-                            if(getAddress.toUpperCase() != Account.toUpperCase()) {
-                                console.log("gb error :", Hash)
-                                break;
+                        if(getAddress == testZeroAddr) {
+                            console.log("Account : ", getAccount.address)
+                            console.log("error :", Hash)
+                            break;
+                        }
+
+                        if(Account.toUpperCase() != testZeroAddr.toUpperCase()){
+                            let code = await ethers.provider.getCode(Account);
+                            if (code !== '0x') {
+                                console.log("k : ", k);
+                                console.log("Account is Contract : ", Account);
+                            } else {
+                                if(Hash == "0x172665f9d91a10c9051e7851268413e8d5c31a04c6d17956ad464598a8e44969"){
+                                    positionAddress = GenBridgeStorage2Contract.address
+                                }
+                                
+                                // console.log("Account["+k+"] :", Account);
+                                let beforeAmount = await getAccount.getBalance()
+    
+                                await UpgradeL1BridgeLogic.connect(getAccount).forceWithdrawClaim(
+                                    positionAddress,
+                                    Hash,
+                                    tokenAddr,
+                                    Amount
+                                )
+
+                                let afterAmount = await getAccount.getBalance()
+                                if(Number(afterAmount) <= Number(beforeAmount)) {
+                                    console.log("Account["+k+"] :", Account);
+                                    console.log("Hash :", Hash);
+                                }
+            
+                                getAddress = await UpgradeL1BridgeLogic.connect(getAccount).gb(Hash)
+                                
+                                if(getAddress.toUpperCase() != Account.toUpperCase()) {
+                                    console.log("gb error :", Hash)
+                                    break;
+                                }
                             }
                         }
+
                     }
-        
+                } else {
+                    tokenContract = new ethers.Contract(
+                        tokenAddr,
+                        TON_ABI.abi,
+                        tester
+                    ) 
+                    // console.log(assets[i].data.length);
+
+                    for(let j = 0; j < assets[i].data.length; j++) {
+                        if(j == 0){
+                            console.log("data.length :", assets[i].data.length)
+                        }
+                        Account = assets[i].data[j].claimer
+                        Amount = ethers.BigNumber.from(assets[i].data[j].amount)
+                        Hash = assets[i].data[j].hash
+                        
+                        await ethers.provider.send('hardhat_impersonateAccount', [
+                            Account
+                        ])
+                        await ethers.provider.send('hardhat_setBalance', [
+                            Account, 
+                            '0x152D02C7E14AF6800000'
+                        ]);
+                        getAccount = await ethers.getSigner(Account);
+    
+                        getAddress = await UpgradeL1BridgeLogic.connect(getAccount).getForcePosition(Hash)
+                        
+                        if(getAddress == testZeroAddr) {
+                            console.log("Account : ", getAccount.address)
+                            console.log("error :", Hash)
+                            break;
+                        }
+             
+                        if(Account.toUpperCase() != testZeroAddr.toUpperCase()){
+                            let code = await ethers.provider.getCode(Account);
+                            if (code !== '0x') {
+                                console.log("j : ", j);
+                                console.log("Account is Contract : ", Account);
+                            } else {
+                                if(Hash == "0x172665f9d91a10c9051e7851268413e8d5c31a04c6d17956ad464598a8e44969"){
+                                    positionAddress = GenBridgeStorage2Contract.address
+                                }
+    
+                                let beforeAmount = await tokenContract.balanceOf(Account)
+    
+                                await UpgradeL1BridgeLogic.connect(getAccount).forceWithdrawClaim(
+                                    positionAddress,
+                                    Hash,
+                                    tokenAddr,
+                                    Amount
+                                )
+            
+                                let afterAmount = await tokenContract.balanceOf(Account)
+                                
+                                expect(afterAmount).to.be.gt(beforeAmount)
+
+                                getAddress = await UpgradeL1BridgeLogic.connect(getAccount).gb(Hash)
+                                
+                                if(getAddress.toUpperCase() != Account.toUpperCase()) {
+                                    console.log("gb error :", Hash)
+                                    break;
+                                }
+                            }
+                        }
+            
+                    }
                 }
+
             }
 
         }).timeout(100000000);
