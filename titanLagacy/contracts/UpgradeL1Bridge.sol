@@ -16,8 +16,14 @@ contract UpgradeL1Bridge is L1StandardBridge {
     error FW_NOT_SEARCH_POSITION();
     error FW_INVALID_HASH(); 
     error FW_FAIl_TRANSFER_ETH();
+    error ER_SAME_STORAGE();
     event ForceWithdraw(bytes32 indexed _index, address indexed _token, uint amount, address indexed _claimer);
 
+    bytes32 internal constant IMPLEMENTATION_KEY =
+        0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc;
+
+    bytes32 internal constant OWNER_KEY =
+        0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103;
     /**
      * @dev Parameter structure for requesting forced withdrawal
      * @param position Contract address where the _hash value is stored.
@@ -68,11 +74,27 @@ contract UpgradeL1Bridge is L1StandardBridge {
     /// @dev Sets the contract's active state to the value provided in _state
     /// @param _state The new active state of the contract
     function forceActive(bool _state) external onlyCloser {
+        require(active != _state, "Same State");
         active = _state;
     }
 
     function setCloser(address _closer) external onlyOwner {
+        require(closer != _closer, "Same Address");
         closer = _closer;
+    }
+
+    function setCloserAndActive(
+        address _closer, 
+        bool _state
+    )   
+        external
+        onlyOwner
+    {   
+        if(closer == _closer && active == _state) {
+            revert ER_SAME_STORAGE();
+        }
+        closer = _closer;
+        active = _state;
     }
 
     /**
@@ -179,6 +201,20 @@ contract UpgradeL1Bridge is L1StandardBridge {
         emit ForceWithdraw(r, _token, _amount, msg.sender);
     }
 
+    function getProxyOwner() external view returns(address) {
+        address owner;
+        assembly {
+            owner := sload(OWNER_KEY)
+        }
+        return owner;
+    }
 
+    function getProxyImplementation() external view returns(address) {
+        address implementation;
+        assembly {
+            implementation := sload(IMPLEMENTATION_KEY)
+        }
+        return implementation;
+    }
    
 }
