@@ -1,6 +1,6 @@
 {
-    "0x4200000000000000000000000000000000000007": {
-        "name": "L2CrossDomainMessenger",
+    "0x4200000000000000000000000000000000000010": {
+        "name": "L2StandardBridge",
         "type": "",
         "TON": "0",
         "TOS": "0",
@@ -25,8 +25,8 @@
         "admin": "",
         "deployer": ""
     },
-    "0x4200000000000000000000000000000000000010": {
-        "name": "L2StandardBridge",
+    "0x4200000000000000000000000000000000000007": {
+        "name": "L2CrossDomainMessenger",
         "type": "",
         "TON": "0",
         "TOS": "0",
@@ -38,60 +38,8 @@
         "admin": "",
         "deployer": ""
     },
-    "0x4200000000000000000000000000000000000011": {
-        "name": "OVM_SequencerFeeVault",
-        "type": "developer",
-        "TON": "0",
-        "TOS": "0",
-        "USDC": "0",
-        "USDT": "0",
-        "WETH": "0",
-        "ETH": "1173421534848486582",
-        "owner": "",
-        "admin": "",
-        "deployer": "0x6e1a64b7496df60bf747085e89e1231a717fdd38"
-    },
-    "0x420000000000000000000000000000000000000f": {
-        "name": "OVM_GasPriceOracle",
-        "type": "",
-        "TON": "0",
-        "TOS": "0",
-        "USDC": "0",
-        "USDT": "0",
-        "WETH": "0",
-        "ETH": "0",
-        "owner": "",
-        "admin": "",
-        "deployer": ""
-    },
-    "0x4200000000000000000000000000000000000006": {
-        "name": "WETH9",
-        "type": "Wrapped Ether (WETH)",
-        "TON": "0",
-        "TOS": "0",
-        "USDC": "0",
-        "USDT": "0",
-        "WETH": "0",
-        "ETH": "67583954436206251",
-        "owner": "",
-        "admin": "",
-        "deployer": ""
-    },
-    "0x4200000000000000000000000000000000000012": {
-        "name": "L2StandardTokenFactory",
-        "type": "",
-        "TON": "0",
-        "TOS": "0",
-        "USDC": "0",
-        "USDT": "0",
-        "WETH": "0",
-        "ETH": "0",
-        "owner": "",
-        "admin": "",
-        "deployer": ""
-    },
-    "0x4200000000000000000000000000000000000013": {
-        "name": "",
+    "0x4200000000000000000000000000000000000000": {
+        "name": "OVM_L2ToL1MessagePasser",
         "type": "",
         "TON": "0",
         "TOS": "0",
@@ -116,8 +64,8 @@
         "admin": "",
         "deployer": ""
     },
-    "0x4200000000000000000000000000000000000000": {
-        "name": "OVM_L2ToL1MessagePasser",
+    "0x4200000000000000000000000000000000000012": {
+        "name": "L2StandardTokenFactory",
         "type": "",
         "TON": "0",
         "TOS": "0",
@@ -125,6 +73,58 @@
         "USDT": "0",
         "WETH": "0",
         "ETH": "0",
+        "owner": "",
+        "admin": "",
+        "deployer": ""
+    },
+    "0x420000000000000000000000000000000000000f": {
+        "name": "OVM_GasPriceOracle",
+        "type": "",
+        "TON": "0",
+        "TOS": "0",
+        "USDC": "0",
+        "USDT": "0",
+        "WETH": "0",
+        "ETH": "0",
+        "owner": "",
+        "admin": "",
+        "deployer": ""
+    },
+    "0x4200000000000000000000000000000000000013": {
+        "name": "",
+        "type": "",
+        "TON": "0",
+        "TOS": "0",
+        "USDC": "0",
+        "USDT": "0",
+        "WETH": "0",
+        "ETH": "0",
+        "owner": "",
+        "admin": "",
+        "deployer": ""
+    },
+    "0x4200000000000000000000000000000000000011": {
+        "name": "OVM_SequencerFeeVault",
+        "type": "developer",
+        "TON": "0",
+        "TOS": "0",
+        "USDC": "0",
+        "USDT": "0",
+        "WETH": "0",
+        "ETH": "1173421534848486582",
+        "owner": "",
+        "admin": "",
+        "deployer": "0x6e1a64b7496df60bf747085e89e1231a717fdd38"
+    },
+    "0x4200000000000000000000000000000000000006": {
+        "name": "WETH9",
+        "type": "Wrapped Ether (WETH)",
+        "TON": "0",
+        "TOS": "0",
+        "USDC": "0",
+        "USDT": "0",
+        "WETH": "0",
+        "ETH": "67583954436206251",
         "owner": "",
         "admin": "",
         "deployer": ""
@@ -1117,7 +1117,7 @@
         "admin": "",
         "deployer": ""
     },
-    "0xd04f98c88ce1054c90022ee34d566b9237a1203c": {
+    "0x76f948e5f13b9a84a81e5681df8682bbf524805e": {
         "name": "",
         "type": "",
         "TON": "0",
@@ -1130,7 +1130,7 @@
         "admin": "",
         "deployer": ""
     },
-    "0x76f948e5f13b9a84a81e5681df8682bbf524805e": {
+    "0xd04f98c88ce1054c90022ee34d566b9237a1203c": {
         "name": "",
         "type": "",
         "TON": "0",
