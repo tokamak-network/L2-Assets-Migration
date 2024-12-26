@@ -319,11 +319,11 @@ describe("claim Test - forking mainnet", function () {
         })
 
         it("UpgradeL1Bridge setCloserAndActive", async () => {
-            let closerAddr = await UpgradeL1BridgeLogic.connect(BridgeOwner).closer()
+            let closerAddr = await UpgradeL1BridgeLogic.closer()
             let storage = await UpgradeL1BridgeLogic.active()
 
-            console.log("closerAddr : ", closerAddr)
-            console.log("storage : ", storage)
+            // console.log("closerAddr : ", closerAddr)
+            // console.log("storage : ", storage)
 
             
             if(storage == false) {
@@ -332,11 +332,12 @@ describe("claim Test - forking mainnet", function () {
                     true
                 );
 
-                closerAddr = await UpgradeL1BridgeLogic.connect(BridgeOwner).closer()
+                closerAddr = await UpgradeL1BridgeLogic.closer()
                 storage = await UpgradeL1BridgeLogic.active()
-                console.log("closerAddr : ", closerAddr)
-                console.log("storage : ", storage)
+                // console.log("closerAddr : ", closerAddr)
+                // console.log("storage : ", storage)
             }
+            
             expect(closerAddr).to.be.equal(closer.address)
             expect(storage).to.be.equal(true)
         })

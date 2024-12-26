@@ -46,8 +46,12 @@ const config: HardhatUserConfig = {
     local: {
       url: "http://127.0.0.1:8545"
     },
-    main: {
-      url: process.env.CONTRACT_RPC_URL_L1 || "",
+    mainnet: {
+      url: process.env.ETH_NODE_URI_MAINNET || "",
+      gasPrice: 7500000000,  //7.5Gwei
+      accounts: [
+        process.env.PERSONAL_ACCOUNT || "", // Personal account
+      ],
       // accounts: [process.env.L1_PORXY_OWNER || "", process.env.L1_FORCE_OWNER || ""]
     },
     sepolia: {
