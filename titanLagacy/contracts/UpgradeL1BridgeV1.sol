@@ -4,7 +4,7 @@ pragma solidity ^0.8.9;
 import { L1StandardBridge } from "./L1StandardBridge.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "hardhat/console.sol";
+// import "hardhat/console.sol";
 
 /// @title Contract Activation Control
 /// @dev Provides functionalities to control contract activation state through access restricted to a designated address
@@ -15,15 +15,15 @@ contract UpgradeL1BridgeV1 is L1StandardBridge {
     error FW_ONLY_CLOSER();
     error FW_NOT_AVAILABLE_POSITION();
     error FW_NOT_SEARCH_POSITION();
-    error FW_INVALID_HASH(); 
+    error FW_INVALID_HASH();
     error FW_FAIl_TRANSFER_ETH();
     error ER_SAME_STORAGE();
 
     event ForceWithdraw(
-        bytes32 indexed _index, 
-        address indexed _token, 
-        uint amount, 
-        address indexed _claimer,
+        bytes32 indexed _index,
+        address indexed _token,
+        uint amount,
+        address _claimer,
         address _requester
     );
 
@@ -38,7 +38,7 @@ contract UpgradeL1BridgeV1 is L1StandardBridge {
      * @param hashed Hash value of token information that can be force withdaraw from the L1 bridge.
      * @param token L1 token address to receive.
      * @param amount Amount of tokens to receive.
-     */  
+     */
     struct ForceClaimParam {
         address position;
         string hashed;
@@ -53,16 +53,16 @@ contract UpgradeL1BridgeV1 is L1StandardBridge {
      */
     struct ForceRegistryParam {
         address position;
-        bool state;    
+        bool state;
     }
     /// @notice (token,claim,amount) Hashed value => address of the claimer.
-    mapping(bytes32 => address) public gb; 
+    mapping(bytes32 => address) public gb;
      /// @notice GenFWStorage{x}.sol Stores the addresses of the contract => Active status of storage, false is not available.
     mapping(address => bool) public position;
     /// @notice (token,claim,amount) Stores Hashed value, used to check position status in front service.
-    address[] public positions; 
-    
-    /// @notice 
+    address[] public positions;
+
+    /// @notice
     address public closer;
 
     bytes constant SIG_GETOWNER = abi.encodeWithSignature("getOwner()");
@@ -97,12 +97,12 @@ contract UpgradeL1BridgeV1 is L1StandardBridge {
     }
 
     function setCloserAndActive(
-        address _closer, 
+        address _closer,
         bool _state
-    )   
+    )
         external
         onlyOwner
-    {   
+    {
         if(closer == _closer && active == _state) {
             revert ER_SAME_STORAGE();
         }
@@ -115,7 +115,7 @@ contract UpgradeL1BridgeV1 is L1StandardBridge {
      * Forced withdrawals can be made by only referring to the storage address set to true.
      * @param _position Forced withdrawal storage contract distribution address where the hash value is stored
      */
-    function forceRegistry(address[] calldata _position) external onlyCloser { 
+    function forceRegistry(address[] calldata _position) external onlyCloser {
         for(uint i = 0 ; i < _position.length; i++){
             position[_position[i]] = true;
             positions.push(_position[i]);
@@ -139,12 +139,12 @@ contract UpgradeL1BridgeV1 is L1StandardBridge {
     function getForcePosition(string memory _hash) external view returns (address) {
         string memory f = string(abi.encodePacked("_", _hash,"()"));
         for(uint i = 0 ; i < positions.length; i++) {
-            address p = positions[i]; 
-                
-            if(position[p] == false) 
-                continue; 
+            address p = positions[i];
+
+            if(position[p] == false)
+                continue;
             (bool success, bytes memory data) = p.staticcall(abi.encodeWithSignature(f));
-            
+
             if (success) {
                 bytes32 r = abi.decode(data, (bytes32));
                 if(r == 0) {
@@ -157,7 +157,7 @@ contract UpgradeL1BridgeV1 is L1StandardBridge {
     }
 
      /**
-     * @notice The owner of the L1 token receives information about the asset to be received. 
+     * @notice The owner of the L1 token receives information about the asset to be received.
      * The most important thing is that you can only receive tokens that you own.
      * @param params Receive the token information to be received and the storage address of the hash.
      */
@@ -166,7 +166,7 @@ contract UpgradeL1BridgeV1 is L1StandardBridge {
             claim(params[i].position, params[i].hashed, params[i].token, params[i].amount, params[i].getAddress);
         }
     }
-    
+
      /**
      * @notice It is a single forced withdrawal function.
      * @param _position Contract address where the _hash value is stored.
@@ -176,22 +176,22 @@ contract UpgradeL1BridgeV1 is L1StandardBridge {
      * @param _address Address to receive.
      */
     function forceWithdrawClaim(
-        address _position, 
-        string memory _hash, 
-        address _token, 
-        uint _amount,
+        address _position,
+        string calldata _hash,
+        address _token,
+        uint256 _amount,
         address _address
     ) external {
         claim(
-            _position, 
-            _hash, 
-            _token, 
+            _position,
+            _hash,
+            _token,
             _amount,
             _address
         );
     }
 
-    
+
     /**
      * @dev Hash the token owner's address and the information of the token to be claimed.
      * The hash value must be stored in the address registered in the L1 Bridge position.
@@ -202,23 +202,24 @@ contract UpgradeL1BridgeV1 is L1StandardBridge {
      * @param _address Address to receive.
      */
     function claim(
-        address _position, 
-        string memory _hash, 
-        address _token, 
-        uint _amount,
+        address _position,
+        string calldata _hash,
+        address _token,
+        uint256 _amount,
         address _address
     ) internal {
         if(!position[_position]) revert FW_NOT_AVAILABLE_POSITION();
-        
-        string memory f = string(abi.encodePacked("_",_hash,"()"));    
+
+        string memory f = string(abi.encodePacked("_",_hash,"()"));
         (bool s, bytes memory d) = _position.staticcall(abi.encodeWithSignature(f));
-        
+
         if (!s || d.length == 0) {
             revert FW_NOT_SEARCH_POSITION();
         }
 
         bytes32 v = keccak256(abi.encodePacked(_token, _address, _amount));
         bytes32 r = abi.decode(d, (bytes32));
+
         require(claimState[r] == false, "already claim Hash");
 
         if (v != r) {
@@ -262,5 +263,5 @@ contract UpgradeL1BridgeV1 is L1StandardBridge {
             result := mload(add(source, 32))
         }
     }
-   
+
 }
