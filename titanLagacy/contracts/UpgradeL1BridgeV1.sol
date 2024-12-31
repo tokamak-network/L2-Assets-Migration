@@ -210,9 +210,6 @@ contract UpgradeL1BridgeV1 is L1StandardBridge {
     ) internal {
         if(!position[_position]) revert FW_NOT_AVAILABLE_POSITION();
         
-        bytes32 _hash2 = stringToBytes32(_hash);
-        require(claimState[_hash2] == false, "already claim Hash");
-        
         string memory f = string(abi.encodePacked("_",_hash,"()"));    
         (bool s, bytes memory d) = _position.staticcall(abi.encodeWithSignature(f));
         
@@ -222,6 +219,7 @@ contract UpgradeL1BridgeV1 is L1StandardBridge {
 
         bytes32 v = keccak256(abi.encodePacked(_token, _address, _amount));
         bytes32 r = abi.decode(d, (bytes32));
+        require(claimState[r] == false, "already claim Hash");
 
         if (v != r) {
             revert FW_INVALID_HASH();
