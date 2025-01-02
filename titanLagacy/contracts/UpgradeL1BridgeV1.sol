@@ -4,7 +4,6 @@ pragma solidity ^0.8.9;
 import { L1StandardBridge } from "./L1StandardBridge.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-// import "hardhat/console.sol";
 
 /// @title Contract Activation Control
 /// @dev Provides functionalities to control contract activation state through access restricted to a designated address
@@ -252,16 +251,5 @@ contract UpgradeL1BridgeV1 is L1StandardBridge {
         return implementation;
     }
 
-    function stringToBytes32(string memory source) public pure returns (bytes32 result) {
-        bytes memory tempEmptyStringTest = bytes(source);
-
-        if (tempEmptyStringTest.length == 0) {
-            return 0x0;
-        }
-
-        assembly {
-            result := mload(add(source, 32))
-        }
-    }
 
 }
