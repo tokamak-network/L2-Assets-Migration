@@ -39,6 +39,7 @@ const config: HardhatUserConfig = {
         // url: process.env.ETH_NODE_URI_SEPOLIA || "", // sepolia
         // blockNumber: 7316273,
         url: process.env.ETH_NODE_URI_MAINNET || "", // mainnet
+        blockNumber: 21521277,
         // url: "http://127.0.0.1:8545", // sepolia
         //   // url: process.env.SEPOLIA_TITAN || "", // L2
       }
@@ -88,12 +89,12 @@ const config: HardhatUserConfig = {
       }
     }
   },
-
   gasReporter: {
     enabled: true,
     currency: 'USD',
-    gasPrice: 10,
-  }
+    gasPrice: 21,
+    coinmarketcap: `${process.env.COINMARKETCAP_API_KEY}`
+  },
 };
 
 export default config;
