@@ -301,25 +301,9 @@ describe("V1Test (25.01.03) - forking mainnet", function () {
             console.log("Implementation : ", Implementation)
         })
 
-        it("UpgradeL1Bridge setCloserAndActive", async () => {
+        it("UpgradeL1Bridge check setCloserAndActive", async () => {
             let closerAddr = await UpgradeL1BridgeLogic.closer()
             let storage = await UpgradeL1BridgeLogic.active()
-
-            // console.log("closerAddr : ", closerAddr)
-            // console.log("storage : ", storage)
-
-            if(storage == false) {
-                console.log("need storage check")
-                await UpgradeL1BridgeLogic.connect(BridgeOwner).setCloserAndActive(
-                    closer.address,
-                    true
-                );
-
-                closerAddr = await UpgradeL1BridgeLogic.closer()
-                storage = await UpgradeL1BridgeLogic.active()
-                // console.log("closerAddr : ", closerAddr)
-                // console.log("storage : ", storage)
-            }
             
             expect(closerAddr).to.be.equal(closer.address)
             expect(storage).to.be.equal(true)
