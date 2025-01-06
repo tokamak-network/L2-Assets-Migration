@@ -21,7 +21,7 @@ contract UpgradeL1BridgeV1 is L1StandardBridge {
     event ForceWithdraw(
         bytes32 indexed _index,
         address indexed _token,
-        uint amount,
+        uint256 amount,
         address _claimer,
         address _requester
     );
@@ -42,7 +42,7 @@ contract UpgradeL1BridgeV1 is L1StandardBridge {
         address position;
         string hashed;
         address token;
-        uint amount;
+        uint256 amount;
         address getAddress;
     }
     /**
