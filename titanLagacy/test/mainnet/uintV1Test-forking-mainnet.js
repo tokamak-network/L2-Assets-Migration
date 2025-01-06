@@ -452,6 +452,7 @@ describe("V1Test - forking mainnet", function () {
                         Account = assets[i].data[k].claimer
                         Amount = ethers.BigNumber.from(assets[i].data[k].amount)
                         Hash = assets[i].data[k].hash
+                        // Hash = "0x7cfd0f0a48a5aefe2122ad61e30b1832a6a0be0828fbbd2e4e4c2a8587844470"
 
                         getAccount = await ethers.getSigner(Account);
 
@@ -525,6 +526,7 @@ describe("V1Test - forking mainnet", function () {
                         Account = assets[i].data[j].claimer
                         Amount = ethers.BigNumber.from(assets[i].data[j].amount)
                         Hash = assets[i].data[j].hash
+                        // Hash = "0x6d670ec21fe9ba0eaa82f6d2d02a72f6f5b3985af03173fbf5eac363d879b264"
                         
                         getAddress = await UpgradeL1BridgeLogic.connect(tester).getForcePosition(Hash)
                         console.log("getAddress : ", getAddress)
