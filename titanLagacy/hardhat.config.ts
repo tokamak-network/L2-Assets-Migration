@@ -39,7 +39,7 @@ const config: HardhatUserConfig = {
         // url: process.env.ETH_NODE_URI_SEPOLIA || "", // sepolia
         // blockNumber: 7316273,
         url: process.env.ETH_NODE_URI_MAINNET || "", // mainnet
-        blockNumber: 21521277,
+        blockNumber: 21563601,
         // url: "http://127.0.0.1:8545", // sepolia
         //   // url: process.env.SEPOLIA_TITAN || "", // L2
       }
@@ -49,7 +49,7 @@ const config: HardhatUserConfig = {
     },
     mainnet: {
       url: process.env.ETH_NODE_URI_MAINNET || "",
-      gasPrice: 7500000000,  //7.5Gwei
+      gasPrice: 16000000000,  //16Gwei
       accounts: [
         process.env.PERSONAL_ACCOUNT || "", // Personal account
       ],

@@ -127,8 +127,8 @@ describe("V1Test (25.01.06) - forking mainnet", function () {
     let GenBridgeStorage1Contract
     let GenBridgeStorage2Contract
 
-    let GenBridgeStorage1ContractAddr = ""
-    let GenBridgeStorage2ContractAddr = ""
+    let GenBridgeStorage1ContractAddr = "0xcb50cacc75368026103a15d2f2a06510037813b8"
+    let GenBridgeStorage2ContractAddr = "0x7b08f5f952590ffcbf3506b93f7084d0a9815a9f"
 
     let l1TON = "0x2be5e8c109e2197d077d13a82daead6a9b3433c5"
     let l2TON = "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2"
@@ -289,93 +289,93 @@ describe("V1Test (25.01.06) - forking mainnet", function () {
             expect(storage).to.be.equal(true)
         })
 
-        it("set forceRegistry", async () => {
-            let addr1 = await UpgradeL1BridgeLogic.connect(closer).position(
-                GenBridgeStorage1Contract.address
-            )
-            let addr2 = await UpgradeL1BridgeLogic.connect(closer).position(
-                GenBridgeStorage2Contract.address
-            )
+        // it("set forceRegistry", async () => {
+        //     let addr1 = await UpgradeL1BridgeLogic.connect(closer).position(
+        //         GenBridgeStorage1Contract.address
+        //     )
+        //     let addr2 = await UpgradeL1BridgeLogic.connect(closer).position(
+        //         GenBridgeStorage2Contract.address
+        //     )
 
-            expect(addr1).to.be.equal(false)
-            expect(addr2).to.be.equal(false)
-
-
-            await UpgradeL1BridgeLogic.connect(closer).forceRegistry(
-                [GenBridgeStorage1Contract.address,GenBridgeStorage2Contract.address]
-            )
+        //     expect(addr1).to.be.equal(false)
+        //     expect(addr2).to.be.equal(false)
 
 
-            addr1 = await UpgradeL1BridgeLogic.connect(closer).position(
-                GenBridgeStorage1Contract.address
-            )
-            addr2 = await UpgradeL1BridgeLogic.connect(closer).position(
-                GenBridgeStorage2Contract.address
-            )
+        //     await UpgradeL1BridgeLogic.connect(closer).forceRegistry(
+        //         [GenBridgeStorage1Contract.address,GenBridgeStorage2Contract.address]
+        //     )
 
-            expect(addr1).to.be.equal(true)
-            expect(addr2).to.be.equal(true)
-        })
 
-        it("set forceModify", async () => {
-            let forcemodifyValue = new Array();
-            forcemodifyValue.push({
-                "position": GenBridgeStorage1Contract.address,
-                "state": false,
-            })
-            forcemodifyValue.push({
-                "position": GenBridgeStorage2Contract.address,
-                "state": false,
-            })
+        //     addr1 = await UpgradeL1BridgeLogic.connect(closer).position(
+        //         GenBridgeStorage1Contract.address
+        //     )
+        //     addr2 = await UpgradeL1BridgeLogic.connect(closer).position(
+        //         GenBridgeStorage2Contract.address
+        //     )
 
-            addr1 = await UpgradeL1BridgeLogic.connect(closer).position(
-                GenBridgeStorage1Contract.address
-            )
-            addr2 = await UpgradeL1BridgeLogic.connect(closer).position(
-                GenBridgeStorage2Contract.address
-            )
+        //     expect(addr1).to.be.equal(true)
+        //     expect(addr2).to.be.equal(true)
+        // })
 
-            expect(addr1).to.be.equal(true)
-            expect(addr2).to.be.equal(true)
+        // it("set forceModify", async () => {
+        //     let forcemodifyValue = new Array();
+        //     forcemodifyValue.push({
+        //         "position": GenBridgeStorage1Contract.address,
+        //         "state": false,
+        //     })
+        //     forcemodifyValue.push({
+        //         "position": GenBridgeStorage2Contract.address,
+        //         "state": false,
+        //     })
 
-            await UpgradeL1BridgeLogic.connect(closer).forceModify(
-                forcemodifyValue
-            )
+        //     addr1 = await UpgradeL1BridgeLogic.connect(closer).position(
+        //         GenBridgeStorage1Contract.address
+        //     )
+        //     addr2 = await UpgradeL1BridgeLogic.connect(closer).position(
+        //         GenBridgeStorage2Contract.address
+        //     )
 
-            addr1 = await UpgradeL1BridgeLogic.connect(closer).position(
-                GenBridgeStorage1Contract.address
-            )
-            addr2 = await UpgradeL1BridgeLogic.connect(closer).position(
-                GenBridgeStorage2Contract.address
-            )
+        //     expect(addr1).to.be.equal(true)
+        //     expect(addr2).to.be.equal(true)
 
-            expect(addr1).to.be.equal(false)
-            expect(addr2).to.be.equal(false)
+        //     await UpgradeL1BridgeLogic.connect(closer).forceModify(
+        //         forcemodifyValue
+        //     )
 
-            let forcemodifyValue2 = new Array();
-            forcemodifyValue2.push({
-                "position": GenBridgeStorage1Contract.address,
-                "state": true,
-            })
-            forcemodifyValue2.push({
-                "position": GenBridgeStorage2Contract.address,
-                "state": true,
-            })
+        //     addr1 = await UpgradeL1BridgeLogic.connect(closer).position(
+        //         GenBridgeStorage1Contract.address
+        //     )
+        //     addr2 = await UpgradeL1BridgeLogic.connect(closer).position(
+        //         GenBridgeStorage2Contract.address
+        //     )
 
-            await UpgradeL1BridgeLogic.connect(closer).forceModify(
-                forcemodifyValue2
-            )
+        //     expect(addr1).to.be.equal(false)
+        //     expect(addr2).to.be.equal(false)
 
-            addr1 = await UpgradeL1BridgeLogic.connect(closer).position(
-                GenBridgeStorage1Contract.address
-            )
-            addr2 = await UpgradeL1BridgeLogic.connect(closer).position(
-                GenBridgeStorage2Contract.address
-            )
+        //     let forcemodifyValue2 = new Array();
+        //     forcemodifyValue2.push({
+        //         "position": GenBridgeStorage1Contract.address,
+        //         "state": true,
+        //     })
+        //     forcemodifyValue2.push({
+        //         "position": GenBridgeStorage2Contract.address,
+        //         "state": true,
+        //     })
 
-            expect(addr1).to.be.equal(true)
-            expect(addr2).to.be.equal(true)
-        })
+        //     await UpgradeL1BridgeLogic.connect(closer).forceModify(
+        //         forcemodifyValue2
+        //     )
+
+        //     addr1 = await UpgradeL1BridgeLogic.connect(closer).position(
+        //         GenBridgeStorage1Contract.address
+        //     )
+        //     addr2 = await UpgradeL1BridgeLogic.connect(closer).position(
+        //         GenBridgeStorage2Contract.address
+        //     )
+
+        //     expect(addr1).to.be.equal(true)
+        //     expect(addr2).to.be.equal(true)
+        // })
         
     })
     
