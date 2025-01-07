@@ -4,21 +4,41 @@ const axios  = require('axios');
 const { BigNumber } = require("ethers")
 
 const UpgradeL1BridgeV1_ABI = require("../../artifacts/contracts/UpgradeL1BridgeV1.sol/UpgradeL1BridgeV1.json")
+const GenBridgeStorage1_ABI = require("../../artifacts/contracts/data2/GenBridgeStorage1.sol/GenBridgeStorage1.json")
+const GenBridgeStorage2_ABI = require("../../artifacts/contracts/data2/GenBridgeStorage2.sol/GenBridgeStorage2.json")
 
 async function forceWithdrawClaimAll() {
     const [deployer] = await ethers.getSigners();
     console.log("deployer Address : ", deployer.address)
 
     let UpgradeL1BridgeProxyAddr = "0x59aa194798Ba87D26Ba6bEF80B85ec465F4bbcfD"
+    let GenBridgeStorage1ContractAddr = "0xcb50cacc75368026103a15d2f2a06510037813b8"
+    let GenBridgeStorage2ContractAddr = "0x7b08f5f952590ffcbf3506b93f7084d0a9815a9f"
     
     //==== set UpgradeL1BridgeProxy =================================
     let UpgradeL1BridgeLogic = new ethers.Contract(
       UpgradeL1BridgeProxyAddr,
       UpgradeL1BridgeV1_ABI.abi,
-      tester
+      deployer
     )
 
-    let yourAddr = ["", ""]
+    //==== set GenBridgeStorage1Contract =================================
+    let GenBridgeStorage1Contract = new ethers.Contract(
+      GenBridgeStorage1ContractAddr,
+      GenBridgeStorage1_ABI.abi,
+      deployer
+    )
+
+    //==== set GenBridgeStorage2Contract =================================
+    let GenBridgeStorage2Contract = new ethers.Contract(
+      GenBridgeStorage2ContractAddr,
+      GenBridgeStorage2_ABI.abi,
+      deployer
+    )
+
+    let yourAddr = ["0x3bFda92Fa3bC0AB080Cac3775147B6318b1C5115", "0x44BFc8355Fea67b2D4d599294e2a15b27fb7923D"]
+    
+    let params = new Array();
 
     let readFile1 ='./data/titan_new-generate-assets.json'
     let assets
@@ -31,6 +51,7 @@ async function forceWithdrawClaimAll() {
     let getAddress
     let getClaimHash
     let testZeroAddr = "0x0000000000000000000000000000000000000000";
+    let l1ETH = "0x0000000000000000000000000000000000000000"
 
     let positionAddress = GenBridgeStorage1Contract.address
 
@@ -46,9 +67,9 @@ async function forceWithdrawClaimAll() {
   
                   Account = assets[i].data[k].claimer
 
-                  if(Account != yourAddr[m]){
+                  if(Account.toUpperCase() != yourAddr[m].toUpperCase()){
                     continue;
-                  }
+                  } 
 
                   Amount = ethers.BigNumber.from(assets[i].data[k].amount)
                   Hash = assets[i].data[k].hash
@@ -102,7 +123,7 @@ async function forceWithdrawClaimAll() {
                   }
                   Account = assets[i].data[j].claimer
 
-                  if(Account != yourAddr[m]){
+                  if(Account.toUpperCase() != yourAddr[m].toUpperCase()){
                     continue;
                   } 
 
