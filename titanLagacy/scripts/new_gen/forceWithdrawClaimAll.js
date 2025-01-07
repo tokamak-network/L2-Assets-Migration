@@ -36,7 +36,7 @@ async function forceWithdrawClaimAll() {
       deployer
     )
 
-    let yourAddr = ["0x3bFda92Fa3bC0AB080Cac3775147B6318b1C5115", "0x44BFc8355Fea67b2D4d599294e2a15b27fb7923D"]
+    let yourAddr = ["", ""]
     
     let params = new Array();
 
