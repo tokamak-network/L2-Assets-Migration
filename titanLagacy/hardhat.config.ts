@@ -49,7 +49,7 @@ const config: HardhatUserConfig = {
     },
     mainnet: {
       url: process.env.ETH_NODE_URI_MAINNET || "",
-      gasPrice: 16000000000,  //16Gwei
+      gasPrice: 5000000000,  //5Gwei
       accounts: [
         process.env.PERSONAL_ACCOUNT || "", // Personal account
       ],
