@@ -56,6 +56,7 @@ async function forceWithdrawClaimAll() {
     let positionAddress = GenBridgeStorage1Contract.address
 
     for(let m = 0; m < yourAddr.length; m++) {
+      console.log("yourAddr :", yourAddr[m])
       for(let i = 0; i < assets.length; i++) {
           tokenAddr = assets[i].l1Token
           console.log("tokenAddr : ", tokenAddr);
@@ -100,16 +101,16 @@ async function forceWithdrawClaimAll() {
                           
                           if(getClaimHash == true){
                             console.log("already claim Hash :", Hash)
-                            continue;
+                          } else {
+                            params.push({
+                              "position": positionAddress,
+                              "hashed": Hash,
+                              "token" : tokenAddr,
+                              "amount" : Amount,
+                              "getAddress" : Account
+                            })
                           }
                           
-                          params.push({
-                            "position": positionAddress,
-                            "hashed": Hash,
-                            "token" : tokenAddr,
-                            "amount" : Amount,
-                            "getAddress" : Account
-                        })
                       }
                   } else {
                       console.log("k : ", k);
@@ -154,16 +155,16 @@ async function forceWithdrawClaimAll() {
                           getClaimHash = await UpgradeL1BridgeLogic.connect(deployer).claimState(Hash)
                           if(getClaimHash == true){
                             console.log("already claim Hash :", Hash)
-                            continue;
+                          } else {
+                            params.push({
+                              "position": positionAddress,
+                              "hashed": Hash,
+                              "token" : tokenAddr,
+                              "amount" : Amount,
+                              "getAddress" : Account
+                            })
                           }
   
-                          params.push({
-                            "position": positionAddress,
-                            "hashed": Hash,
-                            "token" : tokenAddr,
-                            "amount" : Amount,
-                            "getAddress" : Account
-                        })
                       }
                   }
       
