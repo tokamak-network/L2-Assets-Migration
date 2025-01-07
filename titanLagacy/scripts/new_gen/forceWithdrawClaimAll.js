@@ -28,11 +28,9 @@ async function forceWithdrawClaimAll() {
     let Hash
     let Account
     let Amount
-    let getAccount
     let getAddress
     let getClaimHash
     let testZeroAddr = "0x0000000000000000000000000000000000000000";
-    let tokenContract
 
     let positionAddress = GenBridgeStorage1Contract.address
 
@@ -54,10 +52,12 @@ async function forceWithdrawClaimAll() {
 
                   Amount = ethers.BigNumber.from(assets[i].data[k].amount)
                   Hash = assets[i].data[k].hash
-  
-                  getAccount = await ethers.getSigner(Account);
-  
-                  getAddress = await UpgradeL1BridgeLogic.connect(tester).getForcePosition(Hash)
+
+                  console.log("-----------------------------------------")
+                  console.log("input param Hash :", Hash)
+                  console.log("-----------------------------------------")
+    
+                  getAddress = await UpgradeL1BridgeLogic.connect(deployer).getForcePosition(Hash)
               
                   if(getAddress == testZeroAddr) {
                       console.log("Account : ", Account)
@@ -74,39 +74,21 @@ async function forceWithdrawClaimAll() {
                           if(Hash == "0x172665f9d91a10c9051e7851268413e8d5c31a04c6d17956ad464598a8e44969"){
                               positionAddress = GenBridgeStorage2Contract.address
                           }
-  
-                          getClaimHash = await UpgradeL1BridgeLogic.connect(tester).claimState(Hash)
-                          expect(getClaimHash).to.be.equal(false)
+
+                          getClaimHash = await UpgradeL1BridgeLogic.connect(deployer).claimState(Hash)
                           
-                          // console.log("Account["+k+"] :", Account);
-                          let beforeAmount = await getAccount.getBalance()
-  
-                          await UpgradeL1BridgeLogic.connect(tester).forceWithdrawClaim(
-                              positionAddress,
-                              Hash,
-                              tokenAddr,
-                              Amount,
-                              Account
-                          )
-  
-                          let afterAmount = await getAccount.getBalance()
-                          if(Number(afterAmount) <= Number(beforeAmount)) {
-                              console.log("Account["+k+"] :", Account);
-                              console.log("Hash :", Hash);
+                          if(getClaimHash == true){
+                            console.log("already claim Hash :", Hash)
+                            continue;
                           }
-      
-                          getClaimHash = await UpgradeL1BridgeLogic.connect(tester).claimState(Hash)
-                          expect(getClaimHash).to.be.equal(true)
                           
-                          await expect(
-                              UpgradeL1BridgeLogic.connect(tester).forceWithdrawClaim(
-                                  positionAddress,
-                                  Hash,
-                                  tokenAddr,
-                                  Amount,
-                                  Account
-                              )
-                          ).to.be.rejectedWith("already claim Hash")
+                          params.push({
+                            "position": positionAddress,
+                            "hashed": Hash,
+                            "token" : tokenAddr,
+                            "amount" : Amount,
+                            "getAddress" : Account
+                        })
                       }
                   } else {
                       console.log("k : ", k);
@@ -114,22 +96,23 @@ async function forceWithdrawClaimAll() {
                   }
               }
           } else {
-              tokenContract = new ethers.Contract(
-                  tokenAddr,
-                  TON_ABI.abi,
-                  tester
-              ) 
-  
               for(let j = 0; j < assets[i].data.length; j++) {
                   if(j == 0){
                       console.log("data.length :", assets[i].data.length)
                   }
                   Account = assets[i].data[j].claimer
+
+                  if(Account != yourAddr[m]){
+                    continue;
+                  } 
+
                   Amount = ethers.BigNumber.from(assets[i].data[j].amount)
                   Hash = assets[i].data[j].hash
-                  
+                  console.log("-----------------------------------------")
+                  console.log("input param Hash :", Hash)
+                  console.log("-----------------------------------------")
   
-                  getAddress = await UpgradeL1BridgeLogic.connect(tester).getForcePosition(Hash)
+                  getAddress = await UpgradeL1BridgeLogic.connect(deployer).getForcePosition(Hash)
                   
                   if(getAddress == testZeroAddr) {
                       console.log("Account : ", Account)
@@ -147,35 +130,19 @@ async function forceWithdrawClaimAll() {
                               positionAddress = GenBridgeStorage2Contract.address
                           }
   
-                          getClaimHash = await UpgradeL1BridgeLogic.connect(tester).claimState(Hash)
-                          expect(getClaimHash).to.be.equal(false)
+                          getClaimHash = await UpgradeL1BridgeLogic.connect(deployer).claimState(Hash)
+                          if(getClaimHash == true){
+                            console.log("already claim Hash :", Hash)
+                            continue;
+                          }
   
-                          let beforeAmount = await tokenContract.balanceOf(Account)
-  
-                          await UpgradeL1BridgeLogic.connect(tester).forceWithdrawClaim(
-                              positionAddress,
-                              Hash,
-                              tokenAddr,
-                              Amount,
-                              Account
-                          )
-      
-                          let afterAmount = await tokenContract.balanceOf(Account)
-                          
-                          expect(afterAmount).to.be.gt(beforeAmount)
-  
-                          getClaimHash = await UpgradeL1BridgeLogic.connect(tester).claimState(Hash)
-                          expect(getClaimHash).to.be.equal(true)
-  
-                          await expect(
-                              UpgradeL1BridgeLogic.connect(tester).forceWithdrawClaim(
-                                  positionAddress,
-                                  Hash,
-                                  tokenAddr,
-                                  Amount,
-                                  Account
-                              )
-                          ).to.be.rejectedWith("already claim Hash")
+                          params.push({
+                            "position": positionAddress,
+                            "hashed": Hash,
+                            "token" : tokenAddr,
+                            "amount" : Amount,
+                            "getAddress" : Account
+                        })
                       }
                   }
       
@@ -184,6 +151,14 @@ async function forceWithdrawClaimAll() {
   
       }
     }
+
+    console.log(params);
+            
+    await UpgradeL1BridgeLogic.connect(deployer).forceWithdrawClaimAll(
+        params
+    )
+
+    console.log("ClaimAll pass")
 
 }
 
